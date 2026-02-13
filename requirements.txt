@@ -1,0 +1,17 @@
+# 核心框架
+fastapi
+uvicorn
+pydantic
+python-dotenv
+
+# AI 與外部服務
+openai
+fastapi-clerk-auth
+
+# RAG 與資料處理
+chromadb>=0.4.0
+httpx>=0.25.0
+tenacity>=8.2.0
+
+# 🆕 資料庫 (新增)
+sqlalchemy
