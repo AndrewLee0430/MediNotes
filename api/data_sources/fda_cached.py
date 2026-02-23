@@ -4,12 +4,59 @@ FDA Client with Caching
 
 使用方法:
     from api.data_sources.fda_cached import fda_client_cached
+    
+    # 获取单个药物标签
     label = fda_client_cached.get_drug_label("Metformin")
+    
+    # 搜索药物（返回 FDADrugLabel 对象列表）
+    labels = fda_client_cached.search_drug_labels_sync("Aspirin", limit=5)
 """
 
+import json
 import requests
-from typing import Optional, Dict, Any
-from simple_cache import fda_cache
+from typing import Optional, Dict, Any, List
+from dataclasses import dataclass, asdict
+from api.cache.simple_cache import fda_cache
+
+
+@dataclass
+class FDADrugLabel:
+    """FDA 药物标签数据类"""
+    drug_name: str
+    active_ingredient: Optional[str] = None
+    indications: Optional[str] = None
+    dosage: Optional[str] = None
+    warnings: Optional[str] = None
+    adverse_reactions: Optional[str] = None
+    drug_interactions: Optional[str] = None
+    
+    def to_dict(self) -> dict:
+        """转换为字典"""
+        return asdict(self)
+    
+    def to_text(self) -> str:
+        """转换为文本格式（用于 RAG）"""
+        parts = [f"Drug: {self.drug_name}\n"]
+        
+        if self.active_ingredient:
+            parts.append(f"Active Ingredient:\n{self.active_ingredient}\n")
+        
+        if self.indications:
+            parts.append(f"Indications:\n{self.indications}\n")
+        
+        if self.dosage:
+            parts.append(f"Dosage:\n{self.dosage}\n")
+        
+        if self.warnings:
+            parts.append(f"Warnings:\n{self.warnings}\n")
+        
+        if self.adverse_reactions:
+            parts.append(f"Adverse Reactions:\n{self.adverse_reactions}\n")
+        
+        if self.drug_interactions:
+            parts.append(f"Drug Interactions:\n{self.drug_interactions}\n")
+        
+        return "\n".join(parts)
 
 
 class FDAClientCached:
@@ -19,15 +66,53 @@ class FDAClientCached:
         self.base_url = base_url
         self.cache = fda_cache
     
+    def _get_first(self, data: dict, key: str) -> Optional[str]:
+        """
+        从 FDA API 结果中获取字段的第一个值
+        FDA API 的字段都是数组格式
+        
+        Args:
+            data: FDA API 返回的数据
+            key: 字段名
+            
+        Returns:
+            字段的第一个值，如果不存在则返回 None
+        """
+        value = data.get(key, [])
+        if isinstance(value, list) and len(value) > 0:
+            return value[0]
+        return None
+    
+    def _parse_fda_result(self, result: dict, drug_name: str) -> FDADrugLabel:
+        """
+        解析 FDA API 返回结果为 FDADrugLabel 对象
+        
+        Args:
+            result: FDA API 返回的单个结果
+            drug_name: 药物名称
+            
+        Returns:
+            FDADrugLabel 对象
+        """
+        return FDADrugLabel(
+            drug_name=drug_name,
+            active_ingredient=self._get_first(result, "active_ingredient"),
+            indications=self._get_first(result, "indications_and_usage"),
+            dosage=self._get_first(result, "dosage_and_administration"),
+            warnings=self._get_first(result, "warnings"),
+            adverse_reactions=self._get_first(result, "adverse_reactions"),
+            drug_interactions=self._get_first(result, "drug_interactions")
+        )
+    
     def get_drug_label(self, drug_name: str) -> Optional[Dict[str, Any]]:
         """
-        获取药品标签（带缓存）
+        获取药品标签原始数据（带缓存）
         
         Args:
             drug_name: 药物名称
             
         Returns:
-            药品标签数据，如果未找到则返回 None
+            药品标签数据字典，如果未找到则返回 None
         """
         # 生成缓存键
         cache_key = f"fda_label:{drug_name.lower()}"
@@ -36,14 +121,19 @@ class FDAClientCached:
         cached_data = self.cache.get(cache_key)
         if cached_data is not None:
             print(f"✅ Cache hit for FDA label: {drug_name}")
-            return cached_data
+            try:
+                # 尝试解析 JSON（如果是字符串）
+                if isinstance(cached_data, str):
+                    return json.loads(cached_data)
+                return cached_data
+            except json.JSONDecodeError:
+                print(f"⚠️ Cache data corrupted for {drug_name}, fetching fresh...")
         
         # 2. 缓存未命中，调用 API
         print(f"❌ Cache miss for FDA label: {drug_name}, calling FDA API...")
         
         try:
-            # 构建搜索查询
-            # 尝试多种搜索方式以提高命中率
+            # 构建搜索查询（尝试多种搜索方式）
             search_terms = [
                 f'openfda.brand_name:"{drug_name}"',
                 f'openfda.generic_name:"{drug_name}"',
@@ -65,7 +155,7 @@ class FDAClientCached:
                         result = data["results"][0]
                         
                         # 3. 存入缓存（24 小时）
-                        self.cache.set(cache_key, result, ttl=86400)
+                        self.cache.set(cache_key, json.dumps(result), ttl=86400)
                         print(f"💾 Cached FDA label for {drug_name}")
                         
                         return result
@@ -80,41 +170,134 @@ class FDAClientCached:
             
             # 所有搜索词都未找到
             print(f"⚠️ No FDA label found for {drug_name}")
-            
-            # 缓存 None 结果（1小时），避免重复查询不存在的药物
-            self.cache.set(cache_key, None, ttl=3600)
-            
             return None
             
         except requests.exceptions.Timeout:
             print(f"⚠️ FDA API timeout for {drug_name}")
             return None
         
-        except Exception as e:
-            print(f"❌ Error fetching FDA label for {drug_name}: {e}")
+        except requests.exceptions.RequestException as e:
+            print(f"⚠️ FDA API request error for {drug_name}: {e}")
             return None
+        
+        except Exception as e:
+            print(f"❌ Unexpected error fetching FDA label for {drug_name}: {e}")
+            return None
+    
+    def search_drug_labels_sync(self, query: str, limit: int = 5) -> List[FDADrugLabel]:
+        """
+        搜索药物标签（同步方法，带缓存）
+        返回 FDADrugLabel 对象列表
+        
+        Args:
+            query: 搜索查询（药物名称）
+            limit: 返回结果数量
+            
+        Returns:
+            FDADrugLabel 对象列表
+        """
+        cache_key = f"fda_search:{query.lower()}:{limit}"
+        
+        # 1. 尝试从缓存获取
+        cached_data = self.cache.get(cache_key)
+        if cached_data is not None:
+            print(f"✅ Cache hit for FDA search: {query}")
+            try:
+                # 从缓存恢复 FDADrugLabel 对象
+                data = json.loads(cached_data) if isinstance(cached_data, str) else cached_data
+                return [FDADrugLabel(**item) for item in data]
+            except (json.JSONDecodeError, TypeError, KeyError) as e:
+                print(f"⚠️ Cache data error for {query}: {e}, fetching fresh data...")
+                # 缓存数据损坏，继续调用 API
+        
+        # 2. 缓存未命中，调用 API
+        print(f"❌ Cache miss for FDA search: {query}, calling FDA API...")
+        
+        try:
+            # 构建搜索查询
+            search_terms = [
+                f'openfda.brand_name:"{query}"',
+                f'openfda.generic_name:"{query}"',
+                f'openfda.substance_name:"{query}"'
+            ]
+            
+            all_results = []
+            
+            for search_term in search_terms:
+                params = {
+                    "search": search_term,
+                    "limit": limit
+                }
+                
+                response = requests.get(self.base_url, params=params, timeout=10)
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    results = data.get("results", [])
+                    
+                    # 解析为 FDADrugLabel 对象
+                    for result in results:
+                        label = self._parse_fda_result(result, query)
+                        all_results.append(label)
+                    
+                    if all_results:
+                        break  # 找到结果就停止
+                
+                elif response.status_code == 404:
+                    continue  # 尝试下一个搜索词
+                
+                else:
+                    print(f"⚠️ FDA API returned status {response.status_code}")
+                    break
+            
+            # 3. 存入缓存（1 小时）
+            if all_results:
+                cache_data = [label.to_dict() for label in all_results]
+                self.cache.set(cache_key, json.dumps(cache_data), ttl=3600)
+                print(f"💾 Cached {len(all_results)} FDA search results for {query}")
+            else:
+                print(f"⚠️ No FDA labels found for {query}")
+                # 缓存空结果（10分钟），避免重复查询
+                self.cache.set(cache_key, json.dumps([]), ttl=600)
+            
+            return all_results
+        
+        except requests.exceptions.Timeout:
+            print(f"⚠️ FDA API timeout for {query}")
+            return []
+        
+        except requests.exceptions.RequestException as e:
+            print(f"⚠️ FDA API request error for {query}: {e}")
+            return []
+        
+        except Exception as e:
+            print(f"❌ Unexpected error searching FDA for {query}: {e}")
+            return []
     
     def search_drugs(self, query: str, limit: int = 5) -> list:
         """
-        搜索药物（带缓存）
+        搜索药物（返回原始数据，带缓存）
         
         Args:
             query: 搜索查询
             limit: 返回结果数量
             
         Returns:
-            搜索结果列表
+            搜索结果列表（原始 FDA API 数据）
         """
-        cache_key = f"fda_search:{query.lower()}:{limit}"
+        cache_key = f"fda_raw_search:{query.lower()}:{limit}"
         
         # 尝试从缓存获取
         cached_data = self.cache.get(cache_key)
         if cached_data is not None:
-            print(f"✅ Cache hit for FDA search: {query}")
-            return cached_data
+            print(f"✅ Cache hit for FDA raw search: {query}")
+            try:
+                return json.loads(cached_data) if isinstance(cached_data, str) else cached_data
+            except json.JSONDecodeError:
+                print(f"⚠️ Cache data corrupted, fetching fresh...")
         
         # 调用 API
-        print(f"❌ Cache miss for FDA search: {query}, calling FDA API...")
+        print(f"❌ Cache miss for FDA raw search: {query}, calling FDA API...")
         
         try:
             params = {
@@ -129,7 +312,7 @@ class FDAClientCached:
                 results = data.get("results", [])
                 
                 # 存入缓存（1 小时）
-                self.cache.set(cache_key, results, ttl=3600)
+                self.cache.set(cache_key, json.dumps(results), ttl=3600)
                 
                 return results
             
@@ -156,19 +339,42 @@ fda_client_cached = FDAClientCached()
 
 if __name__ == "__main__":
     # 测试
+    print("=" * 60)
+    print("Testing FDAClientCached")
+    print("=" * 60)
+    
     client = FDAClientCached()
     
-    # 第一次查询（API 调用）
-    print("\n=== First query (should call API) ===")
+    # 测试 1: get_drug_label
+    print("\n=== Test 1: get_drug_label (first call - API) ===")
     label1 = client.get_drug_label("Metformin")
     print(f"Found: {bool(label1)}")
     
-    # 第二次查询（缓存命中）
-    print("\n=== Second query (should hit cache) ===")
+    print("\n=== Test 1: get_drug_label (second call - cache) ===")
     label2 = client.get_drug_label("Metformin")
     print(f"Found: {bool(label2)}")
+    print(f"Same result: {label1 == label2}")
     
-    # 打印缓存统计
-    print("\n=== Cache statistics ===")
+    # 测试 2: search_drug_labels_sync
+    print("\n=== Test 2: search_drug_labels_sync (first call - API) ===")
+    labels1 = client.search_drug_labels_sync("Aspirin", limit=2)
+    print(f"Found {len(labels1)} labels")
+    if labels1:
+        print(f"First label drug name: {labels1[0].drug_name}")
+        print(f"Has warnings: {bool(labels1[0].warnings)}")
+    
+    print("\n=== Test 2: search_drug_labels_sync (second call - cache) ===")
+    labels2 = client.search_drug_labels_sync("Aspirin", limit=2)
+    print(f"Found {len(labels2)} labels (from cache)")
+    
+    # 测试 3: to_dict 和 to_text
+    if labels1:
+        print("\n=== Test 3: FDADrugLabel methods ===")
+        label = labels1[0]
+        print(f"to_dict keys: {list(label.to_dict().keys())}")
+        print(f"to_text preview: {label.to_text()[:100]}...")
+    
+    # 测试 4: 缓存统计
+    print("\n=== Test 4: Cache statistics ===")
     stats = client.get_cache_stats()
-    print(stats)
+    print(f"Cache stats: {stats}")

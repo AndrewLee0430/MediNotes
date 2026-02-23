@@ -1,0 +1,28 @@
+{
+  "drug_name": "Erythromycin",
+  "generic_name": "",
+  "brand_names": [],
+  "indications": "",
+  "dosage": "",
+  "contraindications": "C",
+  "warnings": "W",
+  "adverse_reactions": "A",
+  "drug_interactions": "",
+  "pharmacology": "",
+  "pregnancy_category": "",
+  "full_label": {
+    "brand_name": "erythromycin",
+    "generic_name": "ERYTHROMYCIN",
+    "manufacturer": "Bryant Ranch Prepack",
+    "indications": "INDICATIONS AND USAGE Erythromycin Topical Solution USP, 2% is indicated for the topical treatment of acne vulgaris.",
+    "warnings": "WARNINGS Pseudomembranous colitis has been reported with nearly all antibacterial agents, including erythromycin, and may range in severity from mild to life-threatening. Therefore, it is important to consider this diagnosis in patients who present with diarrhea subsequent to the administration of antibacterial agents. Treatment with antibacterial agents alters the normal flora of the colon and may permit overgrowth of clostridia. Studies indicate that a toxin produced by Clostridium difficile is one primary cause of “antibiotic-associated colitis”. After the diagnosis of pseudomembranous colitis has been established, therapeutic measures should be initiated. Mild cases of pseudomembranous colitis usually respond to drug discontinuation alone. In moderate to severe cases, consideration should be given to management with fluids and electrolytes, protein supplementation and treatment with an antibacterial drug clinically effective against C. difficile colitis.",
+    "adverse_reactions": "ADVERSE REACTIONS The following local adverse reactions have been reported occasionally: peeling, dryness, itching, erythema, and oiliness. Irritation of the eyes and tenderness of the skin have also been reported with topical use of erythromycin. Generalized urticarial reactions possibly related to the use of erythromycin, which required systemic steroid therapy have been reported.",
+    "drug_interactions": null,
+    "dosage": "DOSAGE AND ADMINISTRATION Erythromycin Topical Solution USP, 2% should be applied over the affected areas twice a day (morning and evening) after the skin is thoroughly washed with warm water and soap and patted dry. Acne lesions on the face, neck, shoulders, chest, and back may be treated in this manner. This medication should be applied with applicator top. If fingertips are used, wash hands after application. Drying and peeling may be controlled by reducing the frequency of applications.",
+    "contraindications": "CONTRAINDICATIONS Erythromycin Topical Solution USP, 2% is contraindicated in those individuals who have shown hypersensitivity to any of its components.",
+    "url": "https://labels.fda.gov/",
+    "source_id": "FDA:erythromycin"
+  },
+  "last_updated": "2026-02-12T14:46:49.446405",
+  "source": "FDA OpenFDA API"
+}

@@ -1,12 +1,21 @@
+# ==========================================
+# 敏感信息 - 绝对不能上传！
+# ==========================================
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+secrets/
+
+# ==========================================
 # Python
+# ==========================================
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-env/
-venv/
-ENV/
 build/
 develop-eggs/
 dist/
@@ -22,44 +31,96 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# 环境变量（重要！不要上传 API keys）
-.env
-.env.local
-.env.*.local
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
 
-# IDE
+# ==========================================
+# Node.js / Next.js
+# ==========================================
+node_modules/
+.next/
+out/
+.cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ==========================================
+# 数据库
+# ==========================================
+*.db
+*.sqlite
+*.sqlite3
+chroma.sqlite3
+*.parquet
+*.bin
+
+# Chroma 向量数据库
+data/chroma/
+chroma_db/
+
+# ==========================================
+# IDE / 编辑器
+# ==========================================
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+.DS_Store
 
-# 数据库和数据文件
-data/drug_database/*.json
-data/drug_vectordb/
-*.db
-*.sqlite
-*.sqlite3
-
-# 日志
+# ==========================================
+# 日志文件
+# ==========================================
 *.log
 logs/
+pip-log.txt
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Node
-node_modules/
-.next/
-out/
-build/
-.npm
-.pnp
-.pnp.js
-
+# ==========================================
 # 临时文件
+# ==========================================
 *.tmp
 *.temp
 .cache/
+tmp/
+
+# ==========================================
+# 测试覆盖率
+# ==========================================
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+
+# ==========================================
+# OS 特定
+# ==========================================
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ==========================================
+# 项目特定
+# ==========================================
+# 大型数据文件
+data/raw/
+data/processed/
+*.csv
+*.json.gz
+
+# 用户上传的文件
+uploads/
+media/
+
+# 备份文件
+*.bak
+*.backup

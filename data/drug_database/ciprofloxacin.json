@@ -1,0 +1,28 @@
+{
+  "drug_name": "Ciprofloxacin",
+  "generic_name": "",
+  "brand_names": [],
+  "indications": "",
+  "dosage": "",
+  "contraindications": "C",
+  "warnings": "",
+  "adverse_reactions": "A",
+  "drug_interactions": "D",
+  "pharmacology": "",
+  "pregnancy_category": "",
+  "full_label": {
+    "brand_name": "ciprofloxacin",
+    "generic_name": "CIPROFLOXACIN",
+    "manufacturer": "Proficient Rx LP",
+    "indications": "INDICATIONS AND USAGE Ciprofloxacin Ophthalmic Solution is indicated for the treatment of infections caused by susceptible strains of the designated microorganisms in the conditions listed below: Corneal Ulcers: Pseudomonas aeruginosa Serratia marcescens * Staphylococcus aureus Staphylococcus epidermidis Streptococcus pneumoniae Streptococcus (Viridans Group) * Conjunctivitis: Haemophilus influenzae Staphylococcus aureus Staphylococcus epidermidis Streptococcus pneumoniae *Efficacy for this organism was studied in fewer than 10 infections.",
+    "warnings": null,
+    "adverse_reactions": "ADVERSE REACTIONS The most frequently reported drug related adverse reaction was local burning or discomfort. In corneal ulcer studies with frequent administration of the drug, white crystalline precipitates were seen in approximately 17% of patients ( see Precautions ). Other reactions occurring in less than 10% of patients included lid margin crusting, crystals/scales, foreign body sensation, itching, conjunctival hyperemia and a bad taste following instillation. Additional events occurring in less than 1% of patients included corneal staining, keratopathy/keratitis, allergic reactions, lid edema, tearing, photophobia, corneal infiltrates, nausea and decreased vision. To report SUSPECTED ADVERSE REACTIONS, contact LEADING PHARMA AT 1-844-740-7500 or FDA at 1-800-FDA-1088 or www.fda.gov/medwatch",
+    "drug_interactions": "Drug Interactions: Specific drug interaction studies have not been conducted with ophthalmic ciprofloxacin. However, the systemic administration of some quinolones has been shown to elevate plasma concentrations of theophylline, interfere with the metabolism of caffeine, enhance the effects of the oral anticoagulant, warfarin, and its derivatives, and has been associated with transient elevations in serum creatinine in patients receiving cyclosporine concomitantly.",
+    "dosage": "DOSAGE AND ADMINISTRATION Corneal Ulcers: The recommended dosage regimen for the treatment of corneal ulcers is two drops into the affected eye every 15 minutes for the first six hours and then two drops into the affected eye every 30 minutes for the remainder of the first day. On the second day, instill two drops in the affected eye hourly. On the third through the fourteenth day, place two drops in the affected eye every four hours. Treatment may be continued after 14 days if corneal re-epithelialisation has not occurred. Bacterial Conjunctivitis: The recommended dosage regimen for the treatment of bacterial conjunctivitis is one or two drops instilled into the conjunctival sac(s) every two hours while awake for two days and one or two drops every four hours while awake for the next five days.",
+    "contraindications": "CONTRAINDICATIONS A history of hypersensitivity to ciprofloxacin or any other component of the medication is a contraindication to its use. A history of hypersensitivity to other quinolones may also contraindicate the use of ciprofloxacin.",
+    "url": "https://labels.fda.gov/",
+    "source_id": "FDA:ciprofloxacin"
+  },
+  "last_updated": "2026-02-12T14:40:03.701608",
+  "source": "FDA OpenFDA API"
+}

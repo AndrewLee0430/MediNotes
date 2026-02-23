@@ -1,0 +1,28 @@
+{
+  "drug_name": "Docusate",
+  "generic_name": "",
+  "brand_names": [],
+  "indications": "",
+  "dosage": "",
+  "contraindications": "",
+  "warnings": "W",
+  "adverse_reactions": "",
+  "drug_interactions": "",
+  "pharmacology": "",
+  "pregnancy_category": "",
+  "full_label": {
+    "brand_name": "SENNA-S",
+    "generic_name": "SENNA AND DOCUSATE SODIUM TABLETS, 8.6 MG AND 50 MG",
+    "manufacturer": "HealthLife of USA LLC",
+    "indications": "Uses relieves occasional constipation (irregularity) generally produces bowel movement in 6-12 hours",
+    "warnings": "Warnings Do not use if you are now taking mineral oil, unless directed by a doctor laxative products for longer than 1 week unless directed by a doctor Ask a doctor before use if you have stomach pain nausea vomiting noticed a sudden change in bowel habits that lasts over 2 weeks Stop use and ask a doctor if you have rectal bleeding or fail to have a bowel movement after use of a laxative. These may indicate a serious condition. If pregnant or breast-feeding , ask a health professional before use. Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away.",
+    "adverse_reactions": null,
+    "drug_interactions": null,
+    "dosage": "Directions take preferably at bedtime or as directed by a doctor adults and children 12 years of age or older - starting dosage: 2 tablets once a day, maximum dosage: 4 tablets twice a day children 6 to under 12 years - starting dosage: 1 tablet once a day, maximum dosage: 2 tablets twice a day children 2 to under 6 years - starting dosage: 1/2 tablet once a day, maximum dosage: 1 tablet twice a day children under 2 years - starting dosage: ask a doctor, maximum dosage: ask a doctor",
+    "contraindications": null,
+    "url": "https://labels.fda.gov/",
+    "source_id": "FDA:SENNA-S"
+  },
+  "last_updated": "2026-02-12T14:44:11.529650",
+  "source": "FDA OpenFDA API"
+}

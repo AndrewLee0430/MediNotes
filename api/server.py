@@ -3,7 +3,7 @@ MediNotes API Server
 FastAPI 後端，整合諮詢筆記、RAG 檢索、FDA 驗證、合規防護與數據飛輪回饋
 """
 
-from api.cache.simple_cache import fda_cache
+from api.data_sources.fda import FDAClient
 from api.data_sources.fda_cached import fda_client_cached
 
 from dotenv import load_dotenv
@@ -84,7 +84,7 @@ retriever = HybridRetriever(
     enable_fda=True
 )
 generator = AnswerGenerator(model="gpt-4o-mini")
-fda_client = fda_client_cached  # 使用缓存版本
+fda_client = FDAClient()   # 使用缓存版本
 
 
 # ============================================================
@@ -306,6 +306,7 @@ async def verify_drug_interaction(
     # 1. 搜尋 FDA 藥品標籤
     drug_labels = []
     for drug in request.drugs:
+        # 保持异步调用
         labels = await fda_client.search_drug_labels(drug, limit=1)
         if labels:
             drug_labels.append(labels[0])

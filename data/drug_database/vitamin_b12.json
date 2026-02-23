@@ -1,0 +1,28 @@
+{
+  "drug_name": "Vitamin B12",
+  "generic_name": "",
+  "brand_names": [],
+  "indications": "",
+  "dosage": "",
+  "contraindications": "",
+  "warnings": "W",
+  "adverse_reactions": "",
+  "drug_interactions": "",
+  "pharmacology": "",
+  "pregnancy_category": "",
+  "full_label": {
+    "brand_name": "M-Natal Plus",
+    "generic_name": "VITAMIN A, VITAMIN C, VITAMIN D, VITAMIN E, THIAMINE, RIBOFLAVIN, NIACIN, VITAMIN B6, FOLIC ACID, VITAMIN B12, CALCIUM, IRON, ZINC, COPPER",
+    "manufacturer": "METHOD PHARMACEUTICALS, LLC",
+    "indications": null,
+    "warnings": "WARNING: Accidental overdose of iron-containing products is a leading cause of fatal poisoning in children under 6. Keep this product out of reach of children. In case of accidental overdose, call a doctor or poison control center immediately.",
+    "adverse_reactions": null,
+    "drug_interactions": null,
+    "dosage": "DOSAGE AND ADMINISTRATION Before, during and/or after pregnancy, one tablet daily, with a meal, or as directed by a licensed healthcare practitioner regardless of lactation status.",
+    "contraindications": null,
+    "url": "https://labels.fda.gov/",
+    "source_id": "FDA:M-Natal Plus"
+  },
+  "last_updated": "2026-02-12T14:42:07.501262",
+  "source": "FDA OpenFDA API"
+}

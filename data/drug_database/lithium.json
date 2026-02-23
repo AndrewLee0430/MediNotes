@@ -1,0 +1,28 @@
+{
+  "drug_name": "Lithium",
+  "generic_name": "",
+  "brand_names": [],
+  "indications": "",
+  "dosage": "",
+  "contraindications": "",
+  "warnings": "",
+  "adverse_reactions": "",
+  "drug_interactions": "",
+  "pharmacology": "",
+  "pregnancy_category": "",
+  "full_label": {
+    "brand_name": "Lithium Sulphuratum",
+    "generic_name": "LITHIUM SULPHURATUM",
+    "manufacturer": "Hahnemann Laboratories, INC.",
+    "indications": null,
+    "warnings": null,
+    "adverse_reactions": null,
+    "drug_interactions": null,
+    "dosage": null,
+    "contraindications": null,
+    "url": "https://labels.fda.gov/",
+    "source_id": "FDA:Lithium Sulphuratum"
+  },
+  "last_updated": "2026-02-12T14:45:25.327962",
+  "source": "FDA OpenFDA API"
+}

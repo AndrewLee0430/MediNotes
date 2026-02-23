@@ -7,7 +7,7 @@ API 文件：https://www.ncbi.nlm.nih.gov/books/NBK25501/
 
 import os
 import httpx
-from typing import Optional
+from typing import Optional, List
 from dataclasses import dataclass
 from xml.etree import ElementTree as ET
 import asyncio
@@ -19,7 +19,7 @@ class PubMedArticle:
     pmid: str
     title: str
     abstract: str
-    authors: list[str]
+    authors: List[str]
     journal: str
     pub_date: str
     doi: Optional[str] = None
@@ -86,7 +86,7 @@ class PubMedClient:
         query: str,
         max_results: int = 10,
         sort: str = "relevance"
-    ) -> list[str]:
+    ) -> List[str]:
         """
         搜尋 PubMed，返回 PMID 列表
         
@@ -98,27 +98,59 @@ class PubMedClient:
         Returns:
             PMID 列表
         """
-        params = self._build_params(
-            db="pubmed",
-            term=query,
-            retmax=max_results,
-            retmode="json",
-            sort=sort
-        )
+        # 參數驗證
+        if not query or not query.strip():
+            print("⚠️ PubMed: Empty query")
+            return []
         
-        async with httpx.AsyncClient() as client:
-            response = await client.get(
-                f"{self.BASE_URL}/esearch.fcgi",
-                params=params,
-                timeout=30.0
+        if max_results < 1:
+            print("⚠️ PubMed: Invalid max_results")
+            return []
+        
+        try:
+            params = self._build_params(
+                db="pubmed",
+                term=query,
+                retmax=max_results,
+                retmode="json",
+                sort=sort
             )
-            response.raise_for_status()
-            data = response.json()
+            
+            print(f"🔍 Searching PubMed for: {query}")
+            
+            async with httpx.AsyncClient() as client:
+                response = await client.get(
+                    f"{self.BASE_URL}/esearch.fcgi",
+                    params=params,
+                    timeout=30.0
+                )
+                response.raise_for_status()
+                data = response.json()
+            
+            await asyncio.sleep(self.rate_limit_delay)
+            
+            pmids = data.get("esearchresult", {}).get("idlist", [])
+            print(f"✅ PubMed: Found {len(pmids)} articles")
+            
+            return pmids
         
-        await asyncio.sleep(self.rate_limit_delay)
-        return data.get("esearchresult", {}).get("idlist", [])
+        except httpx.TimeoutException as e:
+            print(f"⚠️ PubMed timeout: {e}")
+            return []
+        
+        except httpx.HTTPStatusError as e:
+            print(f"⚠️ PubMed HTTP error: {e.response.status_code}")
+            return []
+        
+        except ValueError as e:
+            print(f"⚠️ PubMed JSON parse error: {e}")
+            return []
+        
+        except Exception as e:
+            print(f"❌ PubMed unexpected error: {type(e).__name__}: {e}")
+            return []
     
-    async def fetch_details(self, pmids: list[str]) -> list[PubMedArticle]:
+    async def fetch_details(self, pmids: List[str]) -> List[PubMedArticle]:
         """
         根據 PMID 取得文章詳細資訊
         
@@ -129,34 +161,62 @@ class PubMedClient:
             PubMedArticle 列表
         """
         if not pmids:
+            print("⚠️ PubMed: No PMIDs to fetch")
             return []
         
-        params = self._build_params(
-            db="pubmed",
-            id=",".join(pmids),
-            retmode="xml",
-            rettype="abstract"
-        )
-        
-        async with httpx.AsyncClient() as client:
-            response = await client.get(
-                f"{self.BASE_URL}/efetch.fcgi",
-                params=params,
-                timeout=30.0
+        try:
+            params = self._build_params(
+                db="pubmed",
+                id=",".join(pmids),
+                retmode="xml",
+                rettype="abstract"
             )
-            response.raise_for_status()
-            xml_text = response.text
+            
+            print(f"📥 Fetching details for {len(pmids)} PubMed articles")
+            
+            async with httpx.AsyncClient() as client:
+                response = await client.get(
+                    f"{self.BASE_URL}/efetch.fcgi",
+                    params=params,
+                    timeout=30.0
+                )
+                response.raise_for_status()
+                xml_text = response.text
+            
+            await asyncio.sleep(self.rate_limit_delay)
+            
+            articles = self._parse_xml(xml_text)
+            print(f"✅ PubMed: Parsed {len(articles)} articles")
+            
+            return articles
         
-        await asyncio.sleep(self.rate_limit_delay)
-        return self._parse_xml(xml_text)
+        except httpx.TimeoutException as e:
+            print(f"⚠️ PubMed fetch timeout: {e}")
+            return []
+        
+        except httpx.HTTPStatusError as e:
+            print(f"⚠️ PubMed fetch HTTP error: {e.response.status_code}")
+            return []
+        
+        except Exception as e:
+            print(f"❌ PubMed fetch unexpected error: {type(e).__name__}: {e}")
+            return []
     
-    def _parse_xml(self, xml_text: str) -> list[PubMedArticle]:
+    def _parse_xml(self, xml_text: str) -> List[PubMedArticle]:
         """解析 PubMed XML 回應"""
         articles = []
         
+        if not xml_text or not xml_text.strip():
+            print("⚠️ PubMed: Empty XML response")
+            return articles
+        
         try:
             root = ET.fromstring(xml_text)
-        except ET.ParseError:
+        except ET.ParseError as e:
+            print(f"❌ PubMed XML parse error: {e}")
+            return articles
+        except Exception as e:
+            print(f"❌ PubMed XML unexpected error: {type(e).__name__}: {e}")
             return articles
         
         for article_elem in root.findall(".//PubmedArticle"):
@@ -168,16 +228,22 @@ class PubMedClient:
                 
                 # Title
                 title = article_elem.findtext(".//ArticleTitle", "")
+                if not title:
+                    continue
                 
                 # Abstract - 可能有多個段落
                 abstract_parts = []
                 for abstract_text in article_elem.findall(".//AbstractText"):
-                    label = abstract_text.get("Label", "")
-                    text = abstract_text.text or ""
-                    if label:
-                        abstract_parts.append(f"**{label}:** {text}")
-                    else:
-                        abstract_parts.append(text)
+                    try:
+                        label = abstract_text.get("Label", "")
+                        text = abstract_text.text or ""
+                        if label:
+                            abstract_parts.append(f"**{label}:** {text}")
+                        else:
+                            abstract_parts.append(text)
+                    except Exception:
+                        continue
+                
                 abstract = "\n\n".join(abstract_parts)
                 
                 # 如果沒有 abstract，跳過
@@ -187,40 +253,55 @@ class PubMedClient:
                 # Authors
                 authors = []
                 for author in article_elem.findall(".//Author"):
-                    last_name = author.findtext("LastName", "")
-                    fore_name = author.findtext("ForeName", "")
-                    if last_name:
-                        authors.append(f"{last_name} {fore_name}".strip())
+                    try:
+                        last_name = author.findtext("LastName", "")
+                        fore_name = author.findtext("ForeName", "")
+                        if last_name:
+                            authors.append(f"{last_name} {fore_name}".strip())
+                    except Exception:
+                        continue
                 
                 # Journal
-                journal = article_elem.findtext(".//Journal/Title", "")
+                journal = article_elem.findtext(".//Journal/Title", "Unknown Journal")
                 
                 # Publication Date
                 pub_date = article_elem.findtext(".//PubDate/Year", "")
                 if not pub_date:
                     medline_date = article_elem.findtext(".//PubDate/MedlineDate", "")
-                    if medline_date:
+                    if medline_date and len(medline_date) >= 4:
                         pub_date = medline_date[:4]  # 取前4個字元（年份）
+                
+                if not pub_date:
+                    pub_date = "Unknown"
                 
                 # DOI
                 doi = None
-                for id_elem in article_elem.findall(".//ArticleId"):
-                    if id_elem.get("IdType") == "doi":
-                        doi = id_elem.text
-                        break
+                try:
+                    for id_elem in article_elem.findall(".//ArticleId"):
+                        if id_elem.get("IdType") == "doi":
+                            doi = id_elem.text
+                            break
+                except Exception:
+                    pass
                 
                 articles.append(PubMedArticle(
                     pmid=pmid,
                     title=title,
                     abstract=abstract,
-                    authors=authors,
+                    authors=authors or ["Unknown"],
                     journal=journal,
                     pub_date=pub_date,
                     doi=doi
                 ))
                 
-            except Exception:
-                # 解析單篇文章失敗，繼續下一篇
+            except KeyError as e:
+                print(f"⚠️ PubMed: Missing required field in article: {e}")
+                continue
+            except TypeError as e:
+                print(f"⚠️ PubMed: Type error in article parsing: {e}")
+                continue
+            except Exception as e:
+                print(f"⚠️ PubMed: Unexpected error parsing article: {type(e).__name__}: {e}")
                 continue
         
         return articles
@@ -229,7 +310,7 @@ class PubMedClient:
         self,
         query: str,
         max_results: int = 10
-    ) -> list[PubMedArticle]:
+    ) -> List[PubMedArticle]:
         """
         搜尋並取得文章詳細資訊（組合方法）
         
@@ -240,28 +321,66 @@ class PubMedClient:
         Returns:
             PubMedArticle 列表
         """
-        pmids = await self.search(query, max_results)
-        if not pmids:
+        try:
+            pmids = await self.search(query, max_results)
+            if not pmids:
+                print(f"⚠️ PubMed: No results found for '{query}'")
+                return []
+            
+            articles = await self.fetch_details(pmids)
+            return articles
+        
+        except Exception as e:
+            print(f"❌ PubMed search_and_fetch error: {type(e).__name__}: {e}")
             return []
-        return await self.fetch_details(pmids)
 
 
 # 同步版本的包裝函數（方便測試）
-def search_pubmed_sync(query: str, max_results: int = 10) -> list[PubMedArticle]:
-    """同步版本的 PubMed 搜尋"""
-    client = PubMedClient()
-    return asyncio.run(client.search_and_fetch(query, max_results))
+def search_pubmed_sync(query: str, max_results: int = 10) -> List[PubMedArticle]:
+    """
+    同步版本的 PubMed 搜尋
+    
+    Args:
+        query: 搜尋關鍵字
+        max_results: 最多返回筆數
+        
+    Returns:
+        PubMedArticle 列表
+    """
+    try:
+        client = PubMedClient()
+        return asyncio.run(client.search_and_fetch(query, max_results))
+    except Exception as e:
+        print(f"❌ PubMed sync search error: {type(e).__name__}: {e}")
+        return []
 
 
 # 測試用
 if __name__ == "__main__":
     async def test():
+        print("=" * 60)
+        print("Testing PubMed Client")
+        print("=" * 60)
+        
         client = PubMedClient()
-        articles = await client.search_and_fetch("metformin drug interaction", max_results=3)
+        
+        # 測試 1: 正常查詢
+        print("\n=== Test 1: Normal query ===")
+        articles = await client.search_and_fetch("metformin diabetes", max_results=3)
         for article in articles:
             print(f"PMID: {article.pmid}")
             print(f"Title: {article.title}")
             print(f"URL: {article.url}")
             print("-" * 50)
+        
+        # 測試 2: 空查詢
+        print("\n=== Test 2: Empty query ===")
+        articles = await client.search_and_fetch("", max_results=3)
+        print(f"Results: {len(articles)}")
+        
+        # 測試 3: 無結果查詢
+        print("\n=== Test 3: No results query ===")
+        articles = await client.search_and_fetch("xyzabc123nonexistent", max_results=3)
+        print(f"Results: {len(articles)}")
     
     asyncio.run(test())

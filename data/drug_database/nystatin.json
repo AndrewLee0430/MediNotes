@@ -1,0 +1,28 @@
+{
+  "drug_name": "Nystatin",
+  "generic_name": "",
+  "brand_names": [],
+  "indications": "",
+  "dosage": "",
+  "contraindications": "C",
+  "warnings": "",
+  "adverse_reactions": "A",
+  "drug_interactions": "",
+  "pharmacology": "",
+  "pregnancy_category": "",
+  "full_label": {
+    "brand_name": "Nyamyc",
+    "generic_name": "NYSTATIN",
+    "manufacturer": "Upsher-Smith Laboratories, LLC",
+    "indications": "INDICATIONS AND USAGE Nyamyc® (Nystatin Topical Powder, USP) is indicated in the treatment of cutaneous or mucocutaneous mycotic infections caused by Candida albicans and other susceptible Candida species. Nyamyc® (Nystatin Topical Powder, USP) is not indicated for systemic, oral, intravaginal or ophthalmic use.",
+    "warnings": null,
+    "adverse_reactions": "ADVERSE REACTIONS The frequency of adverse events reported in patients using nystatin topical preparations is less than 0.1%. The more common events that were reported include allergic reactions, burning, itching, rash, eczema, and pain on application. [see PRECAUTIONS: General ].",
+    "drug_interactions": null,
+    "dosage": "DOSAGE AND ADMINISTRATION Very moist lesions are best treated with the topical dusting powder. Adults and Pediatric Patients (Neonates and Older) Apply to candidal lesions two or three times daily until healing is complete. For fungal infection of the feet caused by Candida species, the powder should be dusted on the feet, as well as, in all foot wear.",
+    "contraindications": "CONTRAINDICATIONS Nyamyc® (Nystatin Topical Powder, USP) is contraindicated in patients with a history of hypersensitivity to any of its components.",
+    "url": "https://labels.fda.gov/",
+    "source_id": "FDA:Nyamyc"
+  },
+  "last_updated": "2026-02-12T14:47:18.879426",
+  "source": "FDA OpenFDA API"
+}

@@ -1,0 +1,28 @@
+{
+  "drug_name": "Mupirocin",
+  "generic_name": "",
+  "brand_names": [],
+  "indications": "",
+  "dosage": "",
+  "contraindications": "4",
+  "warnings": "",
+  "adverse_reactions": "6",
+  "drug_interactions": "",
+  "pharmacology": "",
+  "pregnancy_category": "",
+  "full_label": {
+    "brand_name": "MUPIROCIN",
+    "generic_name": "MUPIROCIN",
+    "manufacturer": "Alembic Pharmaceuticals Limited",
+    "indications": "1 INDICATIONS AND USAGE Mupirocin cream is indicated for the treatment of secondarily infected traumatic skin lesions (up to 10 cm in length or 100 cm 2 in area) due to susceptible isolates of Staphylococcus aureus (S. aureus) and Streptococcus pyogenes (S. pyogenes) . Mupirocin cream is an RNA synthetase inhibitor antibacterial indicated for the treatment of secondarily infected traumatic skin lesions (up to 10 cm in length or 100 cm 2 in area) due to susceptible isolates of Staphylococcus aureus and Streptococcus pyogenes . ( 1 )",
+    "warnings": null,
+    "adverse_reactions": "6 ADVERSE REACTIONS The following adverse reactions are discussed in more detail in other sections of the labeling: Severe Allergic Reactions [see Warnings and Precautions ( 5.1 )] Eye Irritation [see Warnings and Precautions ( 5.2 )] Local Irritation [see Warnings and Precautions ( 5.3 )] Clostridium difficile -Associated Diarrhea [see Warnings and Precautions ( 5.4 )] The most frequent adverse reactions (at least 1%) were headache, rash, and nausea. ( 6.1 ) To report SUSPECTED ADVERSE REACTIONS, contact FDA at 1-800-FDA-1088 or www.fda.gov/medwatch . 6.1 Clinical Trials Experience Because clinical trials are conducted under widely varying conditions, adverse reaction rates observed in the clinical trials of a drug cannot be directly compared with rates in the clinical trials of another drug and may not reflect the rates observed in practice. In 2 randomized, double‑blind, double‑dummy trials, 339 subjects were treated with topical mupirocin cream plus oral placebo. Adverse reactions occurred in 28 (8.3%) subjects. The following adverse reactions were reported by at least 1% of subjects in connection with the use of mupirocin cream in clinical trials: headache (1.7%), rash (1.1%), and nausea (1.1%). Other adverse reactions which occurred in less than 1% of subjects were: abdominal pain, burning at application site, cellulitis, dermatitis, dizziness, pruritus, secondary wound infection, and ulcerative stomatitis. In a supportive trial in the treatment of secondarily infected eczema, 82 subjects were treated with mupirocin cream. The incidence of adverse reactions was as follows: nausea (4.9%), headache and burning at application site (3.6% each), pruritus (2.4%), and 1 report each of abdominal pain, bleeding secondary to eczema, pain secondary to eczema, hives, dry skin, and rash. 6.2 Postmarketing Experience In addition to adverse reactions reported from clinical trials, the following reactions have been identified during postmarketing use of mupirocin cream. Because they are reported voluntarily from a population of unknown size, estimates of frequency cannot be made. These reactions have been chosen for inclusion due to a combination of their seriousness, frequency of reporting, or potential causal relationship to mupirocin cream. Immune System Disorders Systemic allergic reactions, including anaphylaxis, urticaria, angioedema, and generalized rash [see Warnings and Precautions ( 5.1 )] .",
+    "drug_interactions": null,
+    "dosage": "2 DOSAGE AND ADMINISTRATION For Topical Use Only. Apply a small amount of mupirocin cream, with a cotton swab or gauze pad, to the affected area 3 times daily for 10 days. Cover the treated area with gauze dressing if desired. Re-evaluate patients not showing a clinical response within 3 to 5 days. Mupirocin cream is not for intranasal, ophthalmic, or other mucosal use [see Warnings and Precautions ( 5.2 , 5.6 )]. Do not apply mupirocin cream concurrently with any other lotions, creams or ointments [see Clinical Pharmacology ( 12.3 )]. For Topical Use Only. ( 2 ) Apply a small amount of mupirocin cream, with a cotton swab or gauze pad, to the affected area 3 times daily for 10 days. ( 2 ) Re-evaluate patients not showing a clinical response within 3 to 5 days. ( 2 ) Not for intranasal, ophthalmic, or other mucosal use. ( 2 )",
+    "contraindications": "4 CONTRAINDICATIONS Mupirocin cream is contraindicated in patients with known hypersensitivity to mupirocin or any of the excipients of mupirocin cream. Known hypersensitivity to mupirocin or any of the excipients of mupirocin cream. ( 4 )",
+    "url": "https://labels.fda.gov/",
+    "source_id": "FDA:MUPIROCIN"
+  },
+  "last_updated": "2026-02-12T14:41:52.610437",
+  "source": "FDA OpenFDA API"
+}

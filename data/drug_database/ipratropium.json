@@ -1,0 +1,28 @@
+{
+  "drug_name": "Ipratropium",
+  "generic_name": "",
+  "brand_names": [],
+  "indications": "",
+  "dosage": "",
+  "contraindications": "",
+  "warnings": "",
+  "adverse_reactions": "",
+  "drug_interactions": "",
+  "pharmacology": "",
+  "pregnancy_category": "",
+  "full_label": {
+    "brand_name": "Ipratropium Bromide",
+    "generic_name": "IPRATROPIUM BROMIDE",
+    "manufacturer": "Hikma Pharmaceuticals USA Inc.",
+    "indications": null,
+    "warnings": null,
+    "adverse_reactions": null,
+    "drug_interactions": null,
+    "dosage": null,
+    "contraindications": null,
+    "url": "https://labels.fda.gov/",
+    "source_id": "FDA:Ipratropium Bromide"
+  },
+  "last_updated": "2026-02-12T09:14:15.657736",
+  "source": "FDA OpenFDA API"
+}

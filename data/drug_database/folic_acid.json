@@ -1,0 +1,28 @@
+{
+  "drug_name": "Folic Acid",
+  "generic_name": "",
+  "brand_names": [],
+  "indications": "",
+  "dosage": "",
+  "contraindications": "C",
+  "warnings": "",
+  "adverse_reactions": "A",
+  "drug_interactions": "",
+  "pharmacology": "",
+  "pregnancy_category": "",
+  "full_label": {
+    "brand_name": "Integra F",
+    "generic_name": "FERROUS FUMARATE AND POLYSACCHRIDE IRON COMPLEX AND FOLIC ACID",
+    "manufacturer": "U.S. Pharmaceutical Corporation",
+    "indications": "INDICATIONS: Integra FTM is indicated for the treatment of iron deficiency anemia, and folate deficiency anemia. Integra FTM is indicated in pregnancy for the prevention and treatment of iron deficiency and to supply a maintenance dosage of folic acid.",
+    "warnings": null,
+    "adverse_reactions": "Adverse Reactions: Folic Acid: Allergic sensitizations have been reported following both oral and parenteral administration of folic acid. Ferrous Fumarate: Gastrointestinal disturbances (anorexia, nausea, diarrhea, constipation, heartburn and vomiting) occur occasionally, but are usually mild and may subside with continuation of therapy. Reducing the dose and administering it with meals will minimize these effects in the sensitive patient. Increasing fiber in the diet can relieve constipation. Iron may turn stools black. This is a harmless effect that is a result of unabsorbed iron. Although the absorption of iron is best when taken between meals, giving Integra FTM after meals may control occasional G.I. disturbances. Integra FTM is best absorbed when taken at bedtime.",
+    "drug_interactions": null,
+    "dosage": "DOSAGE AND ADMINISTRATION: Adults (persons over 12 years of age), One (1) capsule daily, between meals, or as prescribed by a physician. Do not exceed recommended dosage. Do not administer to children under the age of 12.",
+    "contraindications": "CONTRAINDICATIONS: Integra FTM is contraindicated in patients with known hypersensitivity to any of its ingredients; also, all iron compounds are contraindicated in patients with hemosiderosis, hemochromatosis, or hemolytic anemias. Pernicious anemia is a contraindication, as folic acid may obscure its signs and symptoms.",
+    "url": "https://labels.fda.gov/",
+    "source_id": "FDA:Integra F"
+  },
+  "last_updated": "2026-02-12T14:42:04.047500",
+  "source": "FDA OpenFDA API"
+}

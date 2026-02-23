@@ -1,0 +1,28 @@
+{
+  "drug_name": "Brimonidine",
+  "generic_name": "",
+  "brand_names": [],
+  "indications": "",
+  "dosage": "",
+  "contraindications": "",
+  "warnings": "W",
+  "adverse_reactions": "",
+  "drug_interactions": "",
+  "pharmacology": "",
+  "pregnancy_category": "",
+  "full_label": {
+    "brand_name": "LUMIFY Redness Reliever Eye Drops",
+    "generic_name": "BRIMONIDINE TARTRATE",
+    "manufacturer": "Bausch & Lomb Incorporated",
+    "indications": "Use relieves redness of the eye due to minor eye irritations",
+    "warnings": "Warnings For external use only Do not use if solution changes color or becomes cloudy Stop use and ask a doctor if you experience eye pain, changes in vision, continued redness or irritation of the eye condition worsens or persists for more than 3 days If pregnant or breast-feeding, ask a health professional before use. Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away.",
+    "adverse_reactions": null,
+    "drug_interactions": null,
+    "dosage": "Directions adults and children 5 years of age and over: instill 1 drop in the affected eye(s) every 6-8 hours do not use more than 4 times daily remove contact lenses before use wait at least 10 minutes before re-inserting contact lenses after use if using other ophthalmic products while using this product, wait at least 5 minutes between each product to avoid contamination, do not touch tip of container to any surface replace cap after each use children under 5 years of age: consult a doctor",
+    "contraindications": null,
+    "url": "https://labels.fda.gov/",
+    "source_id": "FDA:LUMIFY Redness Reliever Eye Drops"
+  },
+  "last_updated": "2026-02-12T14:41:38.177439",
+  "source": "FDA OpenFDA API"
+}

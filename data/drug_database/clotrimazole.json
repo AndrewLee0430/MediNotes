@@ -1,0 +1,28 @@
+{
+  "drug_name": "Clotrimazole",
+  "generic_name": "",
+  "brand_names": [],
+  "indications": "",
+  "dosage": "",
+  "contraindications": "",
+  "warnings": "W",
+  "adverse_reactions": "",
+  "drug_interactions": "",
+  "pharmacology": "",
+  "pregnancy_category": "",
+  "full_label": {
+    "brand_name": "Clotrimazole",
+    "generic_name": "CLOTRIMAZOLE",
+    "manufacturer": "Preferred Pharmaceuticals Inc.",
+    "indications": "Uses Cures athlete’s foot (tinea pedis), jock itch (tinea cruris), ringworm (tinea corporis). Relieves the itching, irritation, redness, scaling and discomfort which can accompany these conditions.",
+    "warnings": "Warnings For External use only.",
+    "adverse_reactions": null,
+    "drug_interactions": null,
+    "dosage": "Directions • Wash the affected area and dry thoroughly. ● Apply a thin layer of this product over affected area twice daily (morning and night), or as directed by a doctor. ● Supervise children in the use of this product. ● For athlete’s foot, pay special attention to the spaces between the toes; wear well-fitting ventilated shoes, and change shoes and socks at least once daily. ● For athlete’s foot and ringworm, use daily for 4 weeks. For jock itch, use daily for 2 weeks. ● If conditions persists longer, consult a doctor. ● This product is not effective on the scalp or nails.",
+    "contraindications": null,
+    "url": "https://labels.fda.gov/",
+    "source_id": "FDA:Clotrimazole"
+  },
+  "last_updated": "2026-02-12T14:41:49.141282",
+  "source": "FDA OpenFDA API"
+}
