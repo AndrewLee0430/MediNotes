@@ -1,0 +1,952 @@
+{
+  "timestamp": "20260304_114227",
+  "base_url": "http://127.0.0.1:8000",
+  "summary": {
+    "PASS": 0,
+    "WARN": 0,
+    "FAIL": 0,
+    "ERROR": 50
+  },
+  "pass_rate": 0.0,
+  "evaluator": "LLM Judge (gpt-4o-mini)",
+  "results": [
+    {
+      "id": "R01",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 1.1,
+      "total_elapsed_s": 1.1,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions lactic acidosis as a risk",
+          "mentions renal function or kidney function",
+          "mentions eGFR or creatinine clearance as a threshold"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R02",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions ACE inhibitor or angiotensin-converting enzyme inhibitor or ARB",
+          "mentions diabetes or diabetic patients as the target population"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R03",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions CHA2DS2-VASc or stroke risk scoring",
+          "mentions anticoagulation or anticoagulant therapy"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R04",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions HMG-CoA reductase inhibition",
+          "mentions LDL cholesterol lowering"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R05",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions hyperthermia or high body temperature",
+          "mentions agitation or altered mental status",
+          "mentions clonus or neuromuscular abnormality"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R06",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions stopping heparin or discontinuing heparin",
+          "mentions platelet count or thrombocytopenia",
+          "mentions alternative anticoagulant such as argatroban or fondaparinux or direct thrombin inhibitor"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R07",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions asthma or bronchospasm or reactive airway disease as a contraindication",
+          "mentions bradycardia or heart block as a contraindication"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R08",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions low-dose aspirin or 75mg or 81mg or 100mg",
+          "mentions cardiovascular prevention or secondary prevention or primary prevention"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R09",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions renal function monitoring",
+          "mentions thyroid function monitoring",
+          "mentions serum lithium level monitoring"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R10",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions nausea or vomiting or gastrointestinal symptoms",
+          "mentions arrhythmia or cardiac toxicity",
+          "mentions visual disturbances or yellow vision or xanthopsia"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R11",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions lactic acidosis risk",
+          "mentions renal function or eGFR threshold",
+          "mentions dose adjustment or contraindication based on kidney function"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R12",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions bleeding risk with combination antithrombotic therapy",
+          "mentions clinical monitoring or indication-based decision"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R13",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions increased bleeding risk",
+          "mentions monitoring recommendation or clinical caution"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R14",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions beta-blockers are indicated in stable chronic heart failure with reduced ejection fraction",
+          "mentions contraindicated in acute decompensated heart failure",
+          "mentions the distinction between stable and decompensated heart failure"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R15",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions Type 1 is non-immune and mild platelet drop",
+          "mentions Type 2 is immune-mediated and clinically significant",
+          "mentions thrombosis risk in Type 2"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R16",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions cardiovascular risk of NSAIDs",
+          "mentions renal risk in elderly",
+          "mentions naproxen or acetaminophen as safer alternatives"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R17",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions duration recommendation of at least 6 or 12 months",
+          "mentions bleeding risk vs thrombosis risk balance",
+          "mentions type of stent as a factor"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R18",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions statin-induced myopathy or rhabdomyolysis",
+          "mentions CK level monitoring",
+          "mentions dose reduction or switching statin or discontinuation"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R19",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions dose adjustment based on creatinine clearance or eGFR",
+          "mentions at least one specific antibiotic requiring adjustment"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "R20",
+      "category": "research",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions ACE inhibitors are contraindicated in pregnancy",
+          "mentions fetal risk or teratogenicity",
+          "mentions safer alternative such as methyldopa or labetalol"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/research'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V01",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions increased bleeding risk",
+          "mentions INR monitoring",
+          "mentions clinical monitoring recommendation"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V02",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions lactic acidosis risk",
+          "mentions renal impairment as a concern",
+          "mentions holding or stopping Metformin before or after contrast"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V03",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions myopathy or rhabdomyolysis risk",
+          "mentions CK monitoring or creatine kinase",
+          "mentions dose reduction or dose limitation"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V04",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions hyperkalemia or high potassium risk",
+          "mentions potassium monitoring",
+          "mentions monitoring recommendation"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V05",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions serotonin syndrome risk",
+          "mentions seizure risk"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V06",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions theophylline toxicity risk",
+          "mentions theophylline level monitoring"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V07",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions methotrexate toxicity increase",
+          "mentions renal clearance reduction"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V08",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions CYP2C19 inhibition",
+          "mentions reduced antiplatelet effect",
+          "mentions drug interaction"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V09",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions severe hypotension risk",
+          "states this combination is contraindicated or should be avoided"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V10",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions methotrexate toxicity risk",
+          "mentions renal excretion competition or reduced clearance",
+          "mentions monitoring or caution"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V11",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions colchicine toxicity risk",
+          "mentions CYP3A4 inhibition or P-glycoprotein inhibition",
+          "mentions dose reduction or avoidance"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V12",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions lithium toxicity or elevated lithium levels",
+          "mentions renal prostaglandin inhibition mechanism",
+          "mentions monitoring lithium levels"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V13",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions potential INR elevation",
+          "mentions monitoring INR more frequently"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V14",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions increased bleeding risk with SSRI and NSAID combination",
+          "mentions gastrointestinal bleeding or GI risk",
+          "mentions caution or monitoring recommendation"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "V15",
+      "category": "verify",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions digoxin toxicity risk",
+          "mentions digoxin level monitoring",
+          "mentions dose reduction of digoxin"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D01",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions diabetes or blood sugar condition",
+          "mentions Metformin as the prescribed medication",
+          "mentions diet or lifestyle advice"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D02",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions blood pressure or hypertension",
+          "mentions Amlodipine as the medication",
+          "mentions diet or salt reduction"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D03",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions Warfarin as the medication",
+          "mentions avoiding certain foods or dietary restrictions",
+          "mentions regular blood test or check-up"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D04",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions Levothyroxine or thyroid medication",
+          "mentions taking on empty stomach or before food",
+          "mentions follow-up test or blood test"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D05",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions Aspirin as a medication",
+          "mentions Atorvastatin or cholesterol medication",
+          "mentions heart attack or heart condition or cardiac event"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D06",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions Amoxicillin as the antibiotic",
+          "mentions pregnancy or pregnant",
+          "mentions urinary infection or UTI"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D07",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions COPD or lung condition or breathing difficulty",
+          "mentions inhaler or Salbutamol or breathing medication",
+          "mentions Prednisolone or steroid course or short course medication"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D08",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions Sertraline as the medication",
+          "mentions depression or mood condition",
+          "mentions delay before medication takes effect or weeks to work"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D09",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions osteoporosis or bone condition",
+          "mentions Alendronate as the medication",
+          "mentions taking with water or staying upright after taking"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D10",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions gout or joint pain condition",
+          "mentions Colchicine or gout medication",
+          "mentions dietary advice such as avoiding alcohol or certain foods"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D11",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions kidney disease or renal condition",
+          "mentions avoiding certain medications or NSAIDs",
+          "mentions blood pressure target or control"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D12",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions epilepsy or seizure condition",
+          "mentions Valproate as the medication",
+          "mentions pregnancy risk or contraception advice"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D13",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions memory condition or dementia or Alzheimer",
+          "mentions Donepezil or memory medication or cholinesterase inhibitor",
+          "mentions possible side effects such as nausea or vivid dreams or sleep disturbance"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D14",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions HIV or antiretroviral therapy",
+          "mentions cholesterol medication or statin",
+          "mentions drug interaction concern or monitoring"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    },
+    {
+      "id": "D15",
+      "category": "document",
+      "status": "ERROR",
+      "api_elapsed_s": 0.0,
+      "total_elapsed_s": 0.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions rheumatoid arthritis or joint condition",
+          "mentions Methotrexate as the medication",
+          "mentions folic acid supplementation",
+          "mentions liver function or blood count monitoring"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "API error"
+      },
+      "answer_preview": "[ERROR] Client error '403 Forbidden' for url 'http://127.0.0.1:8000/api/consultation'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    }
+  ]
+}

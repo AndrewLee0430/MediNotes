@@ -84,6 +84,7 @@ class StreamEventType(str, Enum):
     CITATIONS = "citations"     # 引用資訊
     ERROR = "error"             # 錯誤
     DONE = "done"               # 完成
+    FALLBACK  = "fallback"
 
 
 class StreamEvent(BaseModel):

@@ -1,12 +1,9 @@
 """
-Answer Generator - v2.1
-使用 LLM 基於檢索到的文件生成答案，並支援串流輸出
-
-v2.1 改進：
-1. 錯誤分層 - 區分「無結果」/「不相關」/「API 錯誤」給出不同提示
-2. 強化 system prompt - 要求劑量區分、出血徵兆、時效性聲明
-3. Verify 專用 prompt - 藥物交互作用回覆更完整
-4. 時效性標記 - 自動標注文獻年份，提示用戶確認最新指引
+Answer Generator - v2.4
+v2.4 改進：
+1. RAG 生成升級到 gpt-4.1（更強的文獻整合能力）
+2. Fallback 升級到 gpt-4.1-mini
+3. Research prompt 加入禁忌症完整分類要求
 """
 
 from typing import List, AsyncGenerator
@@ -18,67 +15,93 @@ from api.models.schemas import (
     StreamEventType
 )
 
-# 不同狀態的友善錯誤訊息
+# 模型設定
+RAG_MODEL      = "gpt-4.1"        # RAG 生成：最強，處理多篇矛盾文獻
+FALLBACK_MODEL = "gpt-4.1-mini"   # Fallback：平衡品質與成本
+
 ERROR_MESSAGES = {
-    "no_results": (
-        "No relevant literature found for this query. "
-        "Try rephrasing with more specific drug names or clinical terms. "
-        "You may also consult UpToDate or clinical guidelines directly."
-    ),
-    "irrelevant": (
-        "The retrieved documents do not appear to directly address this question. "
-        "The available literature may not cover this specific topic, "
-        "or the query may need to be more specific. "
-        "Consider consulting primary clinical references."
-    ),
     "error": (
         "Unable to retrieve information at this time due to a service issue. "
-        "Please try again in a moment, or consult clinical guidelines directly."
+        "Please try again in a moment."
     ),
+}
+
+# 每個 query_type 有獨立的 Fallback prompt
+# 確保 RAG 找不到文件時，仍根據正確場景回答
+FALLBACK_PROMPTS = {
+    "research": """You are a clinical AI assistant supporting healthcare professionals.
+
+No retrieved documents are available for this query.
+Answer based on standard medical knowledge and current clinical guidelines.
+
+Requirements:
+- Be specific: include drug names, dose ranges, mechanisms, and clinical details
+- Structure your answer clearly with relevant subheadings
+- Include monitoring parameters and clinical warnings where relevant
+- Do NOT add any disclaimer at the end — the system will handle that separately
+
+Language: Respond in the same language as the user's question.
+If the question is in Traditional Chinese (繁體中文), answer in Traditional Chinese.
+""",
+
+    "verify": """You are a clinical pharmacology expert supporting healthcare professionals.
+
+No retrieved documents are available for these drugs.
+Analyze the drug interaction based on known pharmacology and standard clinical references.
+
+You MUST cover ALL of the following:
+1. Interaction severity: Major / Moderate / Minor — with brief rationale
+2. Mechanism: pharmacokinetic (absorption, distribution, metabolism, excretion) or pharmacodynamic
+3. Clinical consequences: what will actually happen to the patient
+4. Specific warning signs: observable symptoms the clinician should watch for
+5. Monitoring parameters: exact labs or clinical checks (e.g. INR, serum levels, renal function)
+6. Clinical recommendation: what action to take (avoid, reduce dose, monitor, time separation)
+
+Do NOT give vague answers like "use with caution" without specifying what to monitor and why.
+Do NOT add any disclaimer at the end — the system will handle that separately
+
+Language: Respond in the same language as the user's question.
+If the question is in Traditional Chinese (繁體中文), answer in Traditional Chinese.
+""",
+
+    "document": """You are a clinical assistant helping write patient-friendly visit summaries.
+
+Generate a clear, friendly letter to the patient based on the visit notes provided.
+
+Requirements:
+- Use simple, non-technical language the patient can understand
+- Include: diagnosis or condition, medications prescribed, how and when to take them
+- Include: key lifestyle advice, foods or activities to avoid if relevant
+- Include: follow-up plan and what to watch out for
+- Do NOT add any disclaimer at the end — the system will handle that separately
+
+Language: Respond in the same language as the visit notes.
+If the notes are in Traditional Chinese (繁體中文), write in Traditional Chinese.
+"""
 }
 
 
 class AnswerGenerator:
-    """
-    答案生成器 v2.1
 
-    功能：
-    1. 基於已驗證的相關文件生成答案
-    2. 支援串流輸出（SSE）
-    3. 自動標註引用來源
-    4. 區分錯誤類型給出對應提示
-    5. 強制要求臨床安全資訊（劑量、徵兆）
-    """
-
-    def __init__(self, model: str = "gpt-4o-mini"):
+    def __init__(self, model: str = RAG_MODEL):
         self.model = model
         self.client = OpenAI()
-
-    # ─────────────────────────────────────────────
-    # 串流生成（主要介面）
-    # ─────────────────────────────────────────────
 
     async def generate_stream(
         self,
         question: str,
         documents: List[RetrievedDocument],
         retrieval_status: str = "ok",
-        query_type: str = "research"  # "research" | "verify" | "document"
+        query_type: str = "research"
     ) -> AsyncGenerator[StreamEvent, None]:
-        """
-        串流生成答案
-
-        Args:
-            question: 使用者問題
-            documents: 已通過相關性驗證的文件
-            retrieval_status: "ok" | "no_results" | "irrelevant" | "error"
-            query_type: 查詢類型，影響 prompt 策略
-        """
-        # 非 ok 狀態：直接回傳對應錯誤訊息
-        if retrieval_status != "ok" or not documents:
-            error_msg = ERROR_MESSAGES.get(retrieval_status, ERROR_MESSAGES["error"])
-            yield StreamEvent(type=StreamEventType.ERROR, content=error_msg)
+        if retrieval_status == "error":
+            yield StreamEvent(type=StreamEventType.ERROR, content=ERROR_MESSAGES["error"])
             yield StreamEvent(type=StreamEventType.DONE)
+            return
+
+        if not documents:
+            async for event in self._generate_fallback_stream(question, query_type):
+                yield event
             return
 
         context = self._build_context(documents)
@@ -113,21 +136,46 @@ class AnswerGenerator:
             yield StreamEvent(type=StreamEventType.DONE)
 
         except Exception as e:
-            yield StreamEvent(
-                type=StreamEventType.ERROR,
-                content=ERROR_MESSAGES["error"]
-            )
+            yield StreamEvent(type=StreamEventType.ERROR, content=ERROR_MESSAGES["error"])
             print(f"❌ Generation error: {e}")
             yield StreamEvent(type=StreamEventType.DONE)
 
-    # ─────────────────────────────────────────────
-    # System Prompts
-    # ─────────────────────────────────────────────
+    async def _generate_fallback_stream(
+        self,
+        question: str,
+        query_type: str = "research"
+    ) -> AsyncGenerator[StreamEvent, None]:
+        system_prompt = FALLBACK_PROMPTS.get(query_type, FALLBACK_PROMPTS["research"])
+        try:
+            yield StreamEvent(type=StreamEventType.FALLBACK, content="no_literature")
+
+            stream = self.client.chat.completions.create(
+                model=FALLBACK_MODEL,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": question}
+                ],
+                stream=True,
+                temperature=0.2,
+                max_tokens=2500
+            )
+
+            for chunk in stream:
+                if chunk.choices[0].delta.content:
+                    yield StreamEvent(
+                        type=StreamEventType.ANSWER,
+                        content=chunk.choices[0].delta.content
+                    )
+
+            yield StreamEvent(type=StreamEventType.CITATIONS, content=[])
+            yield StreamEvent(type=StreamEventType.DONE)
+
+        except Exception as e:
+            yield StreamEvent(type=StreamEventType.ERROR, content=ERROR_MESSAGES["error"])
+            print(f"❌ Fallback generation error: {e}")
+            yield StreamEvent(type=StreamEventType.DONE)
 
     def _get_system_prompt(self, query_type: str = "research") -> str:
-        """
-        根據查詢類型選擇對應 system prompt
-        """
         base = """You are a clinical AI assistant supporting healthcare professionals.
 Your answers must be evidence-based, precise, and clinically actionable.
 
@@ -148,65 +196,85 @@ Drug Interaction specific requirements — you MUST include ALL of the following
 1. **Severity classification**: Major / Moderate / Minor with brief rationale
 2. **Mechanism**: Why this interaction occurs (pharmacokinetic or pharmacodynamic)
 3. **Dose context**: Distinguish effects by dose where relevant
-   - Example: low-dose aspirin (75–100mg) vs. analgesic-dose aspirin (≥325mg) have very different risk profiles when combined with anticoagulants
-4. **Clinical warning signs**: List concrete observable symptoms the patient/clinician should watch for
-   - Example for bleeding risk: gum bleeding, black/tarry stools, unexplained bruising, prolonged bleeding from cuts, blood in urine
-5. **Monitoring parameters**: Specific labs or clinical checks (e.g., INR range, renal function)
-6. **Clinical recommendation**: What action to take (avoid / monitor / adjust dose / use alternative)
+4. **Clinical warning signs**: List concrete observable symptoms
+5. **Monitoring parameters**: Specific labs or clinical checks
+6. **Clinical recommendation**: What action to take
 
 Do NOT say "increases bleeding risk" without specifying HOW to detect it clinically.
 """
 
         if query_type == "research":
             return base + """
-Research query requirements:
+MANDATORY STRUCTURE — Every response MUST follow these 5 sections in order.
+This structure applies to ALL questions regardless of topic.
 
-1. **Answer the specific question directly** — do not summarize tangentially related topics
-2. **Evidence hierarchy**: Note study type (RCT, meta-analysis, cohort, etc.) when relevant
-3. **Recency flag**: If the cited evidence is from before 2020, explicitly state:
-   "⚠️ Note: This evidence predates 2020. More recent guidelines may differ."
-4. **Conflicting evidence**: If sources disagree, present both sides fairly
-5. **Clinical applicability**: Note patient population studied vs. general applicability
+## Direct Answer
+Answer the question directly in 2-3 sentences.
+Put the conclusion FIRST — do not bury it after background information.
+
+## Mechanism
+Explain the underlying pharmacological or pathophysiological mechanism.
+This helps clinicians reason through edge cases beyond the specific question.
+
+## Clinical Warnings & Contraindications
+ALWAYS include this section even if the question is not about safety.
+Structure as:
+- **Absolute contraindications**: situations where the drug/treatment must NOT be used
+- **Relative contraindications**: situations requiring extra caution
+If the question is about mechanism or dosing, still note the key safety concerns.
+
+CONTRAINDICATION COVERAGE RULE:
+When the question involves contraindications or safety, you MUST cover ALL categories:
+- Cardiac (e.g. bradycardia, heart block, decompensated heart failure)
+- Respiratory (e.g. asthma, COPD, bronchospasm)
+- Metabolic (e.g. renal impairment, hepatic impairment, diabetes masking)
+- Drug interactions that are absolute contraindications
+Do not omit categories even if retrieved documents do not mention them.
+Use standard clinical guidelines for any category not covered by the documents.
+
+## Monitoring
+Provide specific, actionable monitoring guidance:
+- What to monitor (exact lab tests or clinical parameters)
+- How frequently
+- Threshold values that require dose adjustment or discontinuation
+Do NOT write vague statements like "monitor renal function".
+Write: "Check eGFR at baseline; reduce dose if eGFR 30-60; discontinue if eGFR < 30; recheck every 3-6 months."
+
+## Evidence Strength
+Rate the evidence and state the source:
+- 🟢 Strong — RCT or meta-analysis; major guideline explicitly recommends
+- 🟡 Moderate — observational study; guideline conditionally recommends
+- 🔴 Limited — case report or expert opinion; insufficient evidence
+
+If evidence is from before 2020, add:
+"⚠️ Evidence predates 2020. Verify against current guidelines."
+If sources conflict, present BOTH sides — do NOT silently choose one.
 """
 
         return base
 
-    # ─────────────────────────────────────────────
-    # Prompt 建構
-    # ─────────────────────────────────────────────
-
     def _build_context(self, documents: List[RetrievedDocument]) -> str:
-        """將文件列表轉換為帶年份標記的 context"""
         context_parts = []
-
         for i, doc in enumerate(documents, 1):
             content = doc.content[:2000] + "..." if len(doc.content) > 2000 else doc.content
-
-            # 加入年份資訊（讓 LLM 能判斷時效性）
             year_info = ""
             if hasattr(doc, 'year') and doc.year and doc.year != "Unknown":
                 year_info = f" [{doc.year}]"
-
-            context_parts.append(
-                f"[{i}] {doc.title}{year_info}\n{content}"
-            )
-
+            context_parts.append(f"[{i}] {doc.title}{year_info}\n{content}")
         return "\n\n".join(context_parts)
 
     def _build_user_prompt(self, question: str, context: str, query_type: str) -> str:
-        """建構 user prompt"""
         extra_instruction = ""
         if query_type == "verify":
             extra_instruction = (
                 "\n\nIMPORTANT: You must explicitly cover dose-dependent effects "
-                "and list specific clinical warning signs for this interaction. "
-                "If the source material mentions dose distinctions, highlight them."
+                "and list specific clinical warning signs for this interaction."
             )
         elif query_type == "research":
             extra_instruction = (
-                "\n\nIMPORTANT: If any cited evidence is from before 2020, "
-                "flag it explicitly. Do not state clinical effects are 'unclear' "
-                "if the context contains evidence supporting a conclusion."
+                "\n\nIMPORTANT: Follow the mandatory 5-section structure: "
+                "Direct Answer → Mechanism → Clinical Warnings & Contraindications → Monitoring → Evidence Strength. "
+                "Every section is required. Do not skip any section even if the question seems narrow."
             )
 
         return f"""Reference documents (with publication year):
@@ -217,14 +285,10 @@ Question: {question}{extra_instruction}
 Instructions:
 1. Answer ONLY based on the provided context
 2. Cite every claim with [1], [2], etc.
-3. If context is insufficient for any part of the answer, state what's missing
+3. If context is insufficient, state what's missing
 4. Be clinically precise
 
 Answer:"""
-
-    # ─────────────────────────────────────────────
-    # 非串流版本
-    # ─────────────────────────────────────────────
 
     async def generate_non_stream(
         self,
@@ -233,19 +297,30 @@ Answer:"""
         retrieval_status: str = "ok",
         query_type: str = "research"
     ) -> tuple[str, List[Citation]]:
-        """非串流生成（用於 Judge 評估等需要完整答案的場景）"""
-        if retrieval_status != "ok" or not documents:
-            error_msg = ERROR_MESSAGES.get(retrieval_status, ERROR_MESSAGES["error"])
-            return error_msg, []
+        if retrieval_status == "error":
+            return ERROR_MESSAGES["error"], []
+
+        if not documents:
+            try:
+                system_prompt = FALLBACK_PROMPTS.get(query_type, FALLBACK_PROMPTS["research"])
+                completion = self.client.chat.completions.create(
+                    model=FALLBACK_MODEL,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": question}
+                    ],
+                    temperature=0.2,
+                    max_tokens=2500
+                )
+                return completion.choices[0].message.content, []
+            except Exception as e:
+                print(f"❌ Fallback error: {e}")
+                return ERROR_MESSAGES["error"], []
 
         context = self._build_context(documents)
         system_prompt = self._get_system_prompt(query_type)
         user_prompt = self._build_user_prompt(question, context, query_type)
-
-        citations = [
-            doc.to_citation(citation_id=i + 1)
-            for i, doc in enumerate(documents)
-        ]
+        citations = [doc.to_citation(citation_id=i + 1) for i, doc in enumerate(documents)]
 
         try:
             completion = self.client.chat.completions.create(
@@ -258,7 +333,6 @@ Answer:"""
                 max_tokens=2500
             )
             return completion.choices[0].message.content, citations
-
         except Exception as e:
             print(f"❌ Generation error: {e}")
             return ERROR_MESSAGES["error"], citations

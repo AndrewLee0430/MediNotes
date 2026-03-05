@@ -1,0 +1,969 @@
+{
+  "timestamp": "20260304_103523",
+  "base_url": "http://127.0.0.1:8000",
+  "summary": {
+    "PASS": 32,
+    "WARN": 17,
+    "FAIL": 1,
+    "ERROR": 0
+  },
+  "pass_rate": 64.0,
+  "evaluator": "LLM Judge (gpt-4o-mini)",
+  "results": [
+    {
+      "id": "R01",
+      "category": "research",
+      "status": "PASS",
+      "api_elapsed_s": 23.7,
+      "total_elapsed_s": 26.9,
+      "eval": {
+        "passed_concepts": [
+          "mentions lactic acidosis as a risk",
+          "mentions renal function or kidney function",
+          "mentions eGFR or creatinine clearance as a threshold"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response adequately addresses all required concepts by discussing lactic acidosis as a risk, mentioning renal function, and referencing eGFR as a threshold for assessing risk in patients with renal impairment. No forbidden concepts were present in the response."
+      },
+      "answer_preview": "Metformin use in patients with renal impairment carries a risk of lactic acidosis (LA), a rare but potentially life-threatening side effect. The risk of LA increases particularly when metformin is combined with histamine H2 receptor inhibitors such as cimetidine, especially in mild-to-moderate renal failure (chronic kidney disease stages 1 to 3), as this combination can raise plasma metformin conc..."
+    },
+    {
+      "id": "R02",
+      "category": "research",
+      "status": "PASS",
+      "api_elapsed_s": 18.1,
+      "total_elapsed_s": 20.3,
+      "eval": {
+        "passed_concepts": [
+          "mentions ACE inhibitor or angiotensin-converting enzyme inhibitor or ARB",
+          "mentions diabetes or diabetic patients as the target population"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response clearly mentions ACE inhibitors (ACEI) and ARBs as first-line treatments for hypertension in diabetic patients, fulfilling both required concepts. There are no forbidden concepts present."
+      },
+      "answer_preview": "根據提供的文獻，糖尿病患者合併高血壓的第一線治療選擇包括：\n\n- 血管緊張素轉換酶抑制劑（ACEI）\n- 鈣離子通道阻斷劑（CCB）\n- Prazosin（α1受體阻斷劑）\n- 小劑量的噻嗪類利尿劑\n- β阻斷劑（但建議使用心臟選擇性β阻斷劑，避免非選擇性β阻斷劑）\n\n其中，ACEI、CCB及prazosin因代謝副作用較小，較適合糖尿病患者使用；而噻嗪類利尿劑和β阻斷劑可能會惡化血糖控制及脂質代謝，需謹慎使用。非選擇性β阻斷劑應避免，因可能影響周邊血流及掩蓋低血糖症狀。對於無腎病變或明顯體液滯留的非胰島素依賴型糖尿病患者，噻嗪類利尿劑可用鈉限制及CCB替代[2]。\n\n此外，另一篇文獻指出阻斷腎素-血管緊張素系統（如ACEI或ARB）不僅有降壓效果，還可能降低新發糖尿病風險，且改善胰島素敏感性；相反，噻嗪類利尿劑和β阻斷劑可能加速糖尿病發生[1]。\n\n⚠️ Note: 以上證據均來自202..."
+    },
+    {
+      "id": "R03",
+      "category": "research",
+      "status": "PASS",
+      "api_elapsed_s": 19.7,
+      "total_elapsed_s": 21.7,
+      "eval": {
+        "passed_concepts": [
+          "mentions CHA2DS2-VASc or stroke risk scoring",
+          "mentions anticoagulation or anticoagulant therapy"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response effectively addresses both required concepts by mentioning the CHA2DS2-VASc scoring system for assessing stroke risk and discussing anticoagulation therapy as a preventive measure for stroke in atrial fibrillation patients."
+      },
+      "answer_preview": "根據提供的文獻，房顫（atrial fibrillation, AF）是心源性栓塞性中風的主要且廣為認可的危險因子，因此預防中風是房顫患者抗凝治療的主要指徵。口服抗凝劑（如華法林）用於預防房顫患者的中風已有超過50年的歷史，且經證實能有效降低中風風險[1][2]。\n\n具體指徵包括：\n- 有房顫診斷的患者，特別是年齡較大（70歲以上）者，因其中風風險顯著增加[2]。\n- 有中風或短暫性腦缺血發作（TIA）病史的房顫患者。\n- 依據臨床風險評估工具（如CHADS2或CHA2DS2-VASc分數）評估後，屬於中高風險者，應接受抗凝治療以預防中風[3]。\n- 儘管抗凝治療有效且安全，但實際臨床中仍有低使用率，尤其是高齡患者，這些患者反而是最可能受益者[2]。\n\n此外，臨床醫師在決定是否給予抗凝治療時，會評估患者的中風風險與出血風險，並依據指南及風險評分系統做出判斷[3]。\n\n⚠️ Note: 以上..."
+    },
+    {
+      "id": "R04",
+      "category": "research",
+      "status": "WARN",
+      "api_elapsed_s": 15.2,
+      "total_elapsed_s": 17.0,
+      "eval": {
+        "passed_concepts": [
+          "mentions HMG-CoA reductase inhibition"
+        ],
+        "missing_concepts": [
+          "mentions LDL cholesterol lowering"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The model response clearly describes the inhibition of HMG-CoA reductase, which is a key mechanism of action for statins. However, it does not explicitly mention the lowering of LDL cholesterol, which is a critical aspect of statin therapy. Therefore, one required concept is missing."
+      },
+      "answer_preview": "Statins act by inhibiting the enzyme HMG-CoA reductase (3-hydroxy-3-methylglutaryl-coenzyme A reductase), which catalyzes the committed step in cholesterol biosynthesis. Structurally, statins bind to the catalytic portion of human HMG-CoA reductase, occupying part of the binding site of the natural substrate HMG-CoA. This binding blocks access of HMG-CoA to the active site of the enzyme, thereby i..."
+    },
+    {
+      "id": "R05",
+      "category": "research",
+      "status": "PASS",
+      "api_elapsed_s": 13.1,
+      "total_elapsed_s": 15.4,
+      "eval": {
+        "passed_concepts": [
+          "mentions hyperthermia or high body temperature",
+          "mentions agitation or altered mental status",
+          "mentions clonus or neuromuscular abnormality"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response adequately covers all required concepts related to serotonin syndrome, including hyperthermia, altered mental status, and neuromuscular abnormalities such as clonus."
+      },
+      "answer_preview": "Serotonin syndrome is characterized by a clinical triad of signs involving:\n\n1. Neuromuscular excitation — such as tremor, clonus, hyperreflexia, and rigidity.\n2. Autonomic dysfunction — including hyperthermia, diaphoresis, tachycardia, and hypertension.\n3. Altered mental status — ranging from agitation and confusion to coma.\n\nThese features typically occur in a patient who has recently started or..."
+    },
+    {
+      "id": "R06",
+      "category": "research",
+      "status": "WARN",
+      "api_elapsed_s": 28.9,
+      "total_elapsed_s": 31.4,
+      "eval": {
+        "passed_concepts": [
+          "concept 1",
+          "concept 3"
+        ],
+        "missing_concepts": [
+          "concept 2"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The response adequately addresses the need to stop heparin and discusses alternative anticoagulants like argatroban. However, it does not explicitly mention monitoring platelet counts or the condition of thrombocytopenia, which is a critical aspect of HIT management."
+      },
+      "answer_preview": "Heparin-induced thrombocytopenia (HIT) management involves several key steps based on current evidence and guidelines:\n\n1. **Diagnosis and Risk Stratification**  \n   - Use clinical risk assessment tools such as the 4Ts score to estimate the pretest probability of HIT. This helps identify patients who need further laboratory testing and management changes [3],[4].  \n   - In patients with intermedia..."
+    },
+    {
+      "id": "R07",
+      "category": "research",
+      "status": "PASS",
+      "api_elapsed_s": 17.6,
+      "total_elapsed_s": 19.6,
+      "eval": {
+        "passed_concepts": [
+          "mentions asthma or bronchospasm or reactive airway disease as a contraindication",
+          "mentions bradycardia or heart block as a contraindication"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response correctly identifies asthma and bronchospasm as contraindications for beta-blocker use, as well as bradycardia and heart block. All required concepts are satisfied without any forbidden concepts present."
+      },
+      "answer_preview": "Based on the provided reference [1], beta-blockers have specific contraindications related to several major categories:\n\n1. **Cardiac contraindications:**\n   - Beta-blockers are contraindicated in patients with bradycardia (slow heart rate).\n   - They should not be used in patients with heart block (atrioventricular conduction disturbances).\n   - They are contraindicated in decompensated heart fai..."
+    },
+    {
+      "id": "R08",
+      "category": "research",
+      "status": "PASS",
+      "api_elapsed_s": 17.9,
+      "total_elapsed_s": 19.4,
+      "eval": {
+        "passed_concepts": [
+          "concept 1",
+          "concept 2"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response adequately mentions low-dose aspirin (75-325 mg) and discusses its use in cardiovascular prevention, fulfilling all required concepts without including any forbidden concepts."
+      },
+      "answer_preview": "根據提供的文獻，阿司匹林用於心血管疾病預防的推薦劑量如下：\n\n1. 低劑量阿司匹林（75-325 mg每日）是常用於心血管和腦血管事件的二級預防，且美國國家指引推薦此範圍內的劑量[3]。  \n2. 在低劑量範圍內，隨機對照試驗顯示75 mg與325 mg的阿司匹林在療效和安全性上無明顯差異，但有趨勢顯示325 mg可能療效稍佳[3]。  \n3. 多項統合分析指出，75-150 mg的阿司匹林療效與160-325 mg相當，且安全性（如出血風險）在低劑量範圍內無明顯差異[3]。  \n4. 目前臨床實務中，阿司匹林的劑量選擇應根據患者的個別臨床狀況及整體心血管風險評估來決定[1][3]。  \n5. 最新文獻也強調低劑量阿司匹林在動脈粥樣硬化性心血管疾病預防中的角色，並關注其安全性與療效的平衡[2]。\n\n總結：阿司匹林用於心血管疾病預防的推薦劑量通常為每日75-325 mg，低劑量（如81 mg..."
+    },
+    {
+      "id": "R09",
+      "category": "research",
+      "status": "PASS",
+      "api_elapsed_s": 19.0,
+      "total_elapsed_s": 21.2,
+      "eval": {
+        "passed_concepts": [
+          "mentions renal function monitoring",
+          "mentions thyroid function monitoring",
+          "mentions serum lithium level monitoring"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response adequately addresses all required concepts by explicitly mentioning the need for monitoring of serum lithium levels, renal function, and thyroid function in patients on lithium therapy."
+      },
+      "answer_preview": "Patients on lithium therapy require careful and regular monitoring due to lithium's narrow therapeutic range and potential toxicities. The key monitoring components include:\n\n1. **Serum Lithium Levels**:  \n   - Lithium blood levels should be monitored regularly to maintain therapeutic concentrations typically between 0.6 and 1.0 mmol/L during maintenance therapy.  \n   - Blood samples for lithium l..."
+    },
+    {
+      "id": "R10",
+      "category": "research",
+      "status": "PASS",
+      "api_elapsed_s": 18.8,
+      "total_elapsed_s": 20.9,
+      "eval": {
+        "passed_concepts": [
+          "concept 1",
+          "concept 2",
+          "concept 3"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response adequately covers all required concepts. It mentions gastrointestinal symptoms such as nausea and vomiting, discusses various arrhythmias as a primary feature of digoxin toxicity, and includes visual disturbances, specifically color vision changes, which align with the required concepts."
+      },
+      "answer_preview": "臨床上，地高辛（digoxin）中毒的特徵主要包括心律不整及非心臟症狀：\n\n1. **心律不整**：地高辛中毒最具特異性的臨床表現是各種心律不整，這些心律不整的種類多樣且與地高辛的電生理作用有關。常見的包括心房顫動、心室早期收縮、心室頻脈、心房顫動伴心室率過慢等。這些心律不整在過去較為常見，但隨著用藥劑量調整及監測技術進步，發生率已有所下降[1][3]。\n\n2. **非心臟症狀**：包括噁心、嘔吐、食慾不振、視覺異常（如色覺改變、模糊視力）、頭暈、疲倦等，這些症狀常與心律不整同時出現，提示中毒可能[4]。\n\n3. **血清地高辛濃度與臨床症狀的關係**：研究顯示，血清地高辛濃度在中毒組平均約2.09 ng/ml，非中毒組約1.20 ng/ml，且血清濃度超過3 ng/ml時，若伴隨臨床症狀，則高度懷疑中毒。但血清濃度與臨床症狀有重疊，故血清濃度不能單獨作為診斷依據[4]。\n\n4. **中毒..."
+    },
+    {
+      "id": "R11",
+      "category": "research",
+      "status": "WARN",
+      "api_elapsed_s": 17.3,
+      "total_elapsed_s": 19.6,
+      "eval": {
+        "passed_concepts": [
+          "mentions lactic acidosis risk",
+          "mentions renal function or eGFR threshold"
+        ],
+        "missing_concepts": [
+          "mentions dose adjustment or contraindication based on kidney function"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The response adequately discusses the risk of lactic acidosis and provides information on renal function thresholds (eGFR). However, it does not explicitly mention dose adjustment or contraindications based on kidney function, which is a required concept."
+      },
+      "answer_preview": "根據最新及過去的研究證據，metformin 在腎功能不佳的病人使用情況如下：\n\n1. 傳統指引通常建議腎功能嚴重受損（如慢性腎臟病第4期，eGFR <30 mL/min/1.73m²）患者避免使用metformin，主要是擔心乳酸中毒風險增加[2]。然而，這些建議缺乏強有力的直接證據支持。\n\n2. 一項2025年的大型蘇格蘭全國性觀察性研究發現，對於已發展至CKD第4期（eGFR <30）的2型糖尿病患者，繼續使用metformin與停止使用相比，3年存活率較高（70.5% vs 63.7%），且主要心血管事件發生率相似，顯示在此腎功能階段繼續使用metformin可能更有利於存活，且未見明顯增加心血管風險[1]。\n\n3. 2014年的系統性回顧指出，對於輕度至中度腎功能不全（eGFR 30-60）患者，metformin的藥物濃度通常仍在治療範圍內，乳酸濃度並未顯著升高，乳酸中毒的發生..."
+    },
+    {
+      "id": "R12",
+      "category": "research",
+      "status": "PASS",
+      "api_elapsed_s": 20.3,
+      "total_elapsed_s": 22.2,
+      "eval": {
+        "passed_concepts": [
+          "mentions bleeding risk with combination antithrombotic therapy",
+          "mentions clinical monitoring or indication-based decision"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response effectively addresses the bleeding risk associated with the combination of antithrombotic therapies and emphasizes the need for clinical monitoring and decision-making based on specific indications. All required concepts are satisfied."
+      },
+      "answer_preview": "根據提供的文獻，關於同時使用兩種抗血栓藥物（通常指抗血小板藥物與抗凝血藥物）：\n\n1. 在缺血性中風或短暫性腦缺血發作（TIA）的二級預防中，短期雙重抗血小板療法（DAPT，例如阿司匹林加氯吡格雷或替卡格雷）在21-30天內比單一抗血小板療法更有效，但延長使用DAPT超過此期間會增加出血風險且無額外益處[1]。這裡指的是兩種抗血小板藥物的合用。\n\n2. 對於某些高風險患者（如大血管顱內動脈粥樣硬化病變），可考慮DAPT使用90天，之後改用阿司匹林單一療法[1]。\n\n3. 關於抗凝血藥物（如華法林）與抗血小板藥物同時使用的情況，文獻中未明確提及同時使用的安全性與禁忌，但抗凝血藥物本身有較高的出血風險，且需監測[1]。\n\n4. 在心臟瓣膜疾病或其他特定情況下，抗凝血藥物（如維生素K拮抗劑）與抗血小板藥物的使用需根據具體病情調整，且存在出血風險[5]。\n\n5. 文獻中未詳細說明同時使用抗血小板與..."
+    },
+    {
+      "id": "R13",
+      "category": "research",
+      "status": "PASS",
+      "api_elapsed_s": 17.0,
+      "total_elapsed_s": 19.1,
+      "eval": {
+        "passed_concepts": [
+          "mentions increased bleeding risk",
+          "mentions monitoring recommendation or clinical caution"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response clearly mentions the increased bleeding risk associated with the combination of warfarin and aspirin, and it also emphasizes the need for clinical caution and monitoring in the context of patient assessment. Therefore, all required concepts are satisfied."
+      },
+      "answer_preview": "根據提供的文獻，warfarin 與 aspirin 合用的安全性存在風險，且需謹慎評估：\n\n1. 一項涵蓋26,916名急性冠心症患者的14個隨機臨床試驗的綜合分析顯示，warfarin 與 aspirin 合用相較於單用 aspirin，並未顯著降低心肌梗塞、全因死亡或中風的整體風險。然而，當 warfarin 控制在中等強度（INR 2.0-3.0）且 aspirin 劑量較高（≥100 mg/天）時，能顯著降低心肌梗塞和中風的風險。但合用組的重大及輕微出血風險幾乎增加一倍以上，顯示出明顯的出血風險增加[1]。\n\n2. 另一項回顧性研究針對接受冠狀動脈支架置放且需長期抗凝的患者指出，warfarin 合併 aspirin 的組合在預防支架血栓形成方面效果不佳，且 warfarin 是主要不良預後和重大出血的獨立預測因子。該研究中，warfarin 加 aspirin 的患者支架血栓發..."
+    },
+    {
+      "id": "R14",
+      "category": "research",
+      "status": "WARN",
+      "api_elapsed_s": 23.1,
+      "total_elapsed_s": 25.2,
+      "eval": {
+        "passed_concepts": [
+          "concept 1",
+          "concept 3"
+        ],
+        "missing_concepts": [
+          "concept 2"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The model response correctly indicates that beta blockers are indicated in stable chronic heart failure with reduced ejection fraction and makes a distinction between stable and decompensated heart failure. However, it does not explicitly mention that beta blockers are contraindicated in acute decompensated heart failure, which is a required concept."
+      },
+      "answer_preview": "Beta blockers are not universally contraindicated in heart failure; rather, they have become a cornerstone of therapy in many patients with chronic heart failure, particularly those with reduced left ventricular ejection fraction (HFrEF). The evidence and guidelines have evolved over time, clarifying when beta blockers can be used and when they should be avoided.\n\n**When beta blockers can be used ..."
+    },
+    {
+      "id": "R15",
+      "category": "research",
+      "status": "WARN",
+      "api_elapsed_s": 13.2,
+      "total_elapsed_s": 15.3,
+      "eval": {
+        "passed_concepts": [
+          "Type 1 is non-immune and mild platelet drop",
+          "Type 2 is immune-mediated and clinically significant"
+        ],
+        "missing_concepts": [
+          "thrombosis risk in Type 2"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The response adequately describes Type 1 HIT as non-immune and mild, and Type 2 HIT as immune-mediated and clinically significant. However, it does not explicitly mention the risk of thrombosis associated with Type 2 HIT, which is a critical aspect of its clinical significance."
+      },
+      "answer_preview": "Type 1 and Type 2 heparin-induced thrombocytopenia (HIT) differ primarily in their pathophysiology and clinical significance:\n\n- Type 1 HIT is a nonimmunologically mediated platelet activation. It is generally less severe and does not typically lead to serious complications.\n\n- Type 2 HIT is immunologically mediated and is the more serious form. It is the most frequent drug-induced immune thromboc..."
+    },
+    {
+      "id": "R16",
+      "category": "research",
+      "status": "WARN",
+      "api_elapsed_s": 23.4,
+      "total_elapsed_s": 25.4,
+      "eval": {
+        "passed_concepts": [
+          "concept 1",
+          "concept 3"
+        ],
+        "missing_concepts": [
+          "concept 2"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The model response adequately discusses the cardiovascular risks associated with NSAIDs and identifies naproxen as a safer alternative. However, it does not mention renal risk in elderly patients, which is a required concept."
+      },
+      "answer_preview": "For elderly patients with cardiovascular disease, the choice of NSAIDs requires careful balancing of cardiovascular (CV) and gastrointestinal (GI) risks.\n\n1. **Cardiovascular Safety:**\n   - Selective COX-2 inhibitors (coxibs) such as celecoxib are associated with higher cardiovascular risk compared to some non-selective NSAIDs [1][4][5].\n   - Among non-selective NSAIDs, naproxen appears to have a ..."
+    },
+    {
+      "id": "R17",
+      "category": "research",
+      "status": "WARN",
+      "api_elapsed_s": 15.6,
+      "total_elapsed_s": 17.8,
+      "eval": {
+        "passed_concepts": [
+          "concept 1",
+          "concept 3"
+        ],
+        "missing_concepts": [
+          "concept 2"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The model response mentions a duration recommendation of 6 to 12 months for standard stent implantation, and it discusses the type of stent as a factor influencing DAPT duration. However, it does not address the balance between bleeding risk and thrombosis risk, which is a critical aspect of DAPT management."
+      },
+      "answer_preview": "The optimal duration of dual antiplatelet therapy (DAPT) after coronary stent placement depends on the stenting strategy and the specific clinical context:\n\n1. For standard coronary stent implantation, individualization of DAPT duration is recommended, but specific durations are not detailed in the provided abstract [1]. Generally, guidelines suggest 6 to 12 months, but this is not explicitly stat..."
+    },
+    {
+      "id": "R18",
+      "category": "research",
+      "status": "PASS",
+      "api_elapsed_s": 21.4,
+      "total_elapsed_s": 23.7,
+      "eval": {
+        "passed_concepts": [
+          "mentions statin-induced myopathy or rhabdomyolysis",
+          "mentions CK level monitoring",
+          "mentions dose reduction or switching statin or discontinuation"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response adequately addresses all required concepts, including the mention of statin-induced myopathy and rhabdomyolysis, CK level monitoring, and the options for dose reduction, switching statins, or discontinuation. No forbidden concepts were present."
+      },
+      "answer_preview": "您的病人在使用statin後出現肌肉痛（statin-associated muscle symptoms, SAMS），建議您依照以下步驟處理：\n\n1. **評估症狀與嚴重度**  \n   - SAMS範圍從輕微肌肉痛、無力到嚴重的橫紋肌溶解症。輕度肌肉痛較常見，約5-25%患者會有不同程度肌肉症狀[2][4][5]。  \n   - 若伴隨肌酸激酶（CK）明顯升高（超過正常上限10倍以上），需高度警覺橫紋肌溶解症的可能[1]。\n\n2. **停藥與評估**  \n   - 若肌肉痛嚴重或CK顯著升高，應暫停statin使用，觀察症狀是否改善[1]。  \n   - 排除其他可能引起肌肉痛的原因。\n\n3. **調整治療方案**  \n   - 若症狀改善，可考慮重新以較低劑量或不同種類的statin（如長效型rosuvastatin或atorvastatin）嘗試[3]。  \n   - 也可考慮非..."
+    },
+    {
+      "id": "R19",
+      "category": "research",
+      "status": "PASS",
+      "api_elapsed_s": 25.7,
+      "total_elapsed_s": 27.8,
+      "eval": {
+        "passed_concepts": [
+          "mentions dose adjustment based on creatinine clearance or eGFR",
+          "mentions at least one specific antibiotic requiring adjustment"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response adequately discusses dose adjustments based on creatinine clearance and mentions specific antibiotics such as vancomycin and colistin that require adjustment in renal impairment. No forbidden concepts were present."
+      },
+      "answer_preview": "根據提供的文獻資料，常用抗生素在腎功能不全或接受腎臟替代治療（如持續性腎臟替代治療CRRT）患者的劑量調整原則如下：\n\n1. **持續性腎臟替代治療（CRRT）患者的抗生素劑量調整**  \n   - CRRT患者的抗生素藥物動力學與正常腎功能患者不同，且不能直接套用間歇性血液透析的劑量。  \n   - 需根據抗生素的藥物特性（如蛋白結合率、分布容積、腎清除率）及CRRT的清除率調整劑量。  \n   - 常用抗生素如vancomycin、linezolid、meropenem、piperacillin-tazobactam、aminoglycosides等均需調整劑量以維持有效血藥濃度，避免毒性或治療失敗[1]。  \n\n2. **Colistin（多黏菌素）在腎功能不全及RRT患者的劑量調整**  \n   - Colistin血漿濃度與腎毒性風險重疊，且患者間藥物動力學差異大。  \n   -..."
+    },
+    {
+      "id": "R20",
+      "category": "research",
+      "status": "WARN",
+      "api_elapsed_s": 19.4,
+      "total_elapsed_s": 21.7,
+      "eval": {
+        "passed_concepts": [
+          "mentions ACE inhibitors are contraindicated in pregnancy",
+          "mentions fetal risk or teratogenicity"
+        ],
+        "missing_concepts": [
+          "mentions safer alternative such as methyldopa or labetalol"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The response adequately states that ACE inhibitors are contraindicated in pregnancy and discusses the associated fetal risks and teratogenicity. However, it does not mention any safer alternatives for managing conditions during pregnancy, which is a required concept."
+      },
+      "answer_preview": "Based on the provided evidence, angiotensin-converting enzyme inhibitors (ACE inhibitors) should not be used during pregnancy.\n\n- ACE inhibitors have been associated with adverse fetal effects and congenital abnormalities, especially when used beyond the first trimester. Although one study of 91 pregnancies with early pregnancy exposure to ACE inhibitors or angiotensin receptor blockers (ARBs) fou..."
+    },
+    {
+      "id": "V01",
+      "category": "verify",
+      "status": "PASS",
+      "api_elapsed_s": 13.0,
+      "total_elapsed_s": 16.0,
+      "eval": {
+        "passed_concepts": [
+          "mentions increased bleeding risk",
+          "mentions INR monitoring",
+          "mentions clinical monitoring recommendation"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response effectively addresses all required concepts by discussing the increased bleeding risk associated with the combination of Warfarin and Aspirin, emphasizing the importance of INR monitoring, and providing recommendations for clinical monitoring of bleeding signs and symptoms."
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. The interaction between Warfarin and Aspirin is primarily pharmacodynamic. Both drugs individually increase bleeding risk by different mechanisms: Warfarin acts as a vitamin K antagonist decreasing clotting factor synthesis, while Aspirin irreversibly inhibits platelet aggregation. The ble..."
+    },
+    {
+      "id": "V02",
+      "category": "verify",
+      "status": "PASS",
+      "api_elapsed_s": 9.5,
+      "total_elapsed_s": 11.5,
+      "eval": {
+        "passed_concepts": [
+          "mentions lactic acidosis risk",
+          "mentions renal impairment as a concern",
+          "mentions holding or stopping Metformin before or after contrast"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response effectively addresses all required concepts by discussing the risk of lactic acidosis, highlighting renal impairment as a concern, and advising on the need to hold or stop Metformin before or after the use of contrast dye."
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. Pharmacodynamic interaction arises because iodinated contrast dye used in imaging procedures can cause acute renal impairment, which reduces renal clearance of metformin. Reduced renal function increases the risk of metformin accumulation and consequently lactic acidosis, a rare but seriou..."
+    },
+    {
+      "id": "V03",
+      "category": "verify",
+      "status": "PASS",
+      "api_elapsed_s": 13.2,
+      "total_elapsed_s": 15.3,
+      "eval": {
+        "passed_concepts": [
+          "mentions myopathy or rhabdomyolysis risk",
+          "mentions CK monitoring or creatine kinase",
+          "mentions dose reduction or dose limitation"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response adequately addresses all required concepts by discussing the risk of myopathy and rhabdomyolysis, recommending CK monitoring, and specifying a dose limitation for simvastatin when coadministered with amiodarone."
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. Simvastatin is extensively metabolized by CYP3A4 enzymes, and amiodarone is a known potent inhibitor of CYP3A4. This pharmacokinetic interaction results in increased plasma concentrations of simvastatin when coadministered with amiodarone, leading to heightened risk of simvastatin-induced ..."
+    },
+    {
+      "id": "V04",
+      "category": "verify",
+      "status": "WARN",
+      "api_elapsed_s": 18.1,
+      "total_elapsed_s": 20.0,
+      "eval": {
+        "passed_concepts": [
+          "mentions hyperkalemia or high potassium risk",
+          "mentions potassium monitoring"
+        ],
+        "missing_concepts": [
+          "mentions monitoring recommendation"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The response adequately discusses the risk of hyperkalemia and the need for potassium monitoring. However, it lacks a clear recommendation for monitoring, which is a separate required concept."
+      },
+      "answer_preview": "Found 3 drug interaction(s): 1 個Critical, 2 個Major. Please review the details below and consult a healthcare professional. Co-administration of Lisinopril, an ACE inhibitor, with Potassium increases the risk of hyperkalemia due to pharmacodynamic interaction. Lisinopril inhibits aldosterone production leading to potassium retention, and exogenous Potassium supplementation adds to this effect. This..."
+    },
+    {
+      "id": "V05",
+      "category": "verify",
+      "status": "PASS",
+      "api_elapsed_s": 11.6,
+      "total_elapsed_s": 13.2,
+      "eval": {
+        "passed_concepts": [
+          "mentions serotonin syndrome risk",
+          "mentions seizure risk"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response adequately addresses both required concepts by discussing the risk of serotonin syndrome and the risk of seizures associated with the interaction between fluoxetine and tramadol."
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. Fluoxetine is a potent CYP2D6 inhibitor which can increase plasma concentrations of tramadol while decreasing levels of its active metabolite M1. This pharmacokinetic interaction may reduce analgesic efficacy and increase risk of tramadol-related adverse effects including seizures and sero..."
+    },
+    {
+      "id": "V06",
+      "category": "verify",
+      "status": "PASS",
+      "api_elapsed_s": 9.9,
+      "total_elapsed_s": 13.0,
+      "eval": {
+        "passed_concepts": [
+          "mentions theophylline toxicity risk",
+          "mentions theophylline level monitoring"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response adequately addresses both required concepts by discussing the risk of theophylline toxicity and the need for monitoring theophylline levels, thus satisfying all criteria."
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. The interaction occurs via a pharmacokinetic mechanism where systemic administration of ciprofloxacin (a fluoroquinolone antibiotic) inhibits the metabolism of theophylline, leading to elevated plasma concentrations of theophylline. This effect can increase the risk of theophylline toxicit..."
+    },
+    {
+      "id": "V07",
+      "category": "verify",
+      "status": "PASS",
+      "api_elapsed_s": 11.4,
+      "total_elapsed_s": 13.0,
+      "eval": {
+        "passed_concepts": [
+          "mentions methotrexate toxicity increase",
+          "mentions renal clearance reduction"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response effectively addresses both required concepts by explaining that NSAIDs can increase methotrexate toxicity and reduce its renal clearance, thus satisfying all criteria."
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. Pharmacokinetic interaction occurs as NSAIDs may reduce renal clearance of methotrexate by decreasing renal perfusion and inhibiting renal tubular secretion, leading to increased plasma concentrations of methotrexate. This increases the risk of methotrexate toxicity. The interaction is dos..."
+    },
+    {
+      "id": "V08",
+      "category": "verify",
+      "status": "PASS",
+      "api_elapsed_s": 10.8,
+      "total_elapsed_s": 12.9,
+      "eval": {
+        "passed_concepts": [
+          "mentions CYP2C19 inhibition",
+          "mentions reduced antiplatelet effect",
+          "mentions drug interaction"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response successfully addresses all required concepts, including the inhibition of CYP2C19, the reduced antiplatelet effect of clopidogrel when used with omeprazole, and the existence of a drug interaction between the two medications."
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. Pharmacodynamic interaction occurs as omeprazole inhibits the CYP2C19 enzyme responsible for converting clopidogrel into its active metabolite. This results in reduced plasma concentrations of clopidogrel's active metabolite, leading to diminished platelet inhibition and decreased antiplat..."
+    },
+    {
+      "id": "V09",
+      "category": "verify",
+      "status": "PASS",
+      "api_elapsed_s": 10.7,
+      "total_elapsed_s": 12.5,
+      "eval": {
+        "passed_concepts": [
+          "mentions severe hypotension risk",
+          "states this combination is contraindicated or should be avoided"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response clearly mentions the risk of severe hypotension associated with the combination of sildenafil and nitrates, and it explicitly states that co-administration is contraindicated. Therefore, all required concepts are satisfied."
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Critical. Please review the details below and consult a healthcare professional. Sildenafil is a phosphodiesterase-5 (PDE5) inhibitor that potentiates the hypotensive effects of nitrates by enhancing the nitric oxide/cGMP pathway. This pharmacodynamic interaction leads to significant vasodilation and can cause severe, potentially life-threatening hypotension. This i..."
+    },
+    {
+      "id": "V10",
+      "category": "verify",
+      "status": "PASS",
+      "api_elapsed_s": 11.3,
+      "total_elapsed_s": 14.0,
+      "eval": {
+        "passed_concepts": [
+          "mentions methotrexate toxicity risk",
+          "mentions renal excretion competition or reduced clearance",
+          "mentions monitoring or caution"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response effectively addresses all required concepts by discussing the risk of methotrexate toxicity, explaining the mechanism of reduced renal clearance due to amoxicillin, and emphasizing the need for monitoring and caution during coadministration."
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Moderate. Please review the details below and consult a healthcare professional. Pharmacokinetic interaction occurs as amoxicillin (a penicillin antibiotic) can reduce the renal clearance of methotrexate by decreasing its tubular secretion, potentially increasing methotrexate plasma concentrations. This may enhance methotrexate toxicity. The risk increases with high..."
+    },
+    {
+      "id": "V11",
+      "category": "verify",
+      "status": "PASS",
+      "api_elapsed_s": 10.9,
+      "total_elapsed_s": 13.2,
+      "eval": {
+        "passed_concepts": [
+          "mentions colchicine toxicity risk",
+          "mentions CYP3A4 inhibition or P-glycoprotein inhibition",
+          "mentions dose reduction or avoidance"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response effectively addresses all required concepts by discussing the risk of colchicine toxicity, the role of CYP3A4 and P-glycoprotein inhibition in the interaction, and the recommendation for dose reduction or avoidance in certain patient populations."
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Critical. Please review the details below and consult a healthcare professional. Clarithromycin is a strong inhibitor of both CYP3A4 and P-glycoprotein (P-gp), enzymes primarily responsible for the metabolism and efflux of colchicine. Co-administration results in significantly increased colchicine plasma concentrations through a pharmacokinetic interaction. This ele..."
+    },
+    {
+      "id": "V12",
+      "category": "verify",
+      "status": "WARN",
+      "api_elapsed_s": 7.7,
+      "total_elapsed_s": 9.9,
+      "eval": {
+        "passed_concepts": [
+          "mentions lithium toxicity or elevated lithium levels",
+          "mentions monitoring lithium levels"
+        ],
+        "missing_concepts": [
+          "mentions renal prostaglandin inhibition mechanism"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The response adequately discusses lithium toxicity and the need for monitoring lithium levels, but it does not mention the renal prostaglandin inhibition mechanism involved in the interaction with ibuprofen."
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. Ibuprofen, a nonsteroidal anti-inflammatory drug (NSAID), can reduce renal clearance of lithium through pharmacokinetic interaction, leading to increased lithium serum concentrations and potential lithium toxicity. This interaction is dose-dependent; higher doses and prolonged use of ibupr..."
+    },
+    {
+      "id": "V13",
+      "category": "verify",
+      "status": "PASS",
+      "api_elapsed_s": 10.0,
+      "total_elapsed_s": 11.7,
+      "eval": {
+        "passed_concepts": [
+          "mentions potential INR elevation",
+          "mentions monitoring INR more frequently"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response effectively addresses both required concepts by discussing the potential elevation of INR due to the interaction between Warfarin and Amoxicillin and emphasizes the need for more frequent INR monitoring during antibiotic treatment."
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. The interaction between Warfarin and Amoxicillin (part of Amoxicillin and Clavulanate Potassium) occurs mainly through pharmacodynamic and pharmacokinetic mechanisms. Amoxicillin can alter gut flora that synthesize vitamin K, which may enhance the anticoagulant effect of Warfarin leading t..."
+    },
+    {
+      "id": "V14",
+      "category": "verify",
+      "status": "FAIL",
+      "api_elapsed_s": 2.9,
+      "total_elapsed_s": 5.0,
+      "eval": {
+        "passed_concepts": [],
+        "missing_concepts": [
+          "mentions increased bleeding risk particularly GI bleeding",
+          "mentions serotonin-mediated platelet dysfunction",
+          "mentions clinical monitoring or alternative analgesic"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The model response does not address any of the required concepts related to the drug interaction between SSRIs and NSAIDs, including the increased bleeding risk, serotonin-mediated platelet dysfunction, and the need for clinical monitoring or alternative analgesics."
+      },
+      "answer_preview": "No FDA label data found for these drugs. Please check the spelling or use the English drug name."
+    },
+    {
+      "id": "V15",
+      "category": "verify",
+      "status": "PASS",
+      "api_elapsed_s": 11.1,
+      "total_elapsed_s": 13.2,
+      "eval": {
+        "passed_concepts": [
+          "mentions digoxin toxicity risk",
+          "mentions digoxin level monitoring",
+          "mentions dose reduction of digoxin"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response adequately addresses all required concepts by discussing the risk of digoxin toxicity, the need for monitoring digoxin levels, and the recommendation for dose reduction of digoxin when initiating amiodarone therapy."
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. Amiodarone inhibits the clearance of digoxin primarily through pharmacokinetic interaction by inhibiting P-glycoprotein (PGP), leading to increased digoxin serum concentrations by approximately 70%. This interaction is dose-dependent with higher doses of amiodarone producing more pronounce..."
+    },
+    {
+      "id": "D01",
+      "category": "document",
+      "status": "PASS",
+      "api_elapsed_s": 2.8,
+      "total_elapsed_s": 5.1,
+      "eval": {
+        "passed_concepts": [
+          "mentions diabetes or blood sugar condition",
+          "mentions Metformin as the prescribed medication",
+          "mentions diet or lifestyle advice"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response successfully addresses all required concepts by mentioning the patient's diabetes condition, prescribing Metformin, and providing lifestyle advice regarding diet and exercise. Additionally, there are no forbidden concepts present in the response."
+      },
+      "answer_preview": "### Visit Summary  \nYou are a 65-year-old man with Type 2 diabetes. At this visit, we started you on Metformin medication, taken twice daily with a dose of 500 mg each time. We also talked about the importance of following a healthy diet and getting regular exercise.\n\n### What Happens Next  \nPlease come back for a follow-up appointment in 3 months. At that time, we will check your average blood su..."
+    },
+    {
+      "id": "D02",
+      "category": "document",
+      "status": "PASS",
+      "api_elapsed_s": 2.5,
+      "total_elapsed_s": 4.3,
+      "eval": {
+        "passed_concepts": [
+          "mentions blood pressure or hypertension",
+          "mentions Amlodipine as the medication",
+          "mentions diet or salt reduction"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response successfully addresses all required concepts by mentioning the patient's high blood pressure, the medication Amlodipine, and the recommendation for a low-salt diet."
+      },
+      "answer_preview": "### Visit Summary  \nYou are a 72-year-old woman with high blood pressure. Today, your blood pressure was measured at 160/95.  \n\n### What Happens Next  \nYou have started taking a new medication called Amlodipine, 5 mg once daily. We also talked about following a low-salt diet. Please come back for a follow-up visit in 4 weeks to check how you are doing."
+    },
+    {
+      "id": "D03",
+      "category": "document",
+      "status": "WARN",
+      "api_elapsed_s": 2.7,
+      "total_elapsed_s": 4.7,
+      "eval": {
+        "passed_concepts": [
+          "mentions Warfarin as the medication",
+          "mentions blood test or regular check"
+        ],
+        "missing_concepts": [
+          "mentions Vitamin K or foods to avoid"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The response successfully mentions Warfarin and the need for regular blood tests, but it fails to mention Vitamin K or foods to avoid, which is a critical aspect of managing Warfarin therapy."
+      },
+      "answer_preview": "### Visit Summary  \nYou are a 55-year-old man diagnosed with an irregular heartbeat called atrial fibrillation. To help manage this, we have started you on a medication called Warfarin.  \n\n### What Happens Next  \nYour blood will be checked every month to monitor how well the medication is working. We aim to keep your blood within a specific range to prevent problems. Please avoid eating foods that..."
+    },
+    {
+      "id": "D04",
+      "category": "document",
+      "status": "WARN",
+      "api_elapsed_s": 2.9,
+      "total_elapsed_s": 4.7,
+      "eval": {
+        "passed_concepts": [
+          "mentions Levothyroxine as the medication",
+          "mentions taking on empty stomach"
+        ],
+        "missing_concepts": [
+          "mentions thyroid condition"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The model response successfully mentions Levothyroxine and the instruction to take it on an empty stomach, but it fails to explicitly mention the thyroid condition, which is a required concept."
+      },
+      "answer_preview": "### Visit Summary\nYou are a 45-year-old woman with an underactive thyroid. We have started you on a medicine called Levothyroxine at a dose of 50 micrograms each day. It is important to take this medicine on an empty stomach.\n\n### What Happens Next\nWe will check your thyroid function again in 6 weeks to see how you are doing on the treatment."
+    },
+    {
+      "id": "D05",
+      "category": "document",
+      "status": "WARN",
+      "api_elapsed_s": 3.2,
+      "total_elapsed_s": 5.2,
+      "eval": {
+        "passed_concepts": [
+          "mentions Aspirin as a medication",
+          "mentions heart attack or heart condition"
+        ],
+        "missing_concepts": [
+          "mentions statin or cholesterol medication"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The response successfully mentions Aspirin and the heart attack, but it does not explicitly mention Atorvastatin as a statin or cholesterol medication, which is a required concept."
+      },
+      "answer_preview": "### Visit Summary  \nYou are a 68-year-old man who recently had a heart attack. After your hospital stay, you were sent home with medications including Aspirin, Atorvastatin, and Metoprolol to help support your heart health.  \n\n### What Happens Next  \nYou have been referred to a cardiac rehabilitation program to support your recovery. Please plan to come back for a follow-up visit in two weeks."
+    },
+    {
+      "id": "D06",
+      "category": "document",
+      "status": "PASS",
+      "api_elapsed_s": 2.4,
+      "total_elapsed_s": 4.8,
+      "eval": {
+        "passed_concepts": [
+          "mentions Amoxicillin as the antibiotic",
+          "mentions pregnancy or pregnant",
+          "mentions urinary infection or UTI"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response successfully includes all required concepts: it mentions Amoxicillin as the antibiotic, indicates that the patient is pregnant, and refers to the urinary tract infection (UTI). There are no forbidden concepts present."
+      },
+      "answer_preview": "### Visit Summary  \nYou are a 30-year-old pregnant woman who was diagnosed with a urinary tract infection (UTI).  \n\n### What Happens Next  \nYou have started taking Amoxicillin three times a day for 7 days. Please avoid using Trimethoprim. We will follow up with a urine culture to check how your infection is improving."
+    },
+    {
+      "id": "D07",
+      "category": "document",
+      "status": "WARN",
+      "api_elapsed_s": 2.5,
+      "total_elapsed_s": 4.2,
+      "eval": {
+        "passed_concepts": [
+          "mentions COPD or lung condition or breathing difficulty",
+          "mentions inhaler or breathing medication"
+        ],
+        "missing_concepts": [
+          "mentions follow-up or review appointment"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The response adequately addresses the concepts related to COPD and the inhaler prescribed, but it lacks a mention of a follow-up or review appointment, which is necessary for complete evaluation."
+      },
+      "answer_preview": "### Visit Summary\nYou are a 58-year-old man experiencing a flare-up of your chronic lung condition (COPD). To help with this, we have prescribed a 5-day course of prednisolone and a salbutamol inhaler to use as needed.\n\n### What Happens Next\nYou will have a breathing test (spirometry) scheduled in 6 weeks to check how your lungs are doing."
+    },
+    {
+      "id": "D08",
+      "category": "document",
+      "status": "PASS",
+      "api_elapsed_s": 2.6,
+      "total_elapsed_s": 4.7,
+      "eval": {
+        "passed_concepts": [
+          "mentions Sertraline as the medication",
+          "mentions depression or mood condition",
+          "mentions delay before medication takes effect or weeks to work"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response successfully addresses all required concepts by mentioning Sertraline as the medication, identifying the condition as depression, and noting the expected delay in medication effects. There are no forbidden concepts present."
+      },
+      "answer_preview": "### Visit Summary\n\nYou are a 40-year-old woman who is experiencing depression. We have started you on a medication called Sertraline, taken once daily at 50mg. It may take 2 to 4 weeks before you begin to notice the full effect of this medicine. \n\n### What Happens Next\n\nPlease avoid drinking alcohol while taking this medication. We would like to see you again in 4 weeks to check on your progress a..."
+    },
+    {
+      "id": "D09",
+      "category": "document",
+      "status": "PASS",
+      "api_elapsed_s": 2.7,
+      "total_elapsed_s": 4.5,
+      "eval": {
+        "passed_concepts": [
+          "mentions osteoporosis or bone condition",
+          "mentions Alendronate as the medication",
+          "mentions taking with water or staying upright after taking"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response successfully addresses all required concepts by mentioning osteoporosis, the medication Alendronate, and the instructions for taking it with water and remaining upright afterward."
+      },
+      "answer_preview": "### Visit Summary  \nYou are a 77-year-old woman with bone thinning (osteoporosis). We started you on a medication called Alendronate, which you will take once a week.\n\n### What Happens Next  \nTake the Alendronate with a full glass of water and remain sitting or standing for 30 minutes after taking it. You will also continue to take calcium and vitamin D supplements to support your bone health."
+    },
+    {
+      "id": "D10",
+      "category": "document",
+      "status": "WARN",
+      "api_elapsed_s": 2.8,
+      "total_elapsed_s": 4.6,
+      "eval": {
+        "passed_concepts": [
+          "mentions gout or joint condition",
+          "mentions Colchicine or gout medication"
+        ],
+        "missing_concepts": [
+          "mentions uric acid or diet advice"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The response adequately mentions gout and colchicine, but it does not explicitly mention uric acid or provide specific diet advice related to it, which is a required concept."
+      },
+      "answer_preview": "### Visit Summary\nYou came in with a gout attack, which is a type of joint inflammation. We have started treatment with a medicine called colchicine, which you should take twice a day for 3 days. Applying an ice pack to the affected joint can help reduce the discomfort. It's important to avoid alcohol and organ meats during this time.\n\n### What Happens Next\nWe will check your uric acid level in ab..."
+    },
+    {
+      "id": "D11",
+      "category": "document",
+      "status": "WARN",
+      "api_elapsed_s": 2.8,
+      "total_elapsed_s": 4.8,
+      "eval": {
+        "passed_concepts": [
+          "mentions kidney disease or renal condition",
+          "mentions blood pressure target or control"
+        ],
+        "missing_concepts": [
+          "mentions avoiding certain medications that harm kidneys"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The response adequately mentions the patient's kidney disease and the blood pressure target but fails to explicitly state the avoidance of certain medications that could harm the kidneys, despite implying it. Therefore, one concept is missing."
+      },
+      "answer_preview": "### Visit Summary  \nYou are a 62-year-old man with stage 3 chronic kidney disease, which means your kidney function is moderately reduced. It is important to avoid certain pain relievers like NSAIDs and other medicines that could harm your kidneys. Your blood pressure goal is to keep it below 130/80. You are currently taking Ramipril 5 mg once daily to help manage this.\n\n### What Happens Next  \nWe..."
+    },
+    {
+      "id": "D12",
+      "category": "document",
+      "status": "PASS",
+      "api_elapsed_s": 2.5,
+      "total_elapsed_s": 4.3,
+      "eval": {
+        "passed_concepts": [
+          "mentions epilepsy or seizure condition",
+          "mentions Valproate as the medication",
+          "mentions pregnancy risk or contraception advice"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response successfully addresses all required concepts by mentioning the patient's epilepsy diagnosis, the medication Valproate, and the risks associated with pregnancy and the need for contraception."
+      },
+      "answer_preview": "### Visit Summary\nYou are a 35-year-old woman who was recently diagnosed with epilepsy. We have started you on a medication called Valproate, which you will take 500mg twice a day. \n\n### What Happens Next\nPlease avoid drinking alcohol while on this medication. It is important to use contraception because Valproate can harm a developing baby. We will check your liver function with a blood test in o..."
+    },
+    {
+      "id": "D13",
+      "category": "document",
+      "status": "WARN",
+      "api_elapsed_s": 2.2,
+      "total_elapsed_s": 4.2,
+      "eval": {
+        "passed_concepts": [
+          "mentions memory condition or dementia or Alzheimer",
+          "mentions possible side effects such as nausea or sleep disturbance"
+        ],
+        "missing_concepts": [
+          "mentions Donepezil or memory medication"
+        ],
+        "forbidden_found": [],
+        "all_pass": false,
+        "reasoning": "The response successfully mentions the memory condition (Alzheimer's disease) and possible side effects (nausea and vivid dreams), but it does not explicitly mention Donepezil as the medication being prescribed."
+      },
+      "answer_preview": "### Visit Summary\nYou are an 80-year-old woman who has Alzheimer's disease. We have started a new medication called Donepezil, which you will take at night. It may cause some vivid dreams or feelings of nausea at first. Your caregiver has been given information about this medication.\n\n### What Happens Next\nWe will see you again in 6 weeks to check how you are doing with the new medication."
+    },
+    {
+      "id": "D14",
+      "category": "document",
+      "status": "PASS",
+      "api_elapsed_s": 2.3,
+      "total_elapsed_s": 4.8,
+      "eval": {
+        "passed_concepts": [
+          "mentions HIV or antiretroviral therapy",
+          "mentions cholesterol medication or statin",
+          "mentions drug interaction concern or monitoring"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response successfully addresses all required concepts by mentioning HIV, the cholesterol medication Atorvastatin, and the concern for drug interactions along with monitoring liver function."
+      },
+      "answer_preview": "### Visit Summary  \nYou are a 48-year-old man living with HIV and currently taking medications to manage it. We have started you on a new medicine, Atorvastatin, to help with your cholesterol levels.  \n\n### What Happens Next  \nWe will review your medications to make sure there are no interactions between the new medicine and your current HIV treatment. You will have a check of your liver function ..."
+    },
+    {
+      "id": "D15",
+      "category": "document",
+      "status": "PASS",
+      "api_elapsed_s": 4.9,
+      "total_elapsed_s": 7.0,
+      "eval": {
+        "passed_concepts": [
+          "mentions rheumatoid arthritis or joint condition",
+          "mentions Methotrexate as the medication",
+          "mentions folic acid supplementation",
+          "mentions liver function or blood count monitoring"
+        ],
+        "missing_concepts": [],
+        "forbidden_found": [],
+        "all_pass": true,
+        "reasoning": "The model response successfully addresses all required concepts related to the patient's condition, medication, supplementation, and monitoring without including any forbidden concepts."
+      },
+      "answer_preview": "### Visit Summary  \nYou are a 55-year-old man diagnosed with rheumatoid arthritis. Your doctor has started you on a medication called Methotrexate, which you will take once a week. You will also take a vitamin called folic acid every day. It is important to avoid drinking alcohol while on this medication.\n\n### What Happens Next  \nYou will need to have blood tests to check your liver function and b..."
+    }
+  ]
+}

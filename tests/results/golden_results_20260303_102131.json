@@ -1,0 +1,521 @@
+{
+  "timestamp": "20260303_102131",
+  "base_url": "http://127.0.0.1:8000",
+  "summary": {
+    "PASS": 0,
+    "WARN": 0,
+    "FAIL": 10,
+    "ERROR": 20
+  },
+  "pass_rate": 0.0,
+  "results": [
+    {
+      "id": "R01",
+      "category": "research",
+      "status": "FAIL",
+      "elapsed_s": 4.6,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "lactic acidosis",
+          "renal",
+          "eGFR"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": ""
+    },
+    {
+      "id": "R02",
+      "category": "research",
+      "status": "FAIL",
+      "elapsed_s": 2.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "ACE inhibitor",
+          "ARB"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": ""
+    },
+    {
+      "id": "R03",
+      "category": "research",
+      "status": "FAIL",
+      "elapsed_s": 4.7,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "CHA2DS2",
+          "stroke",
+          "warfarin"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": ""
+    },
+    {
+      "id": "R04",
+      "category": "research",
+      "status": "FAIL",
+      "elapsed_s": 2.1,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "HMG-CoA",
+          "cholesterol"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": ""
+    },
+    {
+      "id": "R05",
+      "category": "research",
+      "status": "FAIL",
+      "elapsed_s": 3.9,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "hyperthermia",
+          "agitation",
+          "clonus"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": ""
+    },
+    {
+      "id": "R06",
+      "category": "research",
+      "status": "FAIL",
+      "elapsed_s": 4.3,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "heparin",
+          "platelet",
+          "argatroban"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": ""
+    },
+    {
+      "id": "R07",
+      "category": "research",
+      "status": "FAIL",
+      "elapsed_s": 4.4,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "asthma",
+          "bradycardia",
+          "heart block"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": ""
+    },
+    {
+      "id": "R08",
+      "category": "research",
+      "status": "FAIL",
+      "elapsed_s": 3.3,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "75",
+          "100",
+          "low-dose"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": ""
+    },
+    {
+      "id": "R09",
+      "category": "research",
+      "status": "FAIL",
+      "elapsed_s": 4.3,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "renal",
+          "thyroid",
+          "serum level"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": ""
+    },
+    {
+      "id": "R10",
+      "category": "research",
+      "status": "FAIL",
+      "elapsed_s": 4.6,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "nausea",
+          "arrhythmia",
+          "visual"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": ""
+    },
+    {
+      "id": "V01",
+      "category": "verify",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "bleeding",
+          "INR",
+          "monitor"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '422 Unprocessable Content' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422"
+    },
+    {
+      "id": "V02",
+      "category": "verify",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "lactic acidosis",
+          "renal",
+          "hold"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '422 Unprocessable Content' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422"
+    },
+    {
+      "id": "V03",
+      "category": "verify",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [
+          "CK"
+        ],
+        "failed_keywords": [
+          "myopathy",
+          "dose"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '422 Unprocessable Content' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422"
+    },
+    {
+      "id": "V04",
+      "category": "verify",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "hyperkalemia",
+          "potassium",
+          "monitor"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '422 Unprocessable Content' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422"
+    },
+    {
+      "id": "V05",
+      "category": "verify",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "serotonin",
+          "seizure"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '422 Unprocessable Content' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422"
+    },
+    {
+      "id": "V06",
+      "category": "verify",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "theophylline",
+          "toxicity",
+          "level"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '422 Unprocessable Content' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422"
+    },
+    {
+      "id": "V07",
+      "category": "verify",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "toxicity",
+          "renal",
+          "avoid"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '422 Unprocessable Content' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422"
+    },
+    {
+      "id": "V08",
+      "category": "verify",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "CYP2C19",
+          "platelet",
+          "interaction"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '422 Unprocessable Content' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422"
+    },
+    {
+      "id": "V09",
+      "category": "verify",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "hypotension",
+          "contraindicated",
+          "avoid"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '422 Unprocessable Content' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422"
+    },
+    {
+      "id": "V10",
+      "category": "verify",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "methotrexate",
+          "renal",
+          "toxicity"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '422 Unprocessable Content' for url 'http://127.0.0.1:8000/api/verify'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422"
+    },
+    {
+      "id": "D01",
+      "category": "document",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "diabetes",
+          "Metformin",
+          "diet"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '404 Not Found' for url 'http://127.0.0.1:8000/api/product'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    },
+    {
+      "id": "D02",
+      "category": "document",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "blood pressure",
+          "Amlodipine",
+          "diet"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '404 Not Found' for url 'http://127.0.0.1:8000/api/product'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    },
+    {
+      "id": "D03",
+      "category": "document",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "Warfarin",
+          "INR",
+          "vitamin K"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '404 Not Found' for url 'http://127.0.0.1:8000/api/product'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    },
+    {
+      "id": "D04",
+      "category": "document",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "Levothyroxine",
+          "thyroid",
+          "empty stomach"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '404 Not Found' for url 'http://127.0.0.1:8000/api/product'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    },
+    {
+      "id": "D05",
+      "category": "document",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "Aspirin",
+          "statin",
+          "heart attack"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '404 Not Found' for url 'http://127.0.0.1:8000/api/product'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    },
+    {
+      "id": "D06",
+      "category": "document",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "antibiotic",
+          "pregnancy",
+          "infection"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '404 Not Found' for url 'http://127.0.0.1:8000/api/product'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    },
+    {
+      "id": "D07",
+      "category": "document",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "COPD",
+          "inhaler",
+          "steroid"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '404 Not Found' for url 'http://127.0.0.1:8000/api/product'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    },
+    {
+      "id": "D08",
+      "category": "document",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "antidepressant",
+          "Sertraline",
+          "weeks"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '404 Not Found' for url 'http://127.0.0.1:8000/api/product'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    },
+    {
+      "id": "D09",
+      "category": "document",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "osteoporosis",
+          "Alendronate",
+          "upright"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '404 Not Found' for url 'http://127.0.0.1:8000/api/product'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    },
+    {
+      "id": "D10",
+      "category": "document",
+      "status": "ERROR",
+      "elapsed_s": 0.0,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "gout",
+          "Colchicine",
+          "uric acid"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "[ERROR] Client error '404 Not Found' for url 'http://127.0.0.1:8000/api/product'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    }
+  ]
+}

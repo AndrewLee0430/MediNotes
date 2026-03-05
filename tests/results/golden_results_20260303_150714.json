@@ -1,0 +1,516 @@
+{
+  "timestamp": "20260303_150714",
+  "base_url": "http://127.0.0.1:8000",
+  "summary": {
+    "PASS": 28,
+    "WARN": 1,
+    "FAIL": 1,
+    "ERROR": 0
+  },
+  "pass_rate": 93.3,
+  "results": [
+    {
+      "id": "R01",
+      "category": "research",
+      "status": "PASS",
+      "elapsed_s": 20.5,
+      "eval": {
+        "passed_keywords": [
+          "lactic acidosis",
+          "renal",
+          "eGFR"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Metformin use in patients with renal impairment is primarily associated with the risk of metformin-associated lactic acidosis (MALA), a rare but potentially life-threatening complication. The risk of lactic acidosis increases particularly when metformin accumulates due to reduced renal clearance, es..."
+    },
+    {
+      "id": "R02",
+      "category": "research",
+      "status": "WARN",
+      "elapsed_s": 12.8,
+      "eval": {
+        "passed_keywords": [
+          "ACE"
+        ],
+        "failed_keywords": [
+          "diabetes"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "在糖尿病患者中，高血壓的第一線治療通常包括以下幾類藥物：\n\n1. **ACE抑制劑（ACE inhibitors）**  \n   - 例如：雷米普利（Ramipril）、依那普利（Enalapril）  \n   - 機制：抑制血管緊張素轉換酶，降低血管收縮，減少腎臟損傷  \n   - 優點：有助於保護腎臟，減少糖尿病腎病變的進展，是糖尿病患者首選藥物\n\n2. **血管緊張素II受體阻斷劑（ARBs）**  \n   - 例如：氯沙坦（Losartan）、缬沙坦（Valsartan）  \n   - 機制：阻斷血管緊張素II受體，降低血壓並保護腎臟  \n   - 適用於對ACE抑制劑不耐受（如咳嗽）..."
+    },
+    {
+      "id": "R03",
+      "category": "research",
+      "status": "PASS",
+      "elapsed_s": 16.3,
+      "eval": {
+        "passed_keywords": [
+          "atrial fibrillation",
+          "anticoagul"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "The indications for prophylactic anticoagulation in atrial fibrillation (AF) primarily relate to the prevention of thromboembolic events, especially ischemic stroke. Patients with AF have an increased risk of stroke due to embolism from the atria, and anticoagulation reduces this risk significantly...."
+    },
+    {
+      "id": "R04",
+      "category": "research",
+      "status": "PASS",
+      "elapsed_s": 11.9,
+      "eval": {
+        "passed_keywords": [
+          "HMG",
+          "LDL"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Statins are a class of lipid-lowering medications primarily used to reduce cholesterol levels and prevent cardiovascular disease. Their mechanism of action involves the inhibition of a key enzyme in cholesterol biosynthesis:\n\n**Mechanism of Action:**\n\n- Statins competitively inhibit **HMG-CoA reduct..."
+    },
+    {
+      "id": "R05",
+      "category": "research",
+      "status": "PASS",
+      "elapsed_s": 10.4,
+      "eval": {
+        "passed_keywords": [
+          "hyperthermia",
+          "agitation",
+          "clonus"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Serotonin syndrome is characterized by a triad of clinical features:\n\n1. Altered mental state (e.g., agitation, confusion)\n2. Autonomic hyperactivity (e.g., hyperthermia, diaphoresis, tachycardia, hypertension)\n3. Neuromuscular abnormalities (e.g., tremor, clonus, hyperreflexia, rigidity)\n\nThese sig..."
+    },
+    {
+      "id": "R06",
+      "category": "research",
+      "status": "PASS",
+      "elapsed_s": 19.7,
+      "eval": {
+        "passed_keywords": [
+          "heparin",
+          "platelet",
+          "thrombin"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Heparin-induced thrombocytopenia (HIT) management involves several key steps:\n\n1. **Immediate cessation of all heparin products:** Once HIT is suspected, all heparin exposure must be stopped immediately to prevent further immune activation and thrombosis [2].\n\n2. **Risk stratification and diagnosis:..."
+    },
+    {
+      "id": "R07",
+      "category": "research",
+      "status": "FAIL",
+      "elapsed_s": 12.9,
+      "eval": {
+        "passed_keywords": [],
+        "failed_keywords": [
+          "beta-block",
+          "bradycardia"
+        ],
+        "forbidden_found": [],
+        "keyword_pass": false
+      },
+      "answer_preview": "Based on the provided references:\n\n1. β-blockers have traditionally been considered absolutely contraindicated in patients with cocaine-induced cardiovascular toxicity due to the feared phenomenon of unopposed α-stimulation, which could worsen hypertension and vasoconstriction. However, this contrai..."
+    },
+    {
+      "id": "R08",
+      "category": "research",
+      "status": "PASS",
+      "elapsed_s": 12.7,
+      "eval": {
+        "passed_keywords": [
+          "aspirin",
+          "prevention"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "阿司匹林（Aspirin）用於心血管疾病預防時的建議劑量如下：\n\n### 1. 一級預防（Primary Prevention）\n- 對於尚未發生心血管事件但有較高風險的患者，低劑量阿司匹林通常在75至100毫克每日。\n- 目前許多指南對一級預防使用阿司匹林持謹慎態度，因為出血風險可能抵銷其心血管保護效益。需根據個人風險評估決定。\n\n### 2. 二級預防（Secondary Prevention）\n- 對於已有心肌梗塞、中風、周邊動脈疾病等心血管事件病史的患者，建議使用低劑量阿司匹林，通常為75至100毫克每日。\n- 這個劑量能有效抑制血小板聚集，降低再發心血管事件風險。\n\n### 劑量與用..."
+    },
+    {
+      "id": "R09",
+      "category": "research",
+      "status": "PASS",
+      "elapsed_s": 13.0,
+      "eval": {
+        "passed_keywords": [
+          "renal",
+          "thyroid",
+          "serum level"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Patients on lithium therapy require careful and frequent monitoring due to lithium's narrow therapeutic index and potential toxicity. The key monitoring components include:\n\n1. **Serum Lithium Levels:** Regular measurement of serum lithium concentration is essential to avoid toxicity. Lithium toxici..."
+    },
+    {
+      "id": "R10",
+      "category": "research",
+      "status": "PASS",
+      "elapsed_s": 13.2,
+      "eval": {
+        "passed_keywords": [
+          "nausea",
+          "arrhythmia",
+          "visual"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "The clinical features of digoxin toxicity include:\n\n- Gastrointestinal symptoms such as nausea and vomiting [4].\n- Cardiac manifestations including bradycardia, heart block, and potentially lethal arrhythmias such as ventricular fibrillation or tachycardia [1,4].\n- Electrolyte disturbances, notably ..."
+    },
+    {
+      "id": "V01",
+      "category": "verify",
+      "status": "PASS",
+      "elapsed_s": 13.1,
+      "eval": {
+        "passed_keywords": [
+          "bleeding",
+          "INR",
+          "monitor"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. Warfarin and aspirin interact primarily through a pharmacodynamic mechanism increasing bleeding risk due to synergistic effects on hemostasis. Warfarin decreases clotting factor synthesis by..."
+    },
+    {
+      "id": "V02",
+      "category": "verify",
+      "status": "PASS",
+      "elapsed_s": 12.3,
+      "eval": {
+        "passed_keywords": [
+          "lactic acidosis",
+          "renal",
+          "hold"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. Pharmacodynamic interaction occurs because iodinated contrast dye can cause acute kidney injury, which reduces renal function and therefore impairs metformin clearance. Reduced renal clearan..."
+    },
+    {
+      "id": "V03",
+      "category": "verify",
+      "status": "PASS",
+      "elapsed_s": 10.5,
+      "eval": {
+        "passed_keywords": [
+          "myopathy",
+          "CK",
+          "dose"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. Pharmacokinetic interaction occurs because amiodarone inhibits CYP3A4, the enzyme responsible for metabolism of simvastatin. This inhibition increases simvastatin plasma levels, thereby incr..."
+    },
+    {
+      "id": "V04",
+      "category": "verify",
+      "status": "PASS",
+      "elapsed_s": 30.5,
+      "eval": {
+        "passed_keywords": [
+          "hyperkalemia",
+          "potassium",
+          "monitor"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Found 3 drug interaction(s): 3 個Major. Please review the details below and consult a healthcare professional. Lisinopril is an ACE inhibitor which reduces aldosterone secretion, leading to decreased potassium excretion and potential potassium retention (pharmacodynamic effect). Concomitant use with ..."
+    },
+    {
+      "id": "V05",
+      "category": "verify",
+      "status": "PASS",
+      "elapsed_s": 14.6,
+      "eval": {
+        "passed_keywords": [
+          "serotonin",
+          "seizure"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. Fluoxetine is a potent inhibitor of CYP2D6, the enzyme responsible for converting tramadol to its more potent active metabolite M1 (O-desmethyltramadol). This pharmacokinetic interaction res..."
+    },
+    {
+      "id": "V06",
+      "category": "verify",
+      "status": "PASS",
+      "elapsed_s": 11.0,
+      "eval": {
+        "passed_keywords": [
+          "theophylline",
+          "toxicity",
+          "level"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. Ciprofloxacin, a fluoroquinolone antibiotic, can inhibit the metabolism of theophylline, leading to increased serum theophylline concentrations. This interaction is pharmacokinetic in nature..."
+    },
+    {
+      "id": "V07",
+      "category": "verify",
+      "status": "PASS",
+      "elapsed_s": 11.9,
+      "eval": {
+        "passed_keywords": [
+          "toxicity",
+          "renal"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Major. Please review the details below and consult a healthcare professional. NSAIDs can increase plasma concentrations of methotrexate by reducing renal clearance (pharmacokinetic interaction). This effect is dose-dependent and more significant with high-dose methotr..."
+    },
+    {
+      "id": "V08",
+      "category": "verify",
+      "status": "PASS",
+      "elapsed_s": 10.4,
+      "eval": {
+        "passed_keywords": [
+          "CYP2C19",
+          "platelet",
+          "interaction"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Moderate. Please review the details below and consult a healthcare professional. Clopidogrel is a prodrug that requires metabolic activation primarily via the CYP2C19 enzyme to produce its active antiplatelet metabolite. Omeprazole is a strong CYP2C19 inhibitor, which..."
+    },
+    {
+      "id": "V09",
+      "category": "verify",
+      "status": "PASS",
+      "elapsed_s": 14.5,
+      "eval": {
+        "passed_keywords": [
+          "hypotension",
+          "contraindicated"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Critical. Please review the details below and consult a healthcare professional. The interaction occurs because both sildenafil and nitrates affect the nitric oxide/cGMP pathway resulting in potentiated vasodilation and significant hypotension. This is a pharmacodynam..."
+    },
+    {
+      "id": "V10",
+      "category": "verify",
+      "status": "PASS",
+      "elapsed_s": 20.6,
+      "eval": {
+        "passed_keywords": [
+          "methotrexate",
+          "renal",
+          "toxicity"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "Found 1 drug interaction(s): 1 個Moderate. Please review the details below and consult a healthcare professional. Pharmacokinetic interaction due to amoxicillin potentially increasing methotrexate plasma concentrations by decreasing renal clearance. This can lead to increased risk of methotrexate tox..."
+    },
+    {
+      "id": "D01",
+      "category": "document",
+      "status": "PASS",
+      "elapsed_s": 2.5,
+      "eval": {
+        "passed_keywords": [
+          "diabetes",
+          "Metformin",
+          "diet"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "### Visit Summary\nYou are a 65-year-old man with Type 2 diabetes. At this visit, we started you on Metformin, a medication to help control your blood sugar. We also talked about the importance of following a healthy diet and getting regular exercise.\n\n### What Happens Next\nPlease come back for a fol..."
+    },
+    {
+      "id": "D02",
+      "category": "document",
+      "status": "PASS",
+      "elapsed_s": 5.0,
+      "eval": {
+        "passed_keywords": [
+          "blood pressure",
+          "Amlodipine",
+          "diet"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "### Visit Summary  \nYou are a 72-year-old woman with high blood pressure. At today’s visit, your blood pressure was measured at 160/95.  \n\n### What Happens Next  \nYou have started a new medication called Amlodipine, taken once daily. You were also advised to eat less salt in your diet. Please come b..."
+    },
+    {
+      "id": "D03",
+      "category": "document",
+      "status": "PASS",
+      "elapsed_s": 5.6,
+      "eval": {
+        "passed_keywords": [
+          "Warfarin",
+          "vitamin K",
+          "blood"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "### Visit Summary\nYou are a 55-year-old man diagnosed with an irregular heartbeat called atrial fibrillation. We have started you on a blood-thinning medication called Warfarin to help manage this condition. \n\n### What Happens Next\nYour goal is to keep your blood thinning level within a safe range. ..."
+    },
+    {
+      "id": "D04",
+      "category": "document",
+      "status": "PASS",
+      "elapsed_s": 3.2,
+      "eval": {
+        "passed_keywords": [
+          "Levothyroxine",
+          "thyroid",
+          "empty stomach"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "### Visit Summary  \nYou are a 45-year-old woman diagnosed with an underactive thyroid. We have started you on a daily medication called Levothyroxine at a dose of 50 micrograms. It is important to take this medication on an empty stomach.\n\n### What Happens Next  \nWe will check your thyroid function ..."
+    },
+    {
+      "id": "D05",
+      "category": "document",
+      "status": "PASS",
+      "elapsed_s": 2.7,
+      "eval": {
+        "passed_keywords": [
+          "Aspirin",
+          "statin",
+          "heart attack"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "### Visit Summary  \nYou are a 68-year-old man who recently had a heart attack. At discharge, you were prescribed Aspirin, Atorvastatin, and Metoprolol to help manage your heart health.  \n\n### What Happens Next  \nYou have been referred to a cardiac rehabilitation program to support your recovery. Ple..."
+    },
+    {
+      "id": "D06",
+      "category": "document",
+      "status": "PASS",
+      "elapsed_s": 3.2,
+      "eval": {
+        "passed_keywords": [
+          "Amoxicillin",
+          "pregnant",
+          "infection"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "### Visit Summary  \nYou are a 30-year-old pregnant woman who has a urinary tract infection (UTI). To treat this, you have started taking Amoxicillin 500mg three times a day for 7 days.  \n\n### What Happens Next  \nPlease continue with the antibiotics as prescribed. Avoid using Trimethoprim. We will ch..."
+    },
+    {
+      "id": "D07",
+      "category": "document",
+      "status": "PASS",
+      "elapsed_s": 3.9,
+      "eval": {
+        "passed_keywords": [
+          "COPD",
+          "inhaler",
+          "breathing"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "### Visit Summary\nYou are a 58-year-old man who is experiencing a flare-up of your chronic lung condition (COPD).  \n\n### What Happens Next\nYou have been prescribed a 5-day course of a steroid medication called prednisolone to help reduce inflammation. You can use your salbutamol inhaler as needed to..."
+    },
+    {
+      "id": "D08",
+      "category": "document",
+      "status": "PASS",
+      "elapsed_s": 2.9,
+      "eval": {
+        "passed_keywords": [
+          "Sertraline",
+          "depression",
+          "weeks"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "### Visit Summary\nYou are a 40-year-old woman who is experiencing depression. We have started you on a medication called Sertraline at a dose of 50mg each day. It may take 2 to 4 weeks before you notice any improvement in your mood.\n\n### What Happens Next\nPlease avoid drinking alcohol while taking t..."
+    },
+    {
+      "id": "D09",
+      "category": "document",
+      "status": "PASS",
+      "elapsed_s": 2.7,
+      "eval": {
+        "passed_keywords": [
+          "osteoporosis",
+          "Alendronate",
+          "water"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "### Visit Summary  \nYou are a 77-year-old woman with osteoporosis. We have started you on a medication called Alendronate, which you will take once a week.\n\n### What Happens Next  \nPlease take the Alendronate with a full glass of water and remain sitting or standing for at least 30 minutes afterward..."
+    },
+    {
+      "id": "D10",
+      "category": "document",
+      "status": "PASS",
+      "elapsed_s": 3.5,
+      "eval": {
+        "passed_keywords": [
+          "gout",
+          "Colchicine",
+          "uric acid"
+        ],
+        "failed_keywords": [],
+        "forbidden_found": [],
+        "keyword_pass": true
+      },
+      "answer_preview": "### Visit Summary\nYou are a 50-year-old man experiencing a gout attack. To help with this, you have been prescribed a medication called colchicine, which you should take twice a day for 3 days. Applying an ice pack to the affected joint can also help reduce discomfort. It is important to avoid alcoh..."
+    }
+  ]
+}

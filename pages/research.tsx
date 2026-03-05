@@ -23,8 +23,25 @@ const defaultSuggestions = [
     "Long-term risks of proton pump inhibitors?",
 ];
 
-// FatalError tells fetchEventSource to stop retrying
 class FatalError extends Error {}
+
+// Fallback Banner 元件
+function FallbackBanner() {
+    return (
+        <div className="mb-4 flex items-start gap-3 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg">
+            <span className="text-amber-500 text-lg mt-0.5">⚠️</span>
+            <div>
+                <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">
+                    No literature found for this query
+                </p>
+                <p className="text-sm text-amber-700 dark:text-amber-400 mt-0.5">
+                    This answer is based on general medical knowledge, not retrieved PubMed or FDA literature.
+                    Please verify with current clinical guidelines before applying clinically.
+                </p>
+            </div>
+        </div>
+    );
+}
 
 function ResearchForm() {
     const { getToken } = useAuth();
@@ -35,6 +52,8 @@ function ResearchForm() {
     const [loading, setLoading] = useState(false);
     const [queryTime, setQueryTime] = useState<number | null>(null);
     const [error, setError] = useState<string>('');
+    const [isFallback, setIsFallback] = useState(false);
+    const [statusMsg, setStatusMsg] = useState<string>('');  // loading 階段提示
 
     const answerRef = useRef<HTMLDivElement>(null);
     const isRunningRef = useRef(false);
@@ -51,6 +70,8 @@ function ResearchForm() {
         setCitations([]);
         setQueryTime(null);
         setError('');
+        setIsFallback(false);
+        setStatusMsg('');
     };
 
     const runSearch = useCallback(async (q: string) => {
@@ -63,6 +84,8 @@ function ResearchForm() {
         setQueryTime(null);
         setLoading(true);
         setError('');
+        setIsFallback(false);
+        setStatusMsg('');
 
         const controller = new AbortController();
 
@@ -97,8 +120,13 @@ function ResearchForm() {
                 onmessage(ev) {
                     try {
                         const data = JSON.parse(ev.data);
-                        if (data.type === 'answer') {
+                        if (data.type === 'status') {
+                            setStatusMsg(data.content);
+                        } else if (data.type === 'answer') {
+                            setStatusMsg('');  // 開始串流時清除 status
                             setAnswer(prev => prev + data.content);
+                        } else if (data.type === 'fallback') {
+                            setIsFallback(true);
                         } else if (data.type === 'citations') {
                             setCitations(data.content);
                         } else if (data.type === 'error') {
@@ -200,12 +228,26 @@ function ResearchForm() {
                             </div>
                         )}
 
+                        {/* Status message — 檢索/生成中的進度提示 */}
+                        {loading && !answer && statusMsg && (
+                            <div className="flex items-center gap-3 py-8 text-gray-500 dark:text-gray-400">
+                                <svg className="animate-spin h-5 w-5 text-blue-500" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                </svg>
+                                <span className="text-sm">{statusMsg}</span>
+                            </div>
+                        )}
+
                         {(answer || loading) && (
                             <div className="prose prose-blue dark:prose-invert max-w-none">
+                                {/* Fallback Banner — 出現在回答上方 */}
+                                {isFallback && !loading && <FallbackBanner />}
+
                                 <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
                                     {answer}
                                 </ReactMarkdown>
-                                {loading && (
+                                {loading && answer && (
                                     <span className="inline-block w-2 h-4 bg-blue-500 animate-pulse ml-1"></span>
                                 )}
                                 {!loading && answer && !error && (

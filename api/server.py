@@ -11,7 +11,6 @@ import os
 
 load_dotenv()  # 載入 .env 檔案
 
-import os
 import json
 import time
 from pathlib import Path
@@ -34,14 +33,15 @@ from api.models.schemas import (
     SuggestionsResponse,
     StreamEvent,
     StreamEventType,
-    VerifyRequest, 
-    VerifyResponse, 
+    VerifyRequest,
+    VerifyResponse,
     DrugInteraction
 )
 from api.rag.retriever import HybridRetriever
 from api.rag.generator import AnswerGenerator
 from api.data_sources.fda import FDAClient
 from api.middleware.phi_handler import PHIDetector
+from api.middleware.guards import run_guards
 from api.database.sql_db import get_db, engine, Base
 from api.models.sql_models import AuditLog, UserFeedback, ChatHistory
 
@@ -51,7 +51,6 @@ from api.models.sql_models import AuditLog, UserFeedback, ChatHistory
 # ============================================================
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # 確保資料庫 Tables (含 user_feedback, chat_history) 存在
     Base.metadata.create_all(bind=engine)
     yield
 
@@ -59,7 +58,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="MediNotes API",
     description="AI-powered medical assistant for healthcare professionals",
-    version="2.1.0", 
+    version="2.1.0",
     lifespan=lifespan
 )
 
@@ -72,9 +71,44 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Clerk authentication
-clerk_config = ClerkConfig(jwks_url=os.getenv("CLERK_JWKS_URL"))
-clerk_guard = ClerkHTTPBearer(clerk_config)
+# ============================================================
+# TEST_MODE：跳過 JWT 驗證，用於自動化測試
+# 使用方式：在 .env 加上 TEST_MODE=true
+# 測試完畢後務必移除！
+# ============================================================
+TEST_MODE = os.getenv("TEST_MODE", "false").lower() == "true"
+print(f"🔑 TEST_MODE = {TEST_MODE}")
+
+# ── 關鍵修正 ──────────────────────────────────────────────
+# ClerkHTTPBearer 實例化時會自動註冊全域 middleware。
+# TEST_MODE=true 時完全不實例化，避免在 endpoint 執行前就被攔截。
+# ─────────────────────────────────────────────────────────
+if not TEST_MODE:
+    clerk_config = ClerkConfig(jwks_url=os.getenv("CLERK_JWKS_URL"))
+    clerk_guard = ClerkHTTPBearer(clerk_config)
+else:
+    clerk_guard = None
+    print("⚠️  TEST_MODE: Clerk authentication disabled")
+
+
+async def optional_auth(
+    request: Request
+) -> Optional[HTTPAuthorizationCredentials]:
+    """
+    TEST_MODE=true  → 直接回傳 None，完全跳過驗證
+    TEST_MODE=false → 正常走 Clerk JWT 驗證
+    永遠不使用 Depends(clerk_guard)，避免 ClerkHTTPBearer 全域攔截
+    """
+    if TEST_MODE or clerk_guard is None:
+        return None
+    return await clerk_guard(request)
+
+
+def get_user_id(creds: Optional[HTTPAuthorizationCredentials]) -> str:
+    if creds is None:
+        return "test_user"
+    return creds.decoded["sub"]
+
 
 # 初始化元件
 retriever = HybridRetriever(
@@ -83,8 +117,8 @@ retriever = HybridRetriever(
     enable_pubmed=True,
     enable_fda=True
 )
-generator = AnswerGenerator(model="gpt-4.1-mini")
-fda_client = FDAClient()   # 使用缓存版本
+generator = AnswerGenerator(model="gpt-4.1")
+fda_client = FDAClient()
 
 
 # ============================================================
@@ -93,33 +127,30 @@ fda_client = FDAClient()   # 使用缓存版本
 @app.middleware("http")
 async def audit_middleware(request: Request, call_next):
     path = request.url.path
-    
-    # ✅ 串流端点直接跳过（不读取 body）
+
     if path in ["/api/research", "/api/consultation"]:
         return await call_next(request)
-    
-    # ✅ 非串流端点才进行 PHI 检查
+
     if path in ["/api/verify", "/api/feedback"] and request.method == "POST":
         try:
             body_bytes = await request.body()
             body_str = body_bytes.decode("utf-8")
-            
-            # PHI 檢查
+
             phi_type = PHIDetector.detect(body_str)
             if phi_type:
                 return StreamingResponse(
                     iter([json.dumps({
-                        "type": "error", 
+                        "type": "error",
                         "content": f"⚠️ 安全攔截：偵測到潛在的個人資訊 ({phi_type})。為符合隱私規範，請移除後再試。"
-                    })]), 
+                    })]),
                     media_type="application/json",
                     status_code=400
                 )
-                
+
             async def receive():
                 return {"type": "http.request", "body": body_bytes}
             request._receive = receive
-            
+
         except Exception as e:
             print(f"Middleware Error: {e}")
 
@@ -179,12 +210,12 @@ Remember: ONLY translate what is in the notes. Do not add clinical information n
 @app.post("/api/consultation")
 def consultation_summary(
     visit: Visit,
-    creds: HTTPAuthorizationCredentials = Depends(clerk_guard),
+    creds: Optional[HTTPAuthorizationCredentials] = Depends(optional_auth),
     db: Session = Depends(get_db)
 ):
-    user_id = creds.decoded["sub"]
+    user_id = get_user_id(creds)
     client = OpenAI()
-    
+
     try:
         audit = AuditLog(
             id=f"doc_{int(time.time()*1000)}",
@@ -203,20 +234,19 @@ def consultation_summary(
         {"role": "system", "content": consultation_system_prompt},
         {"role": "user", "content": user_prompt},
     ]
-    
+
     stream = client.chat.completions.create(
         model="gpt-4.1-mini",
         messages=prompt,
         stream=True,
     )
-    
+
     def event_stream():
-        # ✅ 改用 JSON 格式傳輸，保留原始換行符號，避免前端拼接時斷行
         for chunk in stream:
             text = chunk.choices[0].delta.content
             if text:
                 yield f"data: {json.dumps({'text': text})}\n\n"
-    
+
     return StreamingResponse(event_stream(), media_type="text/event-stream")
 
 
@@ -227,23 +257,35 @@ def consultation_summary(
 @app.post("/api/research")
 async def research_query(
     request: ResearchRequest,
-    creds: HTTPAuthorizationCredentials = Depends(clerk_guard),
+    creds: Optional[HTTPAuthorizationCredentials] = Depends(optional_auth),
     db: Session = Depends(get_db)
 ):
-    user_id = creds.decoded["sub"]
+    user_id = get_user_id(creds)
     start_time = time.time()
-    
+
     async def event_stream():
         full_answer = ""
-        
+
         try:
-            # ✅ retrieve() 回傳 (documents, status) tuple
+            # ── Guard: Prompt injection + 非醫療意圖 ──────────────
+            passed, guard_error = await run_guards(request.question)
+            if not passed:
+                yield f"data: {json.dumps({'type': 'error', 'content': guard_error}, ensure_ascii=False)}\n\n"
+                yield f"data: {json.dumps({'type': 'done'})}\n\n"
+                return
+
+            # ── Status 1: 開始檢索 ────────────────────────────────
+            yield f"data: {json.dumps({'type': 'status', 'content': 'Searching medical literature...'}, ensure_ascii=False)}\n\n"
+
             documents, retrieval_status = await retriever.retrieve(
                 query=request.question,
                 max_results=request.max_results or 5,
                 source_filter=request.sources
             )
-            
+
+            # ── Status 2: 開始生成 ────────────────────────────────
+            yield f"data: {json.dumps({'type': 'status', 'content': 'Analyzing documents...'}, ensure_ascii=False)}\n\n"
+
             async for event in generator.generate_stream(
                 question=request.question,
                 documents=documents,
@@ -254,11 +296,13 @@ async def research_query(
                     content = event.content or ""
                     full_answer += content
                     yield f"data: {json.dumps({'type': 'answer', 'content': content}, ensure_ascii=False)}\n\n"
-                
+
+                elif event.type == StreamEventType.FALLBACK:
+                    yield f"data: {json.dumps({'type': 'fallback', 'content': event.content}, ensure_ascii=False)}\n\n"
+
                 elif event.type == StreamEventType.CITATIONS:
                     citations_data = [c.model_dump() for c in event.content]
-                    
-                    # 記錄 Audit Log
+
                     try:
                         audit = AuditLog(
                             id=f"res_{int(time.time()*1000)}",
@@ -274,14 +318,13 @@ async def research_query(
                         print(f"Audit Log Error: {e}")
 
                     yield f"data: {json.dumps({'type': 'citations', 'content': citations_data}, ensure_ascii=False)}\n\n"
-                
+
                 elif event.type == StreamEventType.ERROR:
                     yield f"data: {json.dumps({'type': 'error', 'content': event.content}, ensure_ascii=False)}\n\n"
-                
+
                 elif event.type == StreamEventType.DONE:
                     elapsed_ms = int((time.time() - start_time) * 1000)
-                    
-                    # 儲存到 ChatHistory
+
                     try:
                         history = ChatHistory(
                             user_id=user_id,
@@ -295,11 +338,11 @@ async def research_query(
                         print(f"History Save Error: {e}")
 
                     yield f"data: {json.dumps({'type': 'done', 'query_time_ms': elapsed_ms}, ensure_ascii=False)}\n\n"
-        
+
         except Exception as e:
             yield f"data: {json.dumps({'type': 'error', 'content': str(e)}, ensure_ascii=False)}\n\n"
             yield f"data: {json.dumps({'type': 'done'}, ensure_ascii=False)}\n\n"
-    
+
     return StreamingResponse(
         event_stream(),
         media_type="text/event-stream",
@@ -310,7 +353,9 @@ async def research_query(
     )
 
 @app.get("/api/research/suggestions")
-async def get_suggestions(creds: HTTPAuthorizationCredentials = Depends(clerk_guard)):
+async def get_suggestions(
+    creds: Optional[HTTPAuthorizationCredentials] = Depends(optional_auth)
+):
     return SuggestionsResponse.default_suggestions()
 
 
@@ -321,18 +366,14 @@ async def get_suggestions(creds: HTTPAuthorizationCredentials = Depends(clerk_gu
 @app.post("/api/verify", response_model=VerifyResponse)
 async def verify_drug_interaction(
     request: VerifyRequest,
-    creds: HTTPAuthorizationCredentials = Depends(clerk_guard),
+    creds: Optional[HTTPAuthorizationCredentials] = Depends(optional_auth),
     db: Session = Depends(get_db)
 ):
     start_time = time.time()
-    user_id = creds.decoded["sub"]
-    
-    # 1. 搜尋 FDA 藥品標籤
-    # ✅ 拼字偵測：在 Python 層處理，不依賴 LLM
-    # 原理：FDA API 用輸入的藥名搜尋，回傳的 label.drug_name 是標準名稱
-    #       若兩者不一致（忽略大小寫），代表輸入可能有拼字錯誤
+    user_id = get_user_id(creds)
+
     drug_labels = []
-    spelling_corrections: list[str] = []  # 記錄被修正的藥名
+    spelling_corrections: list[str] = []
 
     def levenshtein(a, b):
         m, n = len(a), len(b)
@@ -346,7 +387,6 @@ async def verify_drug_interaction(
                 prev = temp
         return dp[n]
 
-    # 已知常見藥物名稱清單，用來處理 FDA 搜不到拼錯藥名的情況
     KNOWN_DRUGS = [
         "warfarin", "aspirin", "metformin", "lisinopril", "atorvastatin",
         "amlodipine", "simvastatin", "ibuprofen", "acetaminophen", "paracetamol",
@@ -359,12 +399,10 @@ async def verify_drug_interaction(
         labels = await fda_client.search_drug_labels(drug, limit=1)
         if labels:
             drug_labels.append(labels[0])
-            # FDA 有找到結果：比對官方名稱是否與輸入一致
             official_name = (labels[0].generic_name or labels[0].brand_name or '').strip()
             if official_name:
                 drug_lower = drug.lower().strip()
                 official_lower = official_name.lower().strip()
-                # 官方名稱包含輸入名稱視為正常（如 "Aspirin" → "ASPIRIN"）
                 if drug_lower not in official_lower and official_lower not in drug_lower:
                     dist = levenshtein(drug_lower, official_lower)
                     length_diff = abs(len(drug_lower) - len(official_lower))
@@ -373,7 +411,6 @@ async def verify_drug_interaction(
                             f"'{drug}' was interpreted as '{official_name.title()}'"
                         )
         else:
-            # ✅ FDA 找不到結果：用已知藥名清單做拼字比對
             drug_lower = drug.lower().strip()
             best_match = None
             best_dist = 999
@@ -387,40 +424,106 @@ async def verify_drug_interaction(
                 spelling_corrections.append(
                     f"'{drug}' was interpreted as '{best_match.title()}'"
                 )
-                # 用正確名稱重新搜尋，讓分析能繼續進行
                 corrected_labels = await fda_client.search_drug_labels(best_match, limit=1)
                 if corrected_labels:
                     drug_labels.append(corrected_labels[0])
-    
-    # 2. 如果沒有找到任何藥品資料，提前返回
+
+    # ── Verify Fallback ───────────────────────────────────────
+    # FDA 找不到資料（藥物類別名稱如 SSRIs/NSAIDs，或罕見藥物）
+    # 改用 LLM 根據藥理知識分析，不直接回傳空結果
+    # ─────────────────────────────────────────────────────────
     if not drug_labels:
+        print(f"⚠️ No FDA labels found for {request.drugs}, falling back to LLM knowledge")
         try:
             db.add(AuditLog(
                 id=f"ver_{int(time.time()*1000)}",
                 user_id=user_id,
-                action="verify_failed",
-                query_content=f"No FDA data for: {request.drugs}",
+                action="verify_fallback",
+                query_content=f"No FDA data, LLM fallback for: {request.drugs}",
                 ip_address="0.0.0.0"
             ))
             db.commit()
-        except: 
+        except:
             pass
 
-        return VerifyResponse(
-            drugs_analyzed=request.drugs,
-            interactions=[],
-            summary="No FDA label data found for these drugs. Please check the spelling or use the English drug name.",
-            risk_level="Unknown",
-            query_time_ms=int((time.time() - start_time) * 1000)
-        )
+        fallback_system = """You are a clinical pharmacologist. Analyze the drug interaction between the listed drugs based on your pharmacological knowledge and standard clinical references.
 
-    # 3. 準備 LLM 分析的 context
+You MUST cover ALL of the following:
+1. Interaction severity: Major / Moderate / Minor with rationale
+2. Mechanism: pharmacokinetic or pharmacodynamic explanation
+3. Clinical consequences: what will happen to the patient
+4. Specific warning signs: observable symptoms to watch for
+5. Monitoring parameters: exact labs or clinical checks
+6. Clinical recommendation: action to take (avoid / reduce dose / monitor / timing)
+
+CRITICAL: Return valid JSON only with this exact structure:
+{
+    "interactions": [
+        {
+            "drugs": ["Drug1", "Drug2"],
+            "severity": "Major",
+            "description": "Detailed description including mechanism",
+            "recommendation": "Clinical recommendation including monitoring and alternatives"
+        }
+    ],
+    "summary": "Brief summary",
+    "risk_level": "Major"
+}"""
+
+        fallback_user = f"""Analyze the drug interaction between: {', '.join(request.drugs)}
+Patient context: {request.patient_context or 'None'}
+
+Note: These may be drug class names (e.g. SSRIs, NSAIDs, beta-blockers).
+If so, analyze the class interaction and note that specific drug choice within the class may affect severity."""
+
+        try:
+            client_fb = OpenAI()
+            fb_completion = client_fb.chat.completions.create(
+                model="gpt-4.1-mini",
+                messages=[
+                    {"role": "system", "content": fallback_system},
+                    {"role": "user", "content": fallback_user}
+                ],
+                response_format={"type": "json_object"}
+            )
+            fb_analysis = json.loads(fb_completion.choices[0].message.content)
+            fb_interactions = []
+            for item in fb_analysis.get("interactions", []):
+                drugs = item.get("drugs", [])
+                if len(drugs) >= 2:
+                    fb_interactions.append(DrugInteraction(
+                        drug_pair=tuple(drugs[:2]),
+                        severity=item.get("severity", "Unknown"),
+                        description=item.get("description", ""),
+                        clinical_recommendation=item.get("recommendation", ""),
+                        source="Clinical Knowledge (No FDA label available)",
+                        source_url=""
+                    ))
+            fb_summary = "⚠️ No FDA label data found for these drugs. " + fb_analysis.get("summary", "")
+            fb_risk = fb_analysis.get("risk_level", "Unknown")
+            return VerifyResponse(
+                drugs_analyzed=request.drugs,
+                interactions=fb_interactions,
+                summary=fb_summary,
+                risk_level=fb_risk,
+                query_time_ms=int((time.time() - start_time) * 1000)
+            )
+        except Exception as e:
+            print(f"❌ Verify fallback failed: {e}")
+            return VerifyResponse(
+                drugs_analyzed=request.drugs,
+                interactions=[],
+                summary="No FDA label data found. Unable to analyze interaction. Please use specific drug names.",
+                risk_level="Unknown",
+                query_time_ms=int((time.time() - start_time) * 1000)
+            )
+
     fda_context = "\n".join([label.to_text() for label in drug_labels])
-    
+
     system_prompt = """You are a clinical pharmacist. Analyze the provided FDA drug labels for interactions.
     Identify interactions between the listed drugs.
     Classify severity as: Critical, Major, Moderate, Minor.
-    
+
     LANGUAGE RULE: Always respond in English regardless of input language.
 
     For each interaction you MUST include ALL of the following:
@@ -448,15 +551,13 @@ async def verify_drug_interaction(
         "summary": "Brief summary of findings",
         "risk_level": "Major"
     }
-    
+
     DRUG NAME CORRECTION (check this FIRST before analysis):
     - Before analyzing, check each input drug name for misspellings.
     - If a drug name appears misspelled (e.g., "Warrfarin", "Aspirn", "Metfromin"),
       correct it silently for the analysis, BUT you MUST put this exact format in the
       "summary" field at the start:
       "Note: '[original]' was interpreted as '[corrected]'. Please verify this is correct. "
-    - Example: input "Warrfarin" → summary starts with:
-      "Note: 'Warrfarin' was interpreted as 'Warfarin'. Please verify this is correct. "
     - The "drugs" field in each interaction should use the CORRECTED name.
 
     SEVERITY CLASSIFICATION RULES:
@@ -473,33 +574,31 @@ async def verify_drug_interaction(
     3. Drug names must match the input drugs exactly
     4. If no interactions found, return an empty "interactions" array: []
     5. Always include "summary" and "risk_level" fields
-    
+
     Output JSON only, no additional text."""
-    
-    # ✅ 在 user prompt 明確提醒拼字檢查，讓 LLM 在看到藥物名稱時直接觸發
+
     drug_list = ', '.join(request.drugs)
     user_prompt = f"""
     Patient Context: {request.patient_context or 'None'}
     Drugs to Analyze: {drug_list}
-    
+
     IMPORTANT: Before analyzing, carefully check if any drug name above appears misspelled
     (e.g., extra letters, transposed letters). If so, you MUST start the "summary" field with:
     "Note: '[original]' was interpreted as '[corrected]'. Please verify this is correct."
-    
+
     Reference FDA Data:
     {fda_context}
-    
+
     Please analyze interactions between these drugs based on the FDA data provided.
     """
-    
-    # 4. 呼叫 LLM 進行分析（带重试机制）
+
     client = OpenAI()
     summary = ""
     interactions = []
     risk_level = "Unknown"
-    max_retries = 2  # ✅ 最多重试 2 次
+    max_retries = 2
     analysis_success = False
-    
+
     for attempt in range(max_retries):
         try:
             completion = client.chat.completions.create(
@@ -510,105 +609,81 @@ async def verify_drug_interaction(
                 ],
                 response_format={"type": "json_object"}
             )
-            
+
             analysis = json.loads(completion.choices[0].message.content)
-            
-            # ✅ 添加严格的字段验证
+
             temp_interactions = []
             for item in analysis.get("interactions", []):
                 try:
-                    # 验证必要字段
                     drugs = item.get("drugs", [])
-                    
-                    # 跳过无效数据
                     if not drugs or len(drugs) < 2:
-                        print(f"⚠️ Warning: Invalid interaction data - missing or incomplete drug_pair: {item}")
+                        print(f"⚠️ Warning: Invalid interaction data: {item}")
                         continue
-                    
-                    # 验证 drugs 是否为有效的药物名称
                     if not all(isinstance(d, str) and d.strip() for d in drugs):
                         print(f"⚠️ Warning: Invalid drug names: {drugs}")
                         continue
-                    
-                    # 创建交互作用对象
                     drug1, drug2 = drugs[0], drugs[1]
-                    # ✅ 生成 FDA DailyMed 链接
                     source_url = f"https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query={drug1.replace(' ', '+')}"
-                    
                     temp_interactions.append(DrugInteraction(
-                        drug_pair=tuple(drugs[:2]),  # 只取前两个
+                        drug_pair=tuple(drugs[:2]),
                         severity=item.get("severity", "Unknown"),
                         description=item.get("description", "No description provided"),
                         clinical_recommendation=item.get("recommendation", ""),
                         source="FDA Label Analysis",
-                        source_url=source_url  # ✅ 添加链接
+                        source_url=source_url
                     ))
-                    
                 except Exception as e:
-                    print(f"⚠️ Error parsing interaction item: {e}, item: {item}")
-                    continue  # 跳过这个交互作用，继续处理其他的
-            
-            # ✅ 如果成功解析到交互作用，或者没有交互作用（空数组也是成功），则退出重试
+                    print(f"⚠️ Error parsing interaction: {e}")
+                    continue
+
             interactions = temp_interactions
-            
-            # 检查是否成功（至少解析到一些数据，或者明确没有交互作用）
             if interactions or analysis.get("interactions") is not None:
                 print(f"✅ Analysis successful on attempt {attempt + 1}")
                 analysis_success = True
-                break  # 成功，退出重试
+                break
             else:
-                print(f"⚠️ Attempt {attempt + 1} failed - no valid interactions parsed")
                 if attempt < max_retries - 1:
-                    print(f"🔄 Retrying... ({attempt + 2}/{max_retries})")
                     continue
-                    
+
         except Exception as e:
             print(f"❌ LLM call failed on attempt {attempt + 1}: {e}")
             if attempt < max_retries - 1:
-                print(f"🔄 Retrying... ({attempt + 2}/{max_retries})")
                 continue
             else:
-                # 最后一次尝试也失败了
                 summary = f"Analysis failed after {max_retries} retries. Error: {str(e)}"
                 risk_level = "Unknown"
-    
-    # ✅ 在重试循环外生成 summary
+
     if analysis_success:
         if interactions:
-            # 有找到交互作用，生成準確的 summary
             severity_counts = {}
             for interaction in interactions:
                 severity = interaction.severity
                 severity_counts[severity] = severity_counts.get(severity, 0) + 1
-            
-            # 生成更準確的 summary
+
             summary_parts = []
             for severity, count in sorted(
-                severity_counts.items(), 
-                key=lambda x: {"Critical": 4, "Major": 3, "Moderate": 2, "Minor": 1}.get(x[0], 0), 
+                severity_counts.items(),
+                key=lambda x: {"Critical": 4, "Major": 3, "Moderate": 2, "Minor": 1}.get(x[0], 0),
                 reverse=True
             ):
                 summary_parts.append(f"{count} 個{severity}")
-            
+
             summary = f"Found {len(interactions)} drug interaction(s): {', '.join(summary_parts)}. Please review the details below and consult a healthcare professional."
-            
-            # 根據最高嚴重度設定 risk_level
+
             if any(i.severity == "Critical" for i in interactions):
                 risk_level = "Critical"
             elif any(i.severity == "Major" for i in interactions):
-                risk_level = "Major"  
+                risk_level = "Major"
             elif any(i.severity == "Moderate" for i in interactions):
                 risk_level = "Moderate"
             else:
                 risk_level = "Minor"
         else:
-            # 沒有找到交互作用
             summary = "No significant drug interactions found in the FDA data. This does not eliminate all risk — please consult a healthcare professional."
             risk_level = "Low"
 
     elapsed_ms = int((time.time() - start_time) * 1000)
 
-    # 5. 寫入 Audit Log
     try:
         audit_log = AuditLog(
             id=f"ver_{int(time.time()*1000)}",
@@ -621,7 +696,6 @@ async def verify_drug_interaction(
     except Exception as e:
         print(f"Audit Log Error: {e}")
 
-    # 6. 寫入 ChatHistory
     try:
         history = ChatHistory(
             user_id=user_id,
@@ -635,9 +709,6 @@ async def verify_drug_interaction(
         print(f"History Save Error: {e}")
         db.rollback()
 
-    # 7. 返回結果
-    # ✅ 把 Python 層偵測到的拼字修正，直接加在 summary 最前面
-    #    不依賴 LLM，100% 保證出現
     if spelling_corrections:
         correction_note = "Note: " + "; ".join(spelling_corrections) + ". Please verify this is correct. "
         summary = correction_note + summary
@@ -665,13 +736,13 @@ class FeedbackCreate(BaseModel):
 @app.post("/api/feedback")
 async def create_feedback(
     feedback: FeedbackCreate,
-    creds: HTTPAuthorizationCredentials = Depends(clerk_guard),
+    creds: Optional[HTTPAuthorizationCredentials] = Depends(optional_auth),
     db: Session = Depends(get_db)
 ):
-    user_id = creds.decoded["sub"]
+    user_id = get_user_id(creds)
     try:
         sanitized_text = PHIDetector.sanitize_for_log(feedback.feedback_text) if feedback.feedback_text else None
-        
+
         db_feedback = UserFeedback(
             id=f"fb_{int(time.time()*1000)}",
             user_id=user_id,
@@ -681,11 +752,11 @@ async def create_feedback(
             feedback_text=sanitized_text,
             category=feedback.category
         )
-        
+
         db.add(db_feedback)
         db.commit()
         return {"status": "success", "message": "Feedback recorded"}
-        
+
     except Exception as e:
         print(f"Feedback Error: {e}")
         return {"status": "error", "message": str(e)}
@@ -697,21 +768,17 @@ async def create_feedback(
 
 @app.get("/api/history")
 async def get_user_history(
-    creds: HTTPAuthorizationCredentials = Depends(clerk_guard),
+    creds: Optional[HTTPAuthorizationCredentials] = Depends(optional_auth),
     db: Session = Depends(get_db)
 ):
-    """
-    取得使用者的查詢歷史 (Research & Verify)
-    """
-    user_id = creds.decoded["sub"]
-    
-    # 查詢 ChatHistory 表，最近 50 筆
+    user_id = get_user_id(creds)
+
     history = db.query(ChatHistory)\
         .filter(ChatHistory.user_id == user_id)\
         .order_by(desc(ChatHistory.created_at))\
         .limit(50)\
         .all()
-        
+
     return history
 
 
@@ -724,14 +791,16 @@ def health_check():
     return {"status": "healthy", "version": "2.1.0"}
 
 @app.get("/api/status")
-async def api_status(creds: HTTPAuthorizationCredentials = Depends(clerk_guard)):
+async def api_status(
+    creds: Optional[HTTPAuthorizationCredentials] = Depends(optional_auth)
+):
     try:
         from api.database.vector_store import get_vector_store
         vs = get_vector_store()
         vector_store_status = vs.get_stats()
     except Exception as e:
         vector_store_status = {"error": str(e)}
-    
+
     return {
         "status": "healthy",
         "version": "2.1.0",
