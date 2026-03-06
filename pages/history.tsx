@@ -4,6 +4,45 @@ import { useState, useEffect } from 'react';
 import { useAuth, SignedIn, SignedOut, RedirectToSignIn, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 
+// ─── Design System ────────────────────────────────────────────────────────────
+// 顏色對應跨頁面一致，首頁 card / 功能頁 accent / History 標籤全部同色
+const FEATURE = {
+    research: {
+        label: 'Research',
+        color: '#ff8e6e',
+        bg: 'rgba(255,142,110,0.12)',
+        border: 'rgba(255,142,110,0.5)',
+        text: '#c0501a',
+    },
+    verify: {
+        label: 'Verify',
+        color: '#63b3ed',
+        bg: 'rgba(99,179,237,0.12)',
+        border: 'rgba(99,179,237,0.5)',
+        text: '#1a6096',
+    },
+    explain: {
+        label: 'Explain',
+        color: '#68d391',
+        bg: 'rgba(104,211,145,0.12)',
+        border: 'rgba(104,211,145,0.5)',
+        text: '#1a7a40',
+    },
+} as const;
+
+type FeatureKey = keyof typeof FEATURE;
+
+function getFeature(type: string) {
+    return FEATURE[type as FeatureKey] ?? {
+        label: type.charAt(0).toUpperCase() + type.slice(1),
+        color: '#9ca3af',
+        bg: 'rgba(156,163,175,0.12)',
+        border: 'rgba(156,163,175,0.5)',
+        text: '#4b5563',
+    };
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 interface HistoryItem {
     id: number;
     user_id: string;
@@ -21,6 +60,18 @@ interface DrugInteraction {
     source: string;
 }
 
+function TypeTag({ type }: { type: string }) {
+    const f = getFeature(type);
+    return (
+        <span
+            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wide"
+            style={{ background: f.bg, color: f.text, border: `1px solid ${f.border}` }}
+        >
+            {f.label}
+        </span>
+    );
+}
+
 function HistoryList() {
     const { getToken } = useAuth();
     const [history, setHistory] = useState<HistoryItem[]>([]);
@@ -33,9 +84,7 @@ function HistoryList() {
         loading: boolean;
     }}>({});
 
-    useEffect(() => {
-        loadHistory();
-    }, []);
+    useEffect(() => { loadHistory(); }, []);
 
     async function loadHistory() {
         try {
@@ -56,7 +105,6 @@ function HistoryList() {
     async function fetchVerifyDetails(item: HistoryItem) {
         const match = item.question.match(/Drugs:\s*(.+)/);
         if (!match) return;
-
         const drugs = match[1].split(',').map(d => d.trim());
 
         setVerifyDetails(prev => ({
@@ -68,24 +116,16 @@ function HistoryList() {
             const token = await getToken({ skipCache: true });
             const res = await fetch('http://127.0.0.1:8000/api/verify', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ drugs, patient_context: null }),
             });
-            if (!res.ok) throw new Error('Failed to fetch verify details');
+            if (!res.ok) throw new Error('Failed');
             const data = await res.json();
             setVerifyDetails(prev => ({
                 ...prev,
-                [item.id]: {
-                    interactions: data.interactions || [],
-                    risk_level: data.risk_level || 'Unknown',
-                    loading: false,
-                },
+                [item.id]: { interactions: data.interactions || [], risk_level: data.risk_level || 'Unknown', loading: false },
             }));
-        } catch (err) {
-            console.error('Verify details error:', err);
+        } catch {
             setVerifyDetails(prev => ({
                 ...prev,
                 [item.id]: { interactions: [], risk_level: 'Unknown', loading: false },
@@ -104,49 +144,30 @@ function HistoryList() {
         }
     }
 
-    const getIcon = (type: string) => {
-        switch (type) {
-            case 'research': return '🔬';
-            case 'verify':   return '💊';
-            default:         return '📝';
-        }
-    };
-
-    const getTypeLabel = (type: string) => {
-        switch (type) {
-            case 'research': return 'Research';
-            case 'verify':   return 'Verify';
-            default:         return type.charAt(0).toUpperCase() + type.slice(1);
-        }
-    };
-
     const getSeverityColor = (severity: string) => {
         switch (severity) {
-            case 'Critical': return 'bg-red-50 border-red-300 text-red-800';
-            case 'Major':    return 'bg-orange-50 border-orange-300 text-orange-800';
-            case 'Moderate': return 'bg-yellow-50 border-yellow-300 text-yellow-800';
-            case 'Minor':    return 'bg-blue-50 border-blue-300 text-blue-800';
-            default:         return 'bg-gray-50 border-gray-300 text-gray-800';
+            case 'Critical': return 'border-red-400 bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300';
+            case 'Major':    return 'border-orange-400 bg-orange-50 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300';
+            case 'Moderate': return 'border-yellow-400 bg-yellow-50 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300';
+            case 'Minor':    return 'border-blue-300 bg-blue-50 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300';
+            default:         return 'border-gray-300 bg-gray-50 text-gray-700 dark:bg-gray-700 dark:text-gray-300';
         }
     };
 
     if (loading) {
         return (
-            <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                <p className="mt-4 text-gray-500">Loading history...</p>
+            <div className="text-center py-16">
+                <div className="animate-spin rounded-full h-10 w-10 border-2 border-gray-200 border-t-gray-500 mx-auto" />
+                <p className="mt-4 text-sm text-gray-400">Loading history...</p>
             </div>
         );
     }
 
     if (history.length === 0) {
         return (
-            <div className="text-center py-12">
-                <p className="text-gray-500 dark:text-gray-400">No history yet.</p>
-                <Link
-                    href="/research"
-                    className="mt-4 inline-block text-blue-600 hover:text-blue-700"
-                >
+            <div className="text-center py-16">
+                <p className="text-gray-400 mb-4">No history yet.</p>
+                <Link href="/research" className="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 underline underline-offset-4">
                     Start your first search →
                 </Link>
             </div>
@@ -154,131 +175,134 @@ function HistoryList() {
     }
 
     return (
-        <div className="space-y-4">
-            {history.map(item => (
-                <div
-                    key={item.id}
-                    className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
-                >
-                    {/* Header row — click to expand */}
-                    <button
-                        onClick={() => handleToggle(item)}
-                        className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+        <div className="space-y-3">
+            {history.map(item => {
+                const f = getFeature(item.session_type);
+                const isExpanded = expandedId === item.id;
+
+                return (
+                    <div
+                        key={item.id}
+                        className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden transition-shadow hover:shadow-md"
+                        style={{ borderLeft: `3px solid ${f.color}` }}
                     >
-                        <div className="flex items-center gap-4">
-                            <span className="text-3xl">{getIcon(item.session_type)}</span>
-                            <div className="text-left">
-                                <h3 className="font-medium text-gray-900 dark:text-gray-100">
-                                    {item.question.length > 60
-                                        ? item.question.slice(0, 60) + '...'
-                                        : item.question}
-                                </h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    {new Date(item.created_at).toLocaleString('en-US', {
-                                        year: 'numeric', month: 'short', day: 'numeric',
-                                        hour: '2-digit', minute: '2-digit',
-                                    })} · {getTypeLabel(item.session_type)}
-                                </p>
-                            </div>
-                        </div>
-
-                        <svg
-                            className={`w-5 h-5 text-gray-400 transition-transform ${expandedId === item.id ? 'rotate-180' : ''}`}
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        {/* Header */}
+                        <button
+                            onClick={() => handleToggle(item)}
+                            className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-left"
                         >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-
-                    {/* Expanded content */}
-                    {expandedId === item.id && (
-                        <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-
-                            {/* Research — show full answer */}
-                            {item.session_type === 'research' && (
-                                <div className="prose prose-blue dark:prose-invert max-w-none">
-                                    <p className="whitespace-pre-wrap">{item.answer}</p>
+                            <div className="flex items-center gap-3 min-w-0">
+                                <TypeTag type={item.session_type} />
+                                <div className="min-w-0">
+                                    <p className="font-medium text-gray-900 dark:text-gray-100 truncate text-sm">
+                                        {item.question.length > 80
+                                            ? item.question.slice(0, 80) + '...'
+                                            : item.question}
+                                    </p>
+                                    <p className="text-xs text-gray-400 mt-0.5">
+                                        {new Date(item.created_at).toLocaleString('en-US', {
+                                            year: 'numeric', month: 'short', day: 'numeric',
+                                            hour: '2-digit', minute: '2-digit',
+                                        })}
+                                    </p>
                                 </div>
-                            )}
+                            </div>
 
-                            {/* Verify — show summary + interactions */}
-                            {item.session_type === 'verify' && (
-                                <div className="space-y-4">
-                                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                                        <p className="text-gray-700 dark:text-gray-300">{item.answer}</p>
+                            <svg
+                                className={`w-4 h-4 text-gray-400 flex-shrink-0 ml-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        {/* Expanded content */}
+                        {isExpanded && (
+                            <div className="px-6 py-5 border-t border-gray-100 dark:border-gray-700">
+
+                                {/* Research */}
+                                {item.session_type === 'research' && (
+                                    <div className="prose prose-sm prose-gray dark:prose-invert max-w-none">
+                                        <p className="whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                                            {item.answer}
+                                        </p>
                                     </div>
+                                )}
 
-                                    {verifyDetails[item.id]?.loading && (
-                                        <div className="text-center py-8">
-                                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                                            <p className="mt-2 text-sm text-gray-500">Loading interaction details...</p>
+                                {/* Explain */}
+                                {item.session_type === 'explain' && (
+                                    <div className="prose prose-sm prose-gray dark:prose-invert max-w-none">
+                                        <p className="whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                                            {item.answer}
+                                        </p>
+                                    </div>
+                                )}
+
+                                {/* Verify */}
+                                {item.session_type === 'verify' && (
+                                    <div className="space-y-4">
+                                        <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                                            <p className="text-sm text-gray-700 dark:text-gray-300">{item.answer}</p>
                                         </div>
-                                    )}
 
-                                    {!verifyDetails[item.id]?.loading && verifyDetails[item.id]?.interactions?.length > 0 && (
-                                        <div>
-                                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">
-                                                Drug Interactions ({verifyDetails[item.id].interactions.length})
-                                            </h4>
+                                        {verifyDetails[item.id]?.loading && (
+                                            <div className="text-center py-6">
+                                                <div className="animate-spin rounded-full h-6 w-6 border-2 border-gray-200 border-t-blue-400 mx-auto" />
+                                                <p className="mt-2 text-xs text-gray-400">Loading interaction details...</p>
+                                            </div>
+                                        )}
+
+                                        {!verifyDetails[item.id]?.loading && (verifyDetails[item.id]?.interactions?.length ?? 0) > 0 && (
                                             <div className="space-y-3">
+                                                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                                    Interactions ({verifyDetails[item.id].interactions.length})
+                                                </p>
                                                 {verifyDetails[item.id].interactions.map((interaction, idx) => (
-                                                    <div
-                                                        key={idx}
-                                                        className={`border-l-4 rounded-lg p-4 ${getSeverityColor(interaction.severity)}`}
-                                                    >
+                                                    <div key={idx} className={`border-l-4 rounded-lg p-4 ${getSeverityColor(interaction.severity)}`}>
                                                         <div className="flex justify-between items-start mb-2">
-                                                            <h5 className="font-semibold">
+                                                            <p className="font-semibold text-sm">
                                                                 {interaction.drug_pair[0]} ↔ {interaction.drug_pair[1]}
-                                                            </h5>
-                                                            <span className={`px-2 py-1 rounded text-xs font-medium ${
-                                                                interaction.severity === 'Critical' ? 'bg-red-200 text-red-900' :
-                                                                interaction.severity === 'Major'    ? 'bg-orange-200 text-orange-900' :
-                                                                interaction.severity === 'Moderate' ? 'bg-yellow-200 text-yellow-900' :
-                                                                'bg-blue-200 text-blue-900'
-                                                            }`}>
+                                                            </p>
+                                                            <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-white/60 dark:bg-black/20 ml-2 flex-shrink-0">
                                                                 {interaction.severity}
                                                             </span>
                                                         </div>
-                                                        <div className="space-y-2 text-sm">
-                                                            <p className="text-gray-700 dark:text-gray-300">
-                                                                {interaction.description}
+                                                        <p className="text-xs leading-relaxed">{interaction.description}</p>
+                                                        {interaction.clinical_recommendation && (
+                                                            <p className="text-xs mt-2 opacity-80">
+                                                                {interaction.clinical_recommendation}
                                                             </p>
-                                                            {interaction.clinical_recommendation && (
-                                                                <p className="text-gray-600 dark:text-gray-400">
-                                                                    💡 {interaction.clinical_recommendation}
-                                                                </p>
-                                                            )}
-                                                        </div>
+                                                        )}
                                                     </div>
                                                 ))}
                                             </div>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            ))}
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                );
+            })}
         </div>
     );
 }
 
 export default function History() {
     return (
-        <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-            <nav className="bg-white dark:bg-gray-800 shadow-sm">
+        <main className="min-h-screen bg-gray-50 dark:from-gray-900 dark:to-gray-800">
+            <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
                 <div className="container mx-auto px-4 py-3">
                     <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-6">
-                            <Link href="/" className="text-xl font-bold text-gray-800 dark:text-gray-200">
-                                🏥 MediNotes
+                        <div className="flex items-center gap-8">
+                            <Link href="/" className="text-base font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+                                Vela
                             </Link>
-                            <div className="hidden md:flex items-center gap-4">
-                                <Link href="/research" className="text-gray-600 dark:text-gray-400 hover:text-blue-600">Research</Link>
-                                <Link href="/verify"   className="text-gray-600 dark:text-gray-400 hover:text-blue-600">Verify</Link>
-                                <Link href="/product"  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">Document</Link>
-                                <Link href="/history"  className="text-blue-600 dark:text-blue-400 font-medium">History</Link>
+                            <div className="hidden md:flex items-center gap-6 text-sm">
+                                <Link href="/research" className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">Research</Link>
+                                <Link href="/verify"   className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">Verify</Link>
+                                <Link href="/explain"  className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">Explain</Link>
+                                <Link href="/history"  className="text-gray-900 dark:text-gray-100 font-medium">History</Link>
                             </div>
                         </div>
                         <UserButton showName={true} />
@@ -287,9 +311,9 @@ export default function History() {
             </nav>
 
             <SignedIn>
-                <div className="container mx-auto px-4 py-8 max-w-4xl">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-2">
-                        📚 Query History
+                <div className="container mx-auto px-4 py-10 max-w-3xl">
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-8 tracking-tight">
+                        History
                     </h1>
                     <HistoryList />
                 </div>

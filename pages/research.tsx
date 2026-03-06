@@ -10,6 +10,9 @@ import Link from 'next/link';
 import CitationPanel, { Citation } from '../components/CitationPanel';
 import FeedbackBar from '../components/FeedbackBar';
 
+// Research accent color
+const ACCENT = '#ff8e6e';
+
 const defaultSuggestions = [
     "What are the common side effects of Metformin?",
     "Which drugs interact with Warfarin?",
@@ -25,11 +28,10 @@ const defaultSuggestions = [
 
 class FatalError extends Error {}
 
-// Fallback Banner 元件
 function FallbackBanner() {
     return (
         <div className="mb-4 flex items-start gap-3 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg">
-            <span className="text-amber-500 text-lg mt-0.5">⚠️</span>
+            <span className="text-amber-500 text-sm mt-0.5 font-bold">⚠</span>
             <div>
                 <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">
                     No literature found for this query
@@ -46,16 +48,16 @@ function FallbackBanner() {
 function ResearchForm() {
     const { getToken } = useAuth();
 
-    const [question, setQuestion] = useState('');
-    const [answer, setAnswer] = useState('');
+    const [question, setQuestion]   = useState('');
+    const [answer, setAnswer]       = useState('');
     const [citations, setCitations] = useState<Citation[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading]     = useState(false);
     const [queryTime, setQueryTime] = useState<number | null>(null);
-    const [error, setError] = useState<string>('');
+    const [error, setError]         = useState<string>('');
     const [isFallback, setIsFallback] = useState(false);
-    const [statusMsg, setStatusMsg] = useState<string>('');  // loading 階段提示
+    const [statusMsg, setStatusMsg] = useState<string>('');
 
-    const answerRef = useRef<HTMLDivElement>(null);
+    const answerRef    = useRef<HTMLDivElement>(null);
     const isRunningRef = useRef(false);
 
     useEffect(() => {
@@ -65,33 +67,21 @@ function ResearchForm() {
     }, [answer]);
 
     const handleReset = () => {
-        setQuestion('');
-        setAnswer('');
-        setCitations([]);
-        setQueryTime(null);
-        setError('');
-        setIsFallback(false);
-        setStatusMsg('');
+        setQuestion(''); setAnswer(''); setCitations([]);
+        setQueryTime(null); setError(''); setIsFallback(false); setStatusMsg('');
     };
 
     const runSearch = useCallback(async (q: string) => {
-        if (!q.trim()) return;
-        if (isRunningRef.current) return;
+        if (!q.trim() || isRunningRef.current) return;
         isRunningRef.current = true;
 
-        setAnswer('');
-        setCitations([]);
-        setQueryTime(null);
-        setLoading(true);
-        setError('');
-        setIsFallback(false);
-        setStatusMsg('');
+        setAnswer(''); setCitations([]); setQueryTime(null);
+        setLoading(true); setError(''); setIsFallback(false); setStatusMsg('');
 
         const controller = new AbortController();
 
         try {
             const jwt = await getToken({ skipCache: true });
-
             if (!jwt) {
                 setError('Authentication required. Please sign in again.');
                 setLoading(false);
@@ -102,53 +92,36 @@ function ResearchForm() {
             await fetchEventSource('http://127.0.0.1:8000/api/research', {
                 signal: controller.signal,
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${jwt}`,
-                },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` },
                 body: JSON.stringify({ question: q, max_results: 5 }),
                 openWhenHidden: true,
 
                 async onopen(response) {
                     if (response.ok) return;
-                    if (response.status === 403 || response.status === 401) {
-                        throw new FatalError('Session expired. Please refresh the page and sign in again.');
-                    }
+                    if (response.status === 403 || response.status === 401)
+                        throw new FatalError('Session expired. Please refresh and sign in again.');
+                    if (response.status === 429)
+                        throw new FatalError('Too many requests. Please wait a moment and try again.');
                     throw new FatalError(`Server error (${response.status}). Please try again.`);
                 },
 
                 onmessage(ev) {
                     try {
                         const data = JSON.parse(ev.data);
-                        if (data.type === 'status') {
-                            setStatusMsg(data.content);
-                        } else if (data.type === 'answer') {
-                            setStatusMsg('');  // 開始串流時清除 status
-                            setAnswer(prev => prev + data.content);
-                        } else if (data.type === 'fallback') {
-                            setIsFallback(true);
-                        } else if (data.type === 'citations') {
-                            setCitations(data.content);
-                        } else if (data.type === 'error') {
-                            setError(data.content);
-                        } else if (data.type === 'done') {
-                            setLoading(false);
-                            if (data.query_time_ms) setQueryTime(data.query_time_ms);
-                        }
-                    } catch (e) {
-                        console.error('Parse error:', e);
-                    }
+                        if (data.type === 'status')        setStatusMsg(data.content);
+                        else if (data.type === 'answer')   { setStatusMsg(''); setAnswer(prev => prev + data.content); }
+                        else if (data.type === 'fallback') setIsFallback(true);
+                        else if (data.type === 'citations') setCitations(data.content);
+                        else if (data.type === 'error')    setError(data.content);
+                        else if (data.type === 'done')     { setLoading(false); if (data.query_time_ms) setQueryTime(data.query_time_ms); }
+                    } catch {}
                 },
 
-                onclose() {
-                    setLoading(false);
-                },
+                onclose() { setLoading(false); },
 
                 onerror(err) {
                     if (err instanceof FatalError) throw err;
-                    throw new FatalError(
-                        err instanceof Error ? err.message : 'Connection lost. Please try again.'
-                    );
+                    throw new FatalError(err instanceof Error ? err.message : 'Connection lost. Please try again.');
                 },
             });
 
@@ -166,61 +139,51 @@ function ResearchForm() {
         await runSearch(question);
     }
 
-    async function handleSuggestionClick(suggestion: string) {
-        setQuestion(suggestion);
-        await runSearch(suggestion);
-    }
-
     return (
         <div className="flex flex-col lg:flex-row gap-6 h-full">
             <div className="flex-1 flex flex-col">
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col flex-1">
+                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col flex-1">
+
                     <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                            💬 Medical Research Assistant
-                        </h2>
+                        <div>
+                            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                Medical Research
+                            </h2>
+                            <p className="text-xs text-gray-400 mt-0.5">PubMed 36M+ · FDA · Ask in any language</p>
+                        </div>
                         {(answer || question) && (
                             <button
                                 onClick={handleReset}
-                                className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1"
+                                className="text-sm text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
                             >
-                                🔄 New Search
+                                New search
                             </button>
                         )}
                     </div>
 
                     {error && !loading && (
-                        <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-lg border border-red-200 dark:border-red-800">
-                            ❌ {error}
+                        <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-lg border border-red-100 dark:border-red-800 text-sm">
+                            {error}
                         </div>
                     )}
 
-                    <div
-                        ref={answerRef}
-                        className="flex-1 overflow-y-auto mb-4 min-h-[300px] max-h-[500px]"
-                    >
+                    <div ref={answerRef} className="flex-1 overflow-y-auto mb-4 min-h-[300px] max-h-[500px]">
                         {!answer && !loading && (
                             <div className="text-center py-12">
-                                <p className="text-gray-500 dark:text-gray-400 mb-6">
-                                    Ask a clinical question — answers are grounded in PubMed literature and FDA drug data.
-                                    Ask in any language.
+                                <p className="text-sm text-gray-400 dark:text-gray-500 mb-6">
+                                    Ask a clinical question — answers grounded in PubMed literature and FDA drug data.
                                 </p>
                                 <div className="space-y-2">
-                                    <p className="text-sm text-gray-400 dark:text-gray-500">Try these:</p>
+                                    <p className="text-xs text-gray-300 dark:text-gray-600 uppercase tracking-widest">Try these</p>
                                     <div className="flex flex-wrap justify-center gap-2">
-                                        {defaultSuggestions.map((suggestion, i) => (
+                                        {defaultSuggestions.map((s, i) => (
                                             <button
                                                 key={i}
-                                                onClick={() => handleSuggestionClick(suggestion)}
+                                                onClick={() => { setQuestion(s); runSearch(s); }}
                                                 disabled={loading}
-                                                className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700
-                                                         text-gray-700 dark:text-gray-300 rounded-full
-                                                         hover:bg-blue-100 dark:hover:bg-blue-900
-                                                         hover:text-blue-700 dark:hover:text-blue-300
-                                                         disabled:opacity-50 disabled:cursor-not-allowed
-                                                         transition-colors"
+                                                className="px-3 py-1.5 text-xs bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full border border-gray-200 dark:border-gray-600 hover:border-orange-300 hover:text-orange-600 dark:hover:text-orange-400 disabled:opacity-50 transition-colors"
                                             >
-                                                {suggestion}
+                                                {s}
                                             </button>
                                         ))}
                                     </div>
@@ -228,43 +191,31 @@ function ResearchForm() {
                             </div>
                         )}
 
-                        {/* Status message — 檢索/生成中的進度提示 */}
                         {loading && !answer && statusMsg && (
-                            <div className="flex items-center gap-3 py-8 text-gray-500 dark:text-gray-400">
-                                <svg className="animate-spin h-5 w-5 text-blue-500" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                </svg>
+                            <div className="flex items-center gap-3 py-8 text-gray-400">
+                                <div className="w-4 h-4 border-2 border-gray-200 border-t-orange-400 rounded-full animate-spin flex-shrink-0" />
                                 <span className="text-sm">{statusMsg}</span>
                             </div>
                         )}
 
                         {(answer || loading) && (
-                            <div className="prose prose-blue dark:prose-invert max-w-none">
-                                {/* Fallback Banner — 出現在回答上方 */}
+                            <div className="prose prose-gray dark:prose-invert max-w-none prose-sm prose-headings:font-semibold prose-h2:text-base">
                                 {isFallback && !loading && <FallbackBanner />}
-
-                                <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
-                                    {answer}
-                                </ReactMarkdown>
+                                <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{answer}</ReactMarkdown>
                                 {loading && answer && (
-                                    <span className="inline-block w-2 h-4 bg-blue-500 animate-pulse ml-1"></span>
+                                    <span className="inline-block w-1.5 h-4 rounded-sm animate-pulse ml-0.5" style={{ background: ACCENT }} />
                                 )}
                                 {!loading && answer && !error && (
-                                    <FeedbackBar
-                                        query={question}
-                                        response={answer}
-                                        category="research"
-                                    />
+                                    <FeedbackBar query={question} response={answer} category="research" />
                                 )}
                             </div>
                         )}
                     </div>
 
                     {queryTime && (
-                        <div className="text-xs text-gray-400 dark:text-gray-500 mb-2">
+                        <p className="text-xs text-gray-300 dark:text-gray-600 mb-2">
                             Query time: {(queryTime / 1000).toFixed(2)}s
-                        </div>
+                        </p>
                     )}
 
                     <form onSubmit={handleSubmit} className="flex gap-2">
@@ -273,44 +224,31 @@ function ResearchForm() {
                             value={question}
                             onChange={(e) => setQuestion(e.target.value)}
                             placeholder="Ask a clinical question in any language..."
-                            className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600
-                                     rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                                     dark:bg-gray-700 dark:text-white"
+                            className="flex-1 px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 dark:bg-gray-700 dark:text-white transition-shadow"
+                            style={{ '--tw-ring-color': ACCENT } as any}
                             disabled={loading}
                         />
                         <button
                             type="submit"
                             disabled={loading || !question.trim()}
-                            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400
-                                     text-white font-medium rounded-lg transition-colors
-                                     flex items-center gap-2"
+                            className="px-5 py-2.5 text-white text-sm font-medium rounded-lg transition-opacity disabled:opacity-50"
+                            style={{ background: ACCENT }}
                         >
                             {loading ? (
-                                <>
-                                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                    </svg>
-                                    Searching
-                                </>
-                            ) : (
-                                <>🔍 Search</>
-                            )}
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            ) : 'Search'}
                         </button>
                     </form>
 
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-3 text-center">
+                    <p className="text-xs text-gray-300 dark:text-gray-600 mt-3 text-center">
                         ⚠️ For reference only. Not a substitute for professional clinical judgment.
                     </p>
                 </div>
             </div>
 
             <div className="lg:w-96">
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 h-full max-h-[700px] overflow-hidden">
-                    <CitationPanel
-                        citations={citations}
-                        isLoading={loading && citations.length === 0}
-                    />
+                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 h-full max-h-[700px] overflow-hidden">
+                    <CitationPanel citations={citations} isLoading={loading && citations.length === 0} />
                 </div>
             </div>
         </div>
@@ -319,19 +257,19 @@ function ResearchForm() {
 
 export default function Research() {
     return (
-        <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-            <nav className="bg-white dark:bg-gray-800 shadow-sm">
+        <main className="min-h-screen bg-gray-50 dark:from-gray-900 dark:to-gray-800">
+            <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
                 <div className="container mx-auto px-4 py-3">
                     <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-6">
-                            <Link href="/" className="text-xl font-bold text-gray-800 dark:text-gray-200">
-                                🏥 MediNotes
+                        <div className="flex items-center gap-8">
+                            <Link href="/" className="text-base font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+                                Vela
                             </Link>
-                            <div className="hidden md:flex items-center gap-4">
-                                <Link href="/research" className="text-blue-600 dark:text-blue-400 font-medium">Research</Link>
-                                <Link href="/verify" className="text-gray-600 dark:text-gray-400 hover:text-blue-600">Verify</Link>
-                                <Link href="/product" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">Document</Link>
-                                <Link href="/history" className="text-gray-600 dark:text-gray-400 hover:text-blue-600">History</Link>
+                            <div className="hidden md:flex items-center gap-6 text-sm">
+                                <Link href="/research" className="font-medium transition-colors" style={{ color: ACCENT }}>Research</Link>
+                                <Link href="/verify"   className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Verify</Link>
+                                <Link href="/explain"  className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Explain</Link>
+                                <Link href="/history"  className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">History</Link>
                             </div>
                         </div>
                         <UserButton showName={true} />
@@ -344,9 +282,7 @@ export default function Research() {
                     <ResearchForm />
                 </div>
             </SignedIn>
-            <SignedOut>
-                <RedirectToSignIn />
-            </SignedOut>
+            <SignedOut><RedirectToSignIn /></SignedOut>
         </main>
     );
 }

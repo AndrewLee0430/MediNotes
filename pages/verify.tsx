@@ -5,6 +5,9 @@ import { useAuth, SignedIn, SignedOut, RedirectToSignIn, UserButton } from '@cle
 import Link from 'next/link';
 import FeedbackBar from '../components/FeedbackBar';
 
+// Verify accent color
+const ACCENT = '#63b3ed';
+
 interface DrugInteraction {
     drug_pair: [string, string];
     severity: string;
@@ -26,19 +29,14 @@ interface VerifyResponse {
 function VerifyForm() {
     const { getToken } = useAuth();
 
-    const [drugs, setDrugs] = useState('');
+    const [drugs, setDrugs]   = useState('');
     const [result, setResult] = useState<VerifyResponse | null>(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [error, setError]   = useState('');
 
-    // ✅ Prevent duplicate submissions
     const isRunningRef = useRef(false);
 
-    const handleReset = () => {
-        setDrugs('');
-        setResult(null);
-        setError('');
-    };
+    const handleReset = () => { setDrugs(''); setResult(null); setError(''); };
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
@@ -51,36 +49,23 @@ function VerifyForm() {
         }
 
         isRunningRef.current = true;
-        setLoading(true);
-        setError('');
-        setResult(null);
+        setLoading(true); setError(''); setResult(null);
 
         try {
-            // ✅ skipCache: true — always fetch a fresh token
             const token = await getToken({ skipCache: true });
-
-            if (!token) {
-                setError('Authentication required. Please sign in again.');
-                return;
-            }
+            if (!token) { setError('Authentication required. Please sign in again.'); return; }
 
             const res = await fetch('http://127.0.0.1:8000/api/verify', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ drugs: drugList, patient_context: null }),
             });
 
             if (res.status === 403 || res.status === 401) {
-                setError('Session expired. Please refresh the page and sign in again.');
+                setError('Session expired. Please refresh and sign in again.');
                 return;
             }
-
-            if (!res.ok) {
-                throw new Error(`Server error (${res.status}). Please try again.`);
-            }
+            if (!res.ok) throw new Error(`Server error (${res.status}). Please try again.`);
 
             const data: VerifyResponse = await res.json();
             setResult(data);
@@ -93,66 +78,68 @@ function VerifyForm() {
         }
     }
 
-    const getRiskColor = (level: string) => {
-        switch (level) {
-            case 'Critical': return 'bg-red-100 text-red-800 border-red-300';
-            case 'Major':    return 'bg-orange-100 text-orange-800 border-orange-300';
-            case 'Moderate': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
-            case 'Minor':    return 'bg-blue-100 text-blue-800 border-blue-300';
-            case 'Low':      return 'bg-green-100 text-green-800 border-green-300';
-            default:         return 'bg-gray-100 text-gray-800 border-gray-300';
-        }
+    const getRiskBadge = (level: string) => {
+        const map: Record<string, string> = {
+            Critical: 'bg-red-50 text-red-700 border-red-200',
+            Major:    'bg-orange-50 text-orange-700 border-orange-200',
+            Moderate: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+            Minor:    'bg-blue-50 text-blue-700 border-blue-200',
+            Low:      'bg-green-50 text-green-700 border-green-200',
+        };
+        return map[level] ?? 'bg-gray-50 text-gray-700 border-gray-200';
     };
 
-    const getSeverityColor = (severity: string) => {
-        switch (severity) {
-            case 'Critical': return 'bg-red-50 border-red-300 text-red-800';
-            case 'Major':    return 'bg-orange-50 border-orange-300 text-orange-800';
-            case 'Moderate': return 'bg-yellow-50 border-yellow-300 text-yellow-800';
-            case 'Minor':    return 'bg-blue-50 border-blue-300 text-blue-800';
-            default:         return 'bg-gray-50 border-gray-300 text-gray-800';
-        }
+    const getSeverityStyle = (severity: string) => {
+        const map: Record<string, string> = {
+            Critical: 'border-red-400 bg-red-50 dark:bg-red-900/20',
+            Major:    'border-orange-400 bg-orange-50 dark:bg-orange-900/20',
+            Moderate: 'border-yellow-400 bg-yellow-50 dark:bg-yellow-900/20',
+            Minor:    'border-blue-300 bg-blue-50 dark:bg-blue-900/20',
+        };
+        return map[severity] ?? 'border-gray-300 bg-gray-50 dark:bg-gray-700';
+    };
+
+    const getSeverityBadge = (severity: string) => {
+        const map: Record<string, string> = {
+            Critical: 'bg-red-100 text-red-800',
+            Major:    'bg-orange-100 text-orange-800',
+            Moderate: 'bg-yellow-100 text-yellow-800',
+            Minor:    'bg-blue-100 text-blue-800',
+        };
+        return map[severity] ?? 'bg-gray-100 text-gray-800';
     };
 
     return (
         <div className="container mx-auto px-4 py-8 max-w-5xl">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                    💊 Drug Interaction Checker
-                </h1>
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+                        Drug Interaction Checker
+                    </h1>
+                    <p className="text-sm text-gray-400 mt-1">FDA Official · Evidence-based</p>
+                </div>
                 {(result || drugs) && !loading && (
-                    <button
-                        onClick={handleReset}
-                        className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1"
-                    >
-                        🔄 New Check
+                    <button onClick={handleReset} className="text-sm text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
+                        New check
                     </button>
                 )}
             </div>
 
             {/* Privacy notice */}
-            <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
-                <div className="flex items-start gap-3">
-                    <span className="text-xl">🔒</span>
-                    <div>
-                        <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-1">
-                            Privacy: Do not enter real patient names or identifying information
-                        </h3>
-                        <p className="text-sm text-blue-800 dark:text-blue-200">
-                            Enter drug names only (e.g. Metformin, Aspirin, Warfarin) to analyze interactions.
-                            Queries are not stored. Sources are FDA Official.
-                        </p>
-                    </div>
-                </div>
+            <div className="rounded-lg p-4 mb-6 border" style={{ background: 'rgba(99,179,237,0.06)', borderColor: 'rgba(99,179,237,0.3)' }}>
+                <p className="text-sm" style={{ color: '#2b6cb0' }}>
+                    <strong>Privacy:</strong> Enter drug names only — no patient names or identifying information.
+                    Queries are not stored. Example: Metformin, Aspirin, Warfarin.
+                </p>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-6">
-                {/* Left: Input */}
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Input */}
+                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+                    <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="space-y-2">
                             <label htmlFor="drugs" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Drug List (one per line)
+                                Drug list <span className="text-gray-400 font-normal">(one per line)</span>
                             </label>
                             <textarea
                                 id="drugs"
@@ -161,45 +148,41 @@ function VerifyForm() {
                                 value={drugs}
                                 onChange={(e) => setDrugs(e.target.value)}
                                 disabled={loading}
-                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg
-                                         focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                                         dark:bg-gray-700 dark:text-white font-mono text-sm disabled:opacity-60"
+                                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 dark:bg-gray-700 dark:text-white font-mono text-sm disabled:opacity-60 transition-shadow"
                                 placeholder={"Metformin\nAspirin\nWarfarin"}
                             />
-                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                                Enter at least 2 drug names in English, one per line.
-                            </p>
+                            <p className="text-xs text-gray-400">At least 2 drug names in English.</p>
                         </div>
 
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400
-                                     text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                            className="w-full text-white font-medium py-2.5 px-6 rounded-lg transition-opacity disabled:opacity-50 text-sm"
+                            style={{ background: ACCENT }}
                         >
                             {loading ? 'Analyzing...' : 'Analyze Interactions'}
                         </button>
                     </form>
 
                     {error && (
-                        <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-lg border border-red-200 dark:border-red-800">
-                            ❌ {error}
+                        <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-lg border border-red-100 text-sm">
+                            {error}
                         </div>
                     )}
                 </div>
 
-                {/* Right: Results */}
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                {/* Results */}
+                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                     {!result && !loading && (
-                        <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                        <div className="text-center py-16 text-sm text-gray-400">
                             Results will appear here after analysis.
                         </div>
                     )}
 
                     {loading && (
-                        <div className="text-center py-12">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                            <p className="mt-4 text-gray-500 dark:text-gray-400">Analyzing interactions...</p>
+                        <div className="text-center py-16">
+                            <div className="w-8 h-8 border-2 border-gray-200 border-t-blue-400 rounded-full animate-spin mx-auto" />
+                            <p className="mt-4 text-sm text-gray-400">Analyzing interactions...</p>
                         </div>
                     )}
 
@@ -207,87 +190,57 @@ function VerifyForm() {
                         <div className="space-y-6">
                             {/* Summary */}
                             <div>
-                                <div className="flex justify-between items-start mb-2">
-                                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                                <div className="flex justify-between items-start mb-3">
+                                    <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
                                         Analysis Summary
                                     </h2>
-                                    <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getRiskColor(result.risk_level)}`}>
-                                        Risk Level: {result.risk_level}
+                                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${getRiskBadge(result.risk_level)}`}>
+                                        {result.risk_level}
                                     </span>
                                 </div>
-
-                                <p className="text-gray-700 dark:text-gray-300 mb-4">
+                                <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
                                     {result.summary}
                                 </p>
-
                                 <FeedbackBar
                                     query={`Drugs: ${result.drugs_analyzed.join(', ')}`}
                                     response={result.summary}
                                     category="verify"
                                 />
-
-                                <p className="text-xs text-gray-400 dark:text-gray-500 mt-3">
-                                    Drugs analyzed: {result.drugs_analyzed.join(', ')} ·
-                                    Query time: {(result.query_time_ms / 1000).toFixed(2)}s
+                                <p className="text-xs text-gray-300 dark:text-gray-600 mt-3">
+                                    {result.drugs_analyzed.join(', ')} · {(result.query_time_ms / 1000).toFixed(2)}s
                                 </p>
                             </div>
 
                             {/* Interactions */}
                             {result.interactions.length > 0 && (
                                 <div>
-                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
-                                        Drug Interactions ({result.interactions.length})
-                                    </h3>
-
-                                    <div className="space-y-4">
+                                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+                                        Interactions ({result.interactions.length})
+                                    </p>
+                                    <div className="space-y-3">
                                         {result.interactions.map((interaction, idx) => (
-                                            <div
-                                                key={idx}
-                                                className={`border-l-4 rounded-lg p-4 ${getSeverityColor(interaction.severity)}`}
-                                            >
+                                            <div key={idx} className={`border-l-4 rounded-lg p-4 ${getSeverityStyle(interaction.severity)}`}>
                                                 <div className="flex justify-between items-start mb-2">
-                                                    <h4 className="font-semibold text-base">
+                                                    <p className="font-semibold text-sm text-gray-900 dark:text-gray-100">
                                                         {interaction.drug_pair[0]} ↔ {interaction.drug_pair[1]}
-                                                    </h4>
-                                                    <span className={`px-2 py-1 rounded text-xs font-medium ${
-                                                        interaction.severity === 'Critical' ? 'bg-red-200 text-red-900' :
-                                                        interaction.severity === 'Major'    ? 'bg-orange-200 text-orange-900' :
-                                                        interaction.severity === 'Moderate' ? 'bg-yellow-200 text-yellow-900' :
-                                                        'bg-blue-200 text-blue-900'
-                                                    }`}>
+                                                    </p>
+                                                    <span className={`px-2 py-0.5 rounded text-xs font-medium ml-2 flex-shrink-0 ${getSeverityBadge(interaction.severity)}`}>
                                                         {interaction.severity}
                                                     </span>
                                                 </div>
-
-                                                <div className="space-y-2 text-sm">
-                                                    <div>
-                                                        <strong className="text-gray-700">Interaction</strong>
-                                                        <p className="text-gray-600 mt-1">{interaction.description}</p>
-                                                    </div>
-
+                                                <div className="space-y-2 text-xs leading-relaxed text-gray-700 dark:text-gray-300">
+                                                    <p>{interaction.description}</p>
                                                     {interaction.clinical_recommendation && (
-                                                        <div>
-                                                            <strong className="text-gray-700">Clinical Recommendation</strong>
-                                                            <p className="text-gray-600 mt-1">
-                                                                💡 {interaction.clinical_recommendation}
-                                                            </p>
-                                                        </div>
+                                                        <p className="opacity-80">{interaction.clinical_recommendation}</p>
                                                     )}
-
-                                                    <p className="text-xs text-gray-500 italic flex items-center gap-2">
-                                                        <span>Source:</span>
+                                                    <p className="text-gray-400 italic">
+                                                        Source:{' '}
                                                         {interaction.source_url ? (
-                                                            <a
-                                                                href={interaction.source_url}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="text-blue-600 hover:text-blue-800 underline flex items-center gap-1"
-                                                            >
-                                                                {interaction.source} 🔗
+                                                            <a href={interaction.source_url} target="_blank" rel="noopener noreferrer"
+                                                               className="underline hover:opacity-80">
+                                                                {interaction.source}
                                                             </a>
-                                                        ) : (
-                                                            <span>{interaction.source}</span>
-                                                        )}
+                                                        ) : interaction.source}
                                                     </p>
                                                 </div>
                                             </div>
@@ -296,11 +249,10 @@ function VerifyForm() {
                                 </div>
                             )}
 
-                            {/* Disclaimer */}
                             {result.disclaimer && (
-                                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-xs text-gray-600 dark:text-gray-400">
-                                    <p>⚠️ {result.disclaimer}</p>
-                                </div>
+                                <p className="text-xs text-gray-400 pt-2 border-t border-gray-100 dark:border-gray-700">
+                                    ⚠️ {result.disclaimer}
+                                </p>
                             )}
                         </div>
                     )}
@@ -312,19 +264,19 @@ function VerifyForm() {
 
 export default function Verify() {
     return (
-        <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-            <nav className="bg-white dark:bg-gray-800 shadow-sm">
+        <main className="min-h-screen bg-gray-50 dark:from-gray-900 dark:to-gray-800">
+            <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
                 <div className="container mx-auto px-4 py-3">
                     <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-6">
-                            <Link href="/" className="text-xl font-bold text-gray-800 dark:text-gray-200">
-                                🏥 MediNotes
+                        <div className="flex items-center gap-8">
+                            <Link href="/" className="text-base font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+                                Vela
                             </Link>
-                            <div className="hidden md:flex items-center gap-4">
-                                <Link href="/research" className="text-gray-600 dark:text-gray-400 hover:text-blue-600">Research</Link>
-                                <Link href="/verify" className="text-blue-600 dark:text-blue-400 font-medium">Verify</Link>
-                                <Link href="/product" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">Document</Link>
-                                <Link href="/history" className="text-gray-600 dark:text-gray-400 hover:text-blue-600">History</Link>
+                            <div className="hidden md:flex items-center gap-6 text-sm">
+                                <Link href="/research" className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Research</Link>
+                                <Link href="/verify"   className="font-medium transition-colors" style={{ color: ACCENT }}>Verify</Link>
+                                <Link href="/explain"  className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Explain</Link>
+                                <Link href="/history"  className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">History</Link>
                             </div>
                         </div>
                         <UserButton showName={true} />
@@ -332,12 +284,8 @@ export default function Verify() {
                 </div>
             </nav>
 
-            <SignedIn>
-                <VerifyForm />
-            </SignedIn>
-            <SignedOut>
-                <RedirectToSignIn />
-            </SignedOut>
+            <SignedIn><VerifyForm /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
         </main>
     );
 }
