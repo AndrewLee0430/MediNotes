@@ -22,7 +22,7 @@ class ExplainRequest(BaseModel):
         ...,
         description="Medical report, lab results, or clinical document to explain",
         min_length=10,
-        max_length=5000,
+        max_length=2000,
         examples=["eGFR 45 mL/min (ref >60), HbA1c 7.8%, Metformin 1000mg BID"]
     )
 
