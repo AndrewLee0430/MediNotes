@@ -31,13 +31,13 @@ class FatalError extends Error {}
 
 function FallbackBanner() {
     return (
-        <div className="mb-4 flex items-start gap-3 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg">
+        <div className="mb-4 flex items-start gap-3 p-4 rounded-lg" style={{ background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.3)" }}>
             <span className="text-amber-500 text-sm mt-0.5 font-bold">⚠</span>
             <div>
-                <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">
+                <p className="text-sm font-semibold" style={{ color: "#fbbf24" }}>
                     No literature found for this query
                 </p>
-                <p className="text-sm text-amber-700 dark:text-amber-400 mt-0.5">
+                <p className="text-sm mt-0.5" style={{ color: "rgba(251,191,36,0.8)" }}>
                     This answer is based on general medical knowledge, not retrieved PubMed or FDA literature.
                     Please verify with current clinical guidelines before applying clinically.
                 </p>
@@ -212,7 +212,19 @@ function ResearchForm() {
                             )}
 
                             {(answer || loading) && (
-                                <div className="prose prose-invert max-w-none prose-sm prose-headings:font-semibold prose-h2:text-base">
+                                <div 
+                                    className="prose max-w-none prose-sm prose-headings:font-semibold prose-h2:text-base"
+                                    style={{
+                                        color: "rgba(255,255,255,0.85)",
+                                        '--tw-prose-headings': '#ffffff',
+                                        '--tw-prose-bold': '#ffffff',
+                                        '--tw-prose-links': '#ff8e6e',
+                                        '--tw-prose-bullets': 'rgba(255,255,255,0.5)',
+                                        '--tw-prose-counters': 'rgba(255,255,255,0.5)',
+                                        '--tw-prose-code': '#ff8e6e',
+                                        '--tw-prose-hr': 'rgba(255,255,255,0.15)',
+                                    } as React.CSSProperties}
+                                >
                                     {isFallback && !loading && <FallbackBanner />}
                                     <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{answer}</ReactMarkdown>
                                     {loading && answer && (
@@ -278,7 +290,7 @@ export default function Research() {
                     <div className="flex justify-between items-center">
                         <div className="flex items-center gap-8">
                             <Link href="/" className="group relative flex items-center" title="Homepage">
-                                <Image src="/coral_logo.png" alt="Vela" width={60} height={60} style={{ objectFit: 'contain' }} />
+                                <Image src="/coral_logo.png" alt="Vela" width={40} height={40} style={{ objectFit: 'contain' }} />
                                 <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-xs bg-gray-800 text-white px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
                                   Homepage
                                 </span>

@@ -21,17 +21,17 @@ interface CitationPanelProps {
 }
 
 const credibilityConfig = {
-    'peer-reviewed':  { label: 'Peer Reviewed',  color: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',    stars: 5 },
-    'official':       { label: 'Official',        color: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',        stars: 5 },
-    'clinical-trial': { label: 'Clinical Trial',  color: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200', stars: 4 },
-    'review':         { label: 'Review Article',  color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200', stars: 4 },
-    'internal':       { label: 'Internal',        color: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',        stars: 3 },
+    'peer-reviewed':  { label: 'Peer Reviewed',  bg: 'rgba(104,211,145,0.15)', color: '#68d391', stars: 5 },
+    'official':       { label: 'Official',        bg: 'rgba(99,179,237,0.15)',  color: '#63b3ed', stars: 5 },
+    'clinical-trial': { label: 'Clinical Trial',  bg: 'rgba(183,148,244,0.15)', color: '#b794f4', stars: 4 },
+    'review':         { label: 'Review Article',  bg: 'rgba(246,224,94,0.15)',  color: '#f6e05e', stars: 4 },
+    'internal':       { label: 'Internal',        bg: 'rgba(160,174,192,0.15)', color: '#a0aec0', stars: 3 },
 };
 
 const sourceTypeConfig = {
-    'pubmed': { icon: '🔬', label: 'PubMed', color: 'text-green-600 dark:text-green-400' },
-    'fda':    { icon: '💊', label: 'FDA',    color: 'text-blue-600 dark:text-blue-400'   },
-    'local':  { icon: '📋', label: 'Local',  color: 'text-gray-600 dark:text-gray-400'   },
+    'pubmed': { icon: '🔬', label: 'PubMed', color: '#68d391' },
+    'fda':    { icon: '💊', label: 'FDA',    color: '#63b3ed' },
+    'local':  { icon: '📋', label: 'Local',  color: '#a0aec0' },
 };
 
 function StarRating({ count }: { count: number }) {
@@ -40,7 +40,7 @@ function StarRating({ count }: { count: number }) {
             {Array.from({ length: 5 }).map((_, i) => (
                 <svg
                     key={i}
-                    className={`inline w-4 h-4 ${i < count ? 'fill-yellow-400' : 'fill-gray-300 dark:fill-gray-600'}`}
+                    className={`inline w-4 h-4 ${i < count ? 'fill-yellow-400' : 'fill-gray-600'}`}
                     viewBox="0 0 20 20"
                 >
                     <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
@@ -84,16 +84,22 @@ function CitationCard({ citation }: { citation: Citation }) {
     const display      = !expanded && isLong ? abstract.slice(0, 200) + '…' : abstract;
 
     return (
-        <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow bg-white dark:bg-gray-800">
+        <div 
+            className="rounded-lg p-4 hover:shadow-md transition-shadow"
+            style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}
+        >
             {/* Header */}
             <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">
                     <span className="text-xl">{sourceConfig.icon}</span>
-                    <span className={`font-semibold ${sourceConfig.color}`}>
+                    <span className="font-semibold" style={{ color: sourceConfig.color }}>
                         [{citation.id}] {sourceConfig.label}
                     </span>
                 </div>
-                <span className={`text-xs px-2 py-1 rounded-full flex-shrink-0 ml-2 ${credConfig.color}`}>
+                <span 
+                    className="text-xs px-2 py-1 rounded-full flex-shrink-0 ml-2 font-medium"
+                    style={{ background: credConfig.bg, color: credConfig.color }}
+                >
                     {credConfig.label}
                 </span>
             </div>
@@ -123,7 +129,8 @@ function CitationCard({ citation }: { citation: Citation }) {
                     {isLong && (
                         <button
                             onClick={() => setExpanded(!expanded)}
-                            className="text-blue-600 dark:text-blue-400 hover:underline text-xs mt-1"
+                            className="hover:underline text-xs mt-1"
+                            style={{ color: "#ff8e6e" }}
                         >
                             {expanded ? 'Show less' : 'Show more'}
                         </button>
@@ -136,7 +143,8 @@ function CitationCard({ citation }: { citation: Citation }) {
                 href={citation.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 hover:underline mt-3"
+                className="inline-flex items-center gap-1 text-sm hover:underline mt-3"
+                style={{ color: "#ff8e6e" }}
             >
                 🔗 View source
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -152,15 +160,15 @@ function LoadingSkeleton() {
     return (
         <div className="space-y-4">
             {[1, 2, 3].map((i) => (
-                <div key={i} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 animate-pulse">
+                <div key={i} className="rounded-lg p-4 animate-pulse" style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
+                        <div className="w-6 h-6 rounded" style={{ background: "rgba(255,255,255,0.1)" }}></div>
+                        <div className="h-4 rounded w-20" style={{ background: "rgba(255,255,255,0.1)" }}></div>
                     </div>
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
-                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
-                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mt-1"></div>
+                    <div className="h-4 rounded w-3/4 mb-2" style={{ background: "rgba(255,255,255,0.1)" }}></div>
+                    <div className="h-3 rounded w-1/2 mb-2" style={{ background: "rgba(255,255,255,0.08)" }}></div>
+                    <div className="h-3 rounded w-full" style={{ background: "rgba(255,255,255,0.08)" }}></div>
+                    <div className="h-3 rounded w-full mt-1" style={{ background: "rgba(255,255,255,0.08)" }}></div>
                 </div>
             ))}
         </div>
@@ -196,9 +204,9 @@ export default function CitationPanel({ citations, isLoading }: CitationPanelPro
 
     return (
         <div className="h-full flex flex-col">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
+            <h3 className="text-lg font-semibold mb-2 flex items-center gap-2" style={{ color: "#ff8e6e" }}>
                 📚 References
-                <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                <span className="text-sm font-normal" style={{ color: "rgba(255,255,255,0.45)" }}>
                     ({citations.length})
                 </span>
             </h3>
@@ -207,7 +215,8 @@ export default function CitationPanel({ citations, isLoading }: CitationPanelPro
                 {Object.entries(sourceStats).map(([source, count]) => (
                     <span
                         key={source}
-                        className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-gray-600 dark:text-gray-300"
+                        className="px-2 py-1 rounded-full"
+                        style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.65)" }}
                     >
                         {sourceTypeConfig[source as keyof typeof sourceTypeConfig]?.icon} {source}: {count}
                     </span>
@@ -220,8 +229,8 @@ export default function CitationPanel({ citations, isLoading }: CitationPanelPro
                 ))}
             </div>
 
-            <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
-                <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+            <div className="mt-4 pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+                <p className="text-xs text-center" style={{ color: "rgba(255,255,255,0.35)" }}>
                     Click "View source" to verify each reference.
                 </p>
             </div>

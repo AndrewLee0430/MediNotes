@@ -82,7 +82,7 @@ function VerifyForm() {
     const getRiskBadge = (level: string) => {
         const map: Record<string, string> = {
             Critical: 'bg-red-50 text-red-700 border-red-200',
-            Major:    'bg-orange-50 text-orange-700 border-orange-200',
+            Major:    'bg-red-50 text-red-700 border-red-200',
             Moderate: 'bg-yellow-50 text-yellow-700 border-yellow-200',
             Minor:    'bg-blue-50 text-blue-700 border-blue-200',
             Low:      'bg-green-50 text-green-700 border-green-200',
@@ -93,7 +93,7 @@ function VerifyForm() {
     const getSeverityStyle = (severity: string) => {
         const map: Record<string, string> = {
             Critical: 'border-red-400 bg-red-50 dark:bg-red-900/20',
-            Major:    'border-orange-400 bg-orange-50 dark:bg-orange-900/20',
+            Major:    'border-red-400 bg-red-50 dark:bg-red-900/20',
             Moderate: 'border-yellow-400 bg-yellow-50 dark:bg-yellow-900/20',
             Minor:    'border-blue-300 bg-blue-50 dark:bg-blue-900/20',
         };
@@ -103,7 +103,7 @@ function VerifyForm() {
     const getSeverityBadge = (severity: string) => {
         const map: Record<string, string> = {
             Critical: 'bg-red-100 text-red-800',
-            Major:    'bg-orange-100 text-orange-800',
+            Major:    'bg-red-100 text-red-800',
             Moderate: 'bg-yellow-100 text-yellow-800',
             Minor:    'bg-blue-100 text-blue-800',
         };

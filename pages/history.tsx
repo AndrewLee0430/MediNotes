@@ -13,21 +13,21 @@ const FEATURE = {
         color: '#ff8e6e',
         bg: 'rgba(255,142,110,0.12)',
         border: 'rgba(255,142,110,0.5)',
-        text: '#c0501a',
+        text: '#ff8e6e',
     },
     verify: {
         label: 'Verify',
         color: '#63b3ed',
         bg: 'rgba(99,179,237,0.12)',
         border: 'rgba(99,179,237,0.5)',
-        text: '#1a6096',
+        text: '#63b3ed',
     },
     explain: {
         label: 'Explain',
         color: '#68d391',
         bg: 'rgba(104,211,145,0.12)',
         border: 'rgba(104,211,145,0.5)',
-        text: '#1a7a40',
+        text: '#68d391',
     },
 } as const;
 
@@ -145,13 +145,13 @@ function HistoryList() {
         }
     }
 
-    const getSeverityColor = (severity: string) => {
+    const getSeverityAccent = (severity: string) => {
         switch (severity) {
-            case 'Critical': return 'border-red-400 bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300';
-            case 'Major':    return 'border-orange-400 bg-orange-50 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300';
-            case 'Moderate': return 'border-yellow-400 bg-yellow-50 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300';
-            case 'Minor':    return 'border-blue-300 bg-blue-50 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300';
-            default:         return 'border-gray-300 bg-gray-50 text-gray-700 dark:bg-gray-700 dark:text-gray-300';
+            case 'Critical': return '#f87171';
+            case 'Major':    return '#f87171';
+            case 'Moderate': return '#facc15';
+            case 'Minor':    return '#60a5fa';
+            default:         return '#9ca3af';
         }
     };
 
@@ -168,7 +168,7 @@ function HistoryList() {
         return (
             <div className="text-center py-16">
                 <p className="text-gray-400 mb-4">No history yet.</p>
-                <Link href="/research" className="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 underline underline-offset-4">
+                <Link href="/research" className="text-sm hover:text-white underline underline-offset-4" style={{ color: "rgba(255,255,255,0.5)" }}>
                     Start your first search →
                 </Link>
             </div>
@@ -225,7 +225,15 @@ function HistoryList() {
 
                                 {/* Research */}
                                 {item.session_type === 'research' && (
-                                    <div className="prose prose-sm prose-gray dark:prose-invert max-w-none">
+                                    <div 
+                                        className="prose max-w-none prose-sm prose-headings:font-semibold"
+                                        style={{
+                                            color: "rgba(255,255,255,0.8)",
+                                            '--tw-prose-headings': '#ffffff',
+                                            '--tw-prose-bold': '#ffffff',
+                                            '--tw-prose-bullets': 'rgba(255,255,255,0.5)',
+                                        } as React.CSSProperties}
+                                    >
                                         <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
                                             {item.answer}
                                         </p>
@@ -234,7 +242,15 @@ function HistoryList() {
 
                                 {/* Explain */}
                                 {item.session_type === 'explain' && (
-                                    <div className="prose prose-sm prose-gray dark:prose-invert max-w-none">
+                                    <div 
+                                        className="prose max-w-none prose-sm prose-headings:font-semibold"
+                                        style={{
+                                            color: "rgba(255,255,255,0.8)",
+                                            '--tw-prose-headings': '#ffffff',
+                                            '--tw-prose-bold': '#ffffff',
+                                            '--tw-prose-bullets': 'rgba(255,255,255,0.5)',
+                                        } as React.CSSProperties}
+                                    >
                                         <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
                                             {item.answer}
                                         </p>
@@ -245,34 +261,49 @@ function HistoryList() {
                                 {item.session_type === 'verify' && (
                                     <div className="space-y-4">
                                         <div className="rounded-lg p-4" style={{ background: "rgba(255,255,255,0.05)" }}>
-                                            <p className="text-sm text-gray-700 dark:text-gray-300">{item.answer}</p>
+                                            <p className="text-sm" style={{ color: "rgba(255,255,255,0.75)" }}>{item.answer}</p>
                                         </div>
 
                                         {verifyDetails[item.id]?.loading && (
                                             <div className="text-center py-6">
-                                                <div className="animate-spin rounded-full h-6 w-6 border-2 border-gray-200 border-t-blue-400 mx-auto" />
-                                                <p className="mt-2 text-xs text-gray-400">Loading interaction details...</p>
+                                                <div className="animate-spin rounded-full h-6 w-6 border-2 border-t-blue-400 mx-auto" style={{ borderColor: "rgba(255,255,255,0.15)", borderTopColor: "#63b3ed" }} />
+                                                <p className="mt-2 text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Loading interaction details...</p>
                                             </div>
                                         )}
 
                                         {!verifyDetails[item.id]?.loading && (verifyDetails[item.id]?.interactions?.length ?? 0) > 0 && (
                                             <div className="space-y-3">
-                                                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "rgba(255,255,255,0.4)" }}>
                                                     Interactions ({verifyDetails[item.id].interactions.length})
                                                 </p>
                                                 {verifyDetails[item.id].interactions.map((interaction, idx) => (
-                                                    <div key={idx} className={`border-l-4 rounded-lg p-4 ${getSeverityColor(interaction.severity)}`}>
+                                                    <div 
+                                                        key={idx} 
+                                                        className="rounded-lg p-4"
+                                                        style={{ 
+                                                            background: "rgba(255,255,255,0.05)",
+                                                            borderLeft: `3px solid ${getSeverityAccent(interaction.severity)}`,
+                                                            border: `1px solid rgba(255,255,255,0.08)`,
+                                                            borderLeftColor: getSeverityAccent(interaction.severity),
+                                                        }}
+                                                    >
                                                         <div className="flex justify-between items-start mb-2">
-                                                            <p className="font-semibold text-sm">
+                                                            <p className="font-semibold text-sm" style={{ color: "#ffffff" }}>
                                                                 {interaction.drug_pair[0]} ↔ {interaction.drug_pair[1]}
                                                             </p>
-                                                            <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-white/60 dark:bg-black/20 ml-2 flex-shrink-0">
+                                                            <span 
+                                                                className="text-xs font-medium px-2 py-0.5 rounded-full ml-2 flex-shrink-0"
+                                                                style={{ 
+                                                                    background: `${getSeverityAccent(interaction.severity)}20`,
+                                                                    color: getSeverityAccent(interaction.severity)
+                                                                }}
+                                                            >
                                                                 {interaction.severity}
                                                             </span>
                                                         </div>
-                                                        <p className="text-xs leading-relaxed">{interaction.description}</p>
+                                                        <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.7)" }}>{interaction.description}</p>
                                                         {interaction.clinical_recommendation && (
-                                                            <p className="text-xs mt-2 opacity-80">
+                                                            <p className="text-xs mt-2" style={{ color: "rgba(255,255,255,0.5)" }}>
                                                                 {interaction.clinical_recommendation}
                                                             </p>
                                                         )}
@@ -304,7 +335,7 @@ export default function History() {
                     <div className="flex justify-between items-center">
                         <div className="flex items-center gap-8">
                             <Link href="/" className="group relative flex items-center" title="Homepage">
-                                <Image src="/coral_logo.png" alt="Vela" width={60} height={60} style={{ objectFit: 'contain' }} />
+                                <Image src="/coral_logo.png" alt="Vela" width={40} height={40} style={{ objectFit: 'contain' }} />
                                 <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-xs bg-gray-800 text-white px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
                                   Homepage
                                 </span>

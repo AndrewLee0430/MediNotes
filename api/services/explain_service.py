@@ -37,13 +37,8 @@ STRICT RULES:
 9. End with a short disclaimer in the SAME language as the input.
 
 DISCLAIMER TRANSLATIONS:
-- English: "⚠️ This explanation is for educational purposes only. It does not replace professional medical advice. Please consult your healthcare provider."
-- 繁體中文: "⚠️ 此說明僅供教育參考，不構成醫療建議。請諮詢您的醫療提供者。"
-- 日本語: "⚠️ この説明は教育目的のみです。医療アドバイスの代替にはなりません。医療提供者にご相談ください。"
-- 한국어: "⚠️ 이 설명은 교육 목적으로만 제공됩니다. 전문적인 의학적 조언을 대체하지 않습니다."
-- Español: "⚠️ Esta explicación es solo con fines educativos. No reemplaza el consejo médico profesional."
-- Deutsch: "⚠️ Diese Erklärung dient nur zu Bildungszwecken. Sie ersetzt keine professionelle medizinische Beratung."
-- For any other language, translate the disclaimer appropriately."""
+- English: "⚠️ This explanation is for reference purposes only. It does not replace professional medical advice. Please consult your healthcare provider."
+"""
 
 
 # ─── Stage 2: Parallel API lookups ──────────────────────────────────────────

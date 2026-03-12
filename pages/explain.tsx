@@ -22,16 +22,19 @@ interface ExplainSource {
 }
 
 const SOURCE_STYLES: Record<string, { bg: string; text: string; border: string }> = {
-    LOINC:       { bg: 'bg-blue-50 dark:bg-blue-900/20',   text: 'text-blue-700 dark:text-blue-300',   border: 'border-blue-200 dark:border-blue-700' },
-    MedlinePlus: { bg: 'bg-green-50 dark:bg-green-900/20', text: 'text-green-700 dark:text-green-300', border: 'border-green-200 dark:border-green-700' },
-    FDA:         { bg: 'bg-red-50 dark:bg-red-900/20',     text: 'text-red-700 dark:text-red-300',     border: 'border-red-200 dark:border-red-700' },
-    RxNorm:      { bg: 'bg-purple-50 dark:bg-purple-900/20', text: 'text-purple-700 dark:text-purple-300', border: 'border-purple-200 dark:border-purple-700' },
+    LOINC:       { bg: 'rgba(99,179,237,0.12)',   text: '#63b3ed', border: 'rgba(99,179,237,0.3)'   },
+    MedlinePlus: { bg: 'rgba(104,211,145,0.12)', text: '#68d391', border: 'rgba(104,211,145,0.3)' },
+    FDA:         { bg: 'rgba(252,129,129,0.12)', text: '#fc8181', border: 'rgba(252,129,129,0.3)' },
+    RxNorm:      { bg: 'rgba(183,148,244,0.12)', text: '#b794f4', border: 'rgba(183,148,244,0.3)' },
 };
 
 function SourceBadge({ source }: { source: ExplainSource }) {
     const s = SOURCE_STYLES[source.source_type] ?? SOURCE_STYLES['MedlinePlus'];
     const badge = (
-        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${s.bg} ${s.text} ${s.border}`}>
+        <span 
+            className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+            style={{ background: s.bg, color: s.text, border: `1px solid ${s.border}` }}
+        >
             {source.label}
         </span>
     );
@@ -121,7 +124,7 @@ function ExplainForm() {
                 <p className="text-sm" style={{ color: "rgba(255,255,255,0.5)" }}>Paste any lab results, diagnosis, or medical document — explained in plain language with verified sources.</p>
             </div>
             {error && (
-                <div className="mb-5 p-3 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-lg border border-red-100 text-sm">{error}</div>
+                <div className="mb-5 p-3 rounded-lg border text-sm" style={{ background: "rgba(252,129,129,0.12)", borderColor: "rgba(252,129,129,0.3)", color: "#fc8181" }}>{error}</div>
             )}
 
             <form onSubmit={handleSubmit} className="rounded-xl p-6 space-y-5" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
@@ -163,18 +166,30 @@ function ExplainForm() {
             {output && (
                 <section className="mt-5 rounded-xl p-6" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
                     <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">Explanation</h2>
+                        <h2 className="text-base font-semibold" style={{ color: "#ffffff" }}>Explanation</h2>
                         <button onClick={() => { navigator.clipboard.writeText(output); setShowToast(true); }}
                             className="text-xs text-gray-400 hover:text-white transition-colors">
                             Copy to clipboard
                         </button>
                     </div>
                     <div className="rounded-lg p-3 mb-5 border text-sm" style={{ background: 'rgba(251,191,36,0.06)', borderColor: 'rgba(251,191,36,0.3)' }}>
-                        <p className="text-yellow-800 dark:text-yellow-200">
-                            ⚠️ <strong>For educational purposes only.</strong> This explanation does not replace professional medical advice.
+                        <p style={{ color: "rgba(251,191,36,0.85)" }}>
+                            ⚠️ <strong>For reference only.</strong> This explanation does not replace professional medical advice.
                         </p>
                     </div>
-                    <div className="prose prose-invert max-w-none prose-sm prose-headings:font-semibold prose-h2:text-base prose-h2:border-b prose-h2:border-gray-100 dark:prose-h2:border-gray-700 prose-h2:pb-1 prose-p:leading-relaxed prose-li:leading-relaxed">
+                    <div 
+                        className="prose max-w-none prose-sm prose-headings:font-semibold prose-h2:text-base prose-h2:pb-1 prose-p:leading-relaxed prose-li:leading-relaxed"
+                        style={{
+                            color: "rgba(255,255,255,0.85)",
+                            '--tw-prose-headings': '#ffffff',
+                            '--tw-prose-bold': '#ffffff',
+                            '--tw-prose-links': '#68d391',
+                            '--tw-prose-bullets': 'rgba(255,255,255,0.5)',
+                            '--tw-prose-counters': 'rgba(255,255,255,0.5)',
+                            '--tw-prose-code': '#68d391',
+                            '--tw-prose-hr': 'rgba(255,255,255,0.15)',
+                        } as React.CSSProperties}
+                    >
                         <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{output}</ReactMarkdown>
                     </div>
                     {loading && <span className="inline-block w-1.5 h-4 rounded-sm animate-pulse ml-0.5 mt-2" style={{ background: ACCENT }} />}
@@ -218,7 +233,7 @@ export default function Explain() {
                     <div className="flex justify-between items-center">
                         <div className="flex items-center gap-8">
                             <Link href="/" className="group relative flex items-center" title="Homepage">
-                                <Image src="/coral_logo.png" alt="Vela" width={60} height={60} style={{ objectFit: 'contain' }} />
+                                <Image src="/coral_logo.png" alt="Vela" width={40} height={40} style={{ objectFit: 'contain' }} />
                                 <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-xs bg-gray-800 text-white px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
                                   Homepage
                                 </span>

@@ -73,5 +73,5 @@ class ExplainResponse(BaseModel):
     explanation: str
     sources: list[ExplainSource] = Field(default_factory=list)
     input_language: str = "en"
-    disclaimer: str = "⚠️ This explanation is for educational purposes only. It does not constitute medical advice. Please consult your healthcare provider."
+    disclaimer: str = "⚠️ This explanation is for reference only. It does not constitute medical advice. Please consult your healthcare provider."
     query_time_ms: int = 0
